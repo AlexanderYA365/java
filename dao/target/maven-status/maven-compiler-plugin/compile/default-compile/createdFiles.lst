@@ -1,0 +1,6 @@
+AccountDAO.class
+ConnectionMYSQL.class
+FriendDAO.class
+GroupDAO.class
+UserDAO.class
+ConnectionPool.class
