@@ -1,4 +1,3 @@
-import javax.servlet.*;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -10,10 +9,16 @@ public class FriendsList extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
+            throws IOException {
+        //AccountService accountService = new AccountService();
         AccountDAO accountDAO = new AccountDAO();
-        List<Account> accounts = accountDAO.readAccounts();
+        System.out.println("AccountDAO accountDAO");
+
+        List<Account> accounts = accountDAO.readAccounts();//accountService.getAllAccounts();
+        System.out.println("List<Account> accounts");
+
         PrintWriter out = resp.getWriter();
+
         out.print("<html>");
         out.print("<title>" + "Users account" + "</title>");
 

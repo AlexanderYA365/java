@@ -1,16 +1,14 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 import java.util.Scanner;
 
 public class ConnectionMYSQL {
-    private static Connection connection;
     private static final String user = "root";
     private static final String password = "root";
     private static final String url = "jdbc:mysql://localhost:3306/socialnetwork";
+    private static Connection connection;
 
     public static void connectDataBase() {
         try {
@@ -23,14 +21,15 @@ public class ConnectionMYSQL {
 
     public static void main(String[] args) {
         //connectDataBase();
-
-        ConnectionPool connectionPool = ConnectionPool.create(url, user, password);
+        ConnectionPool connectionPool = ConnectionPool.getInstance();
         try {
-            connection = connectionPool.getConnection();
-            connection.setAutoCommit(false);
+            connectionPool.create();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+        connection = connectionPool.getConnection();
         Scanner scanner = new Scanner(System.in);
         while (true) {
             System.out.println("Select options:");

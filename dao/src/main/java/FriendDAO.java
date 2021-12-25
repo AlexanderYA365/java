@@ -27,7 +27,7 @@ public class FriendDAO {
             e.printStackTrace();
         }
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection(url, username, password);
             connection.setAutoCommit(false);
         } catch (SQLException | ClassNotFoundException throwables) {
@@ -43,7 +43,7 @@ public class FriendDAO {
             int rows = query.executeUpdate();
             System.out.println("Added " + rows + " rows");
         } catch (Exception ex) {
-            System.out.println("Connection failed...");
+            System.out.println("Connection failed...createFriend");
             System.out.println(ex);
         }finally {
             try {
@@ -69,7 +69,7 @@ public class FriendDAO {
                 friendList.add(friend);
             }
         } catch (Exception ex) {
-            System.out.println("Connection failed...");
+            System.out.println("Connection failed...readFriends");
             System.out.println(ex);
         }
         return friendList;
@@ -86,7 +86,7 @@ public class FriendDAO {
                 friend.setIdFriendsAccount(resultSet.getInt(3));
             }
         } catch (Exception ex) {
-            System.out.println("Connection failed...");
+            System.out.println("Connection failed...readFriend");
             System.out.println(ex);
         }
         return friend;
@@ -103,7 +103,7 @@ public class FriendDAO {
                 friendList.add(friend);
             }
         } catch (Exception ex) {
-            System.out.println("Connection failed...");
+            System.out.println("Connection failed...readAllFriends");
             System.out.println(ex);
         }
         return friendList;
@@ -118,7 +118,7 @@ public class FriendDAO {
             int rows = query.executeUpdate();
             System.out.println("Updated rows = " + rows);
         } catch (Exception ex) {
-            System.out.println("Connection failed...");
+            System.out.println("Connection failed...updateFriend");
             System.out.println(ex);
         }finally {
             try {
@@ -137,6 +137,8 @@ public class FriendDAO {
             int rows = query.executeUpdate();
             System.out.println("Delete rows = " + rows);
         } catch (SQLException throwables) {
+            System.out.println("Connection failed...deleteFriendIdAccountIdFriendAccount");
+
             throwables.printStackTrace();
         }finally {
             try {
@@ -154,6 +156,8 @@ public class FriendDAO {
             int rows = query.executeUpdate();
             System.out.println("Delete rows = " + rows);
         } catch (SQLException throwables) {
+            System.out.println("Connection failed...deleteFriend");
+
             throwables.printStackTrace();
         }finally {
             try {

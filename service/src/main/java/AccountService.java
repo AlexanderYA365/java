@@ -41,4 +41,12 @@ public class AccountService {
         return friendList;
     }
 
+    public List<Account> getAllAccounts(){
+        AccountDAO accountDAO = new AccountDAO();
+        System.out.println("create account dao");
+        List<Account> accounts = accountDAO.readAccounts();
+        System.out.println("read from account dao");
+        return accounts;
+    }
+
 }

@@ -32,7 +32,7 @@ public class GroupDAO {
             e.printStackTrace();
         }
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection(url, username, password);
             connection.setAutoCommit(false);
         } catch (SQLException | ClassNotFoundException throwables) {
@@ -52,7 +52,7 @@ public class GroupDAO {
                 int rows = statement.executeUpdate(text);
                 System.out.printf("Added %d rows", rows);
             } catch(Exception ex){
-                System.out.println("Connection failed...");
+                System.out.println("Connection failed...createGroup");
                 System.out.println(ex);
             } finally {
                 try {
@@ -79,7 +79,7 @@ public class GroupDAO {
                 group.setIdAccount(resultSet.getInt(5));
             }
         }catch(Exception ex){
-            System.out.println("Connection failed...");
+            System.out.println("Connection failed...readGroup");
             System.out.println(ex);
         }
         return group;
@@ -100,7 +100,7 @@ public class GroupDAO {
                 groupList.add(group);
             }
         }catch(Exception ex){
-            System.out.println("Connection failed...");
+            System.out.println("Connection failed...readGroups");
             System.out.println(ex);
         }
         return groupList;
@@ -118,7 +118,7 @@ public class GroupDAO {
             int rows = statement.executeUpdate(sql);
             System.out.println("Updated rows = " + rows);
         }catch(Exception ex){
-            System.out.println("Connection failed...");
+            System.out.println("Connection failed...updateGroup");
             System.out.println(ex);
         } finally {
             try {

@@ -3,6 +3,10 @@ import java.sql.Statement;
 
 public class UserDAO {
 
+    public UserDAO(){
+
+    }
+
     public void create(Connection connection, User user){
         try {
             Statement statement = connection.createStatement();
@@ -13,7 +17,7 @@ public class UserDAO {
             connection.commit();
             System.out.println("Added "+ rows + " rows");
         } catch(Exception ex){
-            System.out.println("Connection failed...");
+            System.out.println("Connection failed...UserDAO create");
             System.out.println(ex);
         }
     }

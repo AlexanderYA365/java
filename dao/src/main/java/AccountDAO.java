@@ -17,15 +17,21 @@ public class AccountDAO {
     private Connection connection;
 
     public AccountDAO(){
+        System.out.println("try read properties ");
         try (InputStream input = AccountDAO.class.getClassLoader().getResourceAsStream("database.properties")) {
             Properties prop = new Properties();
             if (input == null) {
                 throw new Exception("Sorry, unable to find database.properties");
             }
+            System.out.println("try read properties ");
             prop.load(input);
             url = prop.getProperty("url");
             username = prop.getProperty("username");
             password = prop.getProperty("password");
+            System.out.println("url = " + url);
+            System.out.println("username = " + username);
+            System.out.println("password = " + password);
+
         } catch (IOException ex) {
             ex.printStackTrace();
         } catch (Exception e) {
@@ -36,6 +42,7 @@ public class AccountDAO {
             connection = DriverManager.getConnection(url, username, password);
             connection.setAutoCommit(false);
         } catch (SQLException | ClassNotFoundException throwables) {
+            System.out.println("Connection failed... AccountDAO");
             throwables.printStackTrace();
         }
     }
@@ -54,7 +61,7 @@ public class AccountDAO {
             int rows = statement.executeUpdate(text);
             System.out.println("Added " + rows + " rows");
         } catch (Exception ex) {
-            System.out.println("Connection failed...");
+            System.out.println("Connection failed... createAccount");
             System.out.println(ex);
         }finally {
             try {
@@ -69,6 +76,7 @@ public class AccountDAO {
     public Account readAccount(int id) {
         Account account = new Account();
         try (PreparedStatement query = connection.prepareStatement("SELECT * FROM account WHERE idAccount = ?")){
+            System.out.println("Test connection to server at readAccount");
             query.setInt(1, id);
             ResultSet resultSet = query.executeQuery();
             while (resultSet.next()) {
@@ -85,7 +93,7 @@ public class AccountDAO {
                 account.setAboutMe(resultSet.getString(11));
             }
         } catch (Exception ex) {
-            System.out.println("Connection failed...");
+            System.out.println("Connection failed...at readAccount");
             System.out.println(ex);
         }
         return account;
@@ -110,8 +118,10 @@ public class AccountDAO {
                 account.setAboutMe(resultSet.getString(11));
                 accountList.add(account);
             }
+            System.out.println("get account from readAccounts");
+
         } catch (Exception ex) {
-            System.out.println("Connection failed...");
+            System.out.println("Connection failed...readAccounts");
             System.out.println(ex);
         }
         return accountList;
@@ -134,7 +144,7 @@ public class AccountDAO {
             int rows = statement.executeUpdate(sql);
             System.out.println("Updated rows = " + rows);
         } catch (Exception ex) {
-            System.out.println("Connection failed...");
+            System.out.println("Connection failed...updateAccount");
             System.out.println(ex);
         }finally {
             try {
