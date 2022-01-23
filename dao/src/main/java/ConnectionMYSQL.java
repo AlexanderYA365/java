@@ -46,8 +46,8 @@ public class ConnectionMYSQL {
             switch (option) {
                 case 1: {
                     Account account = new Account("name", "surname", "lastName", new Date(), "phone", 2,
-                            "addressHome", "addressJob", "email", "aboutMe");
-                    AccountDAO accountDAO = new AccountDAO();
+                            "addressHome", "addressJob", "email", "aboutMe", "1", "1");
+                    AccountDao accountDAO = new AccountDao();
                     boolean result = false;
                     try {
                         result = accountDAO.createAccount(account);
@@ -59,22 +59,22 @@ public class ConnectionMYSQL {
                 }
                 case 2: {
                     Account account = new Account("name1", "surname1", "lastName1", new Date(), "phone1", 2,
-                            "addressHome1", "addressJob1", "email1", "aboutMe1");
+                            "addressHome1", "addressJob1", "email1", "aboutMe1", "333", "333");
                     System.out.println("insert id to update");
                     account.setId(scanner.nextInt());
-                    AccountDAO accountDAO = new AccountDAO();
+                    AccountDao accountDAO = new AccountDao();
                     boolean result = accountDAO.updateAccount(account);
                     System.out.println(result);
                     break;
                 }
                 case 3: {
-                    AccountDAO accountDAO = new AccountDAO();
+                    AccountDao accountDAO = new AccountDao();
                     Account account = accountDAO.readAccount(5);
                     System.out.println(account);
                     break;
                 }
                 case 4: {
-                    AccountDAO accountDAO = new AccountDAO();
+                    AccountDao accountDAO = new AccountDao();
                     System.out.println("Insert id to delete");
                     Account account = new Account();
                     account.setId(scanner.nextInt());
@@ -83,7 +83,7 @@ public class ConnectionMYSQL {
                     break;
                 }
                 case 5: {
-                    GroupDAO groupDAO = new GroupDAO();
+                    GroupDao groupDAO = new GroupDao();
                     Group group = new Group("test", "c", 1, 3);
                     try {
                         boolean result = groupDAO.createGroup(group);
@@ -94,7 +94,7 @@ public class ConnectionMYSQL {
                     break;
                 }
                 case 6: {
-                    GroupDAO groupDAO = new GroupDAO();
+                    GroupDao groupDAO = new GroupDao();
                     Group group = new Group("test1", "c1", 1, 3);
                     group.setIdGroup(3);
                     try {
@@ -106,7 +106,7 @@ public class ConnectionMYSQL {
                     break;
                 }
                 case 7: {
-                    GroupDAO groupDAO = new GroupDAO();
+                    GroupDao groupDAO = new GroupDao();
                     try {
                         Group group = groupDAO.readGroup(5);
                         System.out.println(group);
@@ -116,7 +116,7 @@ public class ConnectionMYSQL {
                     break;
                 }
                 case 8: {
-                    GroupDAO groupDAO = new GroupDAO();
+                    GroupDao groupDAO = new GroupDao();
                     Group group = new Group("test1", "c1", 1, 3);
                     group.setIdGroup(3);
                     try {

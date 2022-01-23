@@ -12,12 +12,16 @@ public class Account {
     private String addressJob;
     private String email;
     private String aboutMe;
+    private String username;
+    private String password;
+    private int role;
 
     public Account(){
     }
 
     public Account(String name, String surname, String lastName, Date date, String phone,
-                   int icq, String addressHome, String addressJob, String email, String aboutMe){
+                   int icq, String addressHome, String addressJob, String email, String aboutMe, String username,
+                   String password){
         this.name = name;
         this.surname = surname;
         this.lastName = lastName;
@@ -28,6 +32,16 @@ public class Account {
         this.addressJob = addressJob;
         this.email = email;
         this.aboutMe = aboutMe;
+        this.username = username;
+        this.password = password;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
     }
 
     public int getId() {
@@ -72,6 +86,22 @@ public class Account {
 
     public String getAboutMe() {
         return aboutMe;
+    }
+
+    public int getRole() {
+        return role;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setRole(int role) {
+        this.role = role;
     }
 
     public void setId(int id) {
@@ -132,6 +162,10 @@ public class Account {
                 ", addressJob='" + addressJob + '\'' +
                 ", email='" + email + '\'' +
                 ", aboutMe='" + aboutMe + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", role=" + role +
                 '}';
     }
+
 }

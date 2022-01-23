@@ -3,7 +3,7 @@ import java.util.List;
 public class AccountService {
 
     public boolean create(Account account){
-        AccountDAO accountDAO = new AccountDAO();
+        AccountDao accountDAO = new AccountDao();
         try {
             return accountDAO.createAccount(account);
         } catch (Exception e) {
@@ -13,17 +13,17 @@ public class AccountService {
     }
 
     public boolean update(Account account){
-        AccountDAO accountDAO = new AccountDAO();
+        AccountDao accountDAO = new AccountDao();
         return accountDAO.updateAccount(account);
     }
 
     public boolean delete(Account account){
-        AccountDAO accountDAO = new AccountDAO();
+        AccountDao accountDAO = new AccountDao();
         return accountDAO.deleteAccount(account);
     }
 
     public boolean addFriend(Account account, Account friend){
-        FriendDAO friendDAO = new FriendDAO();
+        FriendDao friendDAO = new FriendDao();
         Friend friend1 = new Friend();
         friend1.setIdAccount(account.getId());
         friend1.setIdFriendsAccount(friend.getId());
@@ -31,18 +31,18 @@ public class AccountService {
     }
 
     public boolean deleteFriend(Account account, Account friend){
-        FriendDAO friendDAO = new FriendDAO();
+        FriendDao friendDAO = new FriendDao();
         return friendDAO.deleteFriendIdAccountIdFriendAccount(account.getId(), friend.getId());
     }
 
     public List<Friend> accountFriends(Account account){
-        FriendDAO friendDAO = new FriendDAO();
+        FriendDao friendDAO = new FriendDao();
         List<Friend> friendList = friendDAO.readFriends(account.getId());
         return friendList;
     }
 
     public List<Account> getAllAccounts(){
-        AccountDAO accountDAO = new AccountDAO();
+        AccountDao accountDAO = new AccountDao();
         System.out.println("create account dao");
         List<Account> accounts = accountDAO.readAccounts();
         System.out.println("read from account dao");

@@ -12,7 +12,7 @@ public class ConnectionPool {
     private static String URL;
     private static String USERNAME;
     private static String PASSWORD;
-    private static LinkedBlockingQueue<Connection> pool;
+    private static LinkedBlockingQueue<Connection> pool;//TODO переделать
     private static ConnectionPool instance;
 
     private ConnectionPool() {
@@ -26,7 +26,7 @@ public class ConnectionPool {
     }
 
     private static void getProperty() {
-        try (InputStream input = AccountDAO.class.getClassLoader().getResourceAsStream("database.properties")) {
+        try (InputStream input = AccountDao.class.getClassLoader().getResourceAsStream("database.properties")) {
             Properties prop = new Properties();
             if (input == null) {
                 throw new Exception("File database.properties not found");
