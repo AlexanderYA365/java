@@ -1,9 +1,17 @@
-public class WallMassage {
+import java.io.Serializable;
+import java.util.Date;
+
+public class WallMassage implements Serializable {
+    private static final long serialVersionUID = 2041275512219239990L;
     private int id;
     private int idSender;
     private int idReceiving;
     private String massage;
     private String picture;
+    private Date publicationDate;
+    private boolean edited;
+
+    public WallMassage(){}
 
     public int getId() {
         return id;
@@ -23,6 +31,22 @@ public class WallMassage {
 
     public String getPicture() {
         return picture;
+    }
+
+    public Date getPublicationDate() {
+        return publicationDate;
+    }
+
+    public boolean isEdited() {
+        return edited;
+    }
+
+    public void setEdited(boolean edited) {
+        this.edited = edited;
+    }
+
+    public void setPublicationDate(Date publicationDate) {
+        this.publicationDate = publicationDate;
     }
 
     public void setId(int id) {
@@ -53,6 +77,8 @@ public class WallMassage {
                 ", idReceiving=" + idReceiving +
                 ", massage='" + massage + '\'' +
                 ", picture='" + picture + '\'' +
+                ", publicationDate=" + publicationDate +
+                ", edited=" + edited +
                 '}';
     }
 }

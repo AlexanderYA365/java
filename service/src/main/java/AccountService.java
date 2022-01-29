@@ -1,8 +1,10 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class AccountService {
 
     public boolean create(Account account){
+        System.out.println("Creat new Account from AccountService.create");
         AccountDao accountDAO = new AccountDao();
         try {
             return accountDAO.createAccount(account);
@@ -47,6 +49,25 @@ public class AccountService {
         List<Account> accounts = accountDAO.readAccounts();
         System.out.println("read from account dao");
         return accounts;
+    }
+
+    public boolean createWallMassage(WallMassage massage){
+        WallMassageDao massageDao = new WallMassageDao();
+        try {
+
+        massageDao.create(massage);
+        return true;
+        }catch (Exception e){
+            System.out.println("exception in createWallMassage - " + e);
+        }
+        return false;
+    }
+
+    public List<WallMassage> readWallMassage(Account account){
+        System.out.println("readWallMassage, account.getId() - " + account.getId());
+        WallMassageDao massageDao = new WallMassageDao();
+        System.out.println("create massageDao in readWallMassage");
+        return massageDao.readWallMassageUserId(account.getId());
     }
 
 }

@@ -1,4 +1,5 @@
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,7 +13,7 @@ public class FriendsList extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws IOException, ServletException {
         AccountDao accountDAO = new AccountDao();
-        System.out.println("AccountDAO accountDAO");
+        System.out.println("FriendsList");
         List<Account> accounts = accountDAO.readAccounts();
         PrintWriter out = resp.getWriter();
         out.print("<html>");

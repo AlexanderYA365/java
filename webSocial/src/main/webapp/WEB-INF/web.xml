@@ -23,7 +23,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>Servlet</servlet-name>
-        <url-pattern>/</url-pattern>
+        <url-pattern>/AllAccounts</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>RegisterAccount</servlet-name>
@@ -40,6 +40,14 @@
     <servlet-mapping>
         <servlet-name>AccountPage</servlet-name>
         <url-pattern>/main.jsp</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>AccountLogin</servlet-name>
+        <servlet-class>AccountLogin</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AccountLogin</servlet-name>
+        <url-pattern>/index.jsp</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>jsp/index.jsp</welcome-file>

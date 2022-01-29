@@ -38,6 +38,10 @@ public class RegisterAccount extends HttpServlet {
             account.setEmail(request.getParameter("email"));
             account.setAboutMe(request.getParameter("aboutMe"));
             System.out.println(account);
+            AccountService service = new AccountService();
+            service.create(account);
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher("jsp/main.jsp");
+            requestDispatcher.forward(request, response);
         }catch (Exception e){
             System.out.println("RegisterAccount.doPost Exception - " + e);
         }

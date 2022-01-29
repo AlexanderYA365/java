@@ -1,11 +1,6 @@
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -17,7 +12,6 @@ public class AccountDao {
     private Connection connection;
 
     public AccountDao(){
-        System.out.println("try read properties ");
         try (InputStream input = AccountDao.class.getClassLoader().getResourceAsStream("database.properties")) {
             Properties prop = new Properties();
             if (input == null) {
@@ -51,18 +45,26 @@ public class AccountDao {
         if(account.getName()  == null){
             throw new Exception("user name equals null");
         }
-        try (Statement statement = connection.createStatement()){//TODO
-//            String sql = "INSERT INTO account(name, surname, lastname, date, phone, icq, addresshome, " +
-//                    "addressjob, email, aboutme, username, password) " +
-//                    "VALUES ('?','?','?',NOW(),'?','?','?','?','?','?', '?', '?');";
+        String sql = "INSERT INTO account(name, surname, lastname, date, phone, icq, addresshome, " +
+                "addressjob, email, aboutme, username, password) " +
+                "VALUES (?,?,?,NOW(),?,?,?,?,?,?,?,?);";
+        System.out.println(sql);
 
-            String text = "INSERT INTO account(name, surname, lastname, date, phone, icq, addresshome, " +
-                    "addressjob, email, aboutme) " +
-                    "VALUES (" + "'" + account.getName() + "','" + account.getSurname() +
-                    "','" + account.getLastName() + "'," + "NOW()" +
-                    ",'" + account.getPhone() + "','" + account.getIcq() + "','" + account.getAddressHome() +
-                    "','" + account.getAddressJob() + "','" + account.getEmail() + "','" + account.getAboutMe() + "');";
-            int rows = statement.executeUpdate(text);
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)){//TODO
+            preparedStatement.setString(1, account.getName());
+            preparedStatement.setString(2, account.getSurname());
+            preparedStatement.setString(3, account.getLastName());
+            //preparedStatement.setDate(5, (Date) account.getDate());
+            preparedStatement.setString(4, account.getPhone());
+            preparedStatement.setInt(5, account.getIcq());
+            preparedStatement.setString(6, account.getAddressHome());
+            preparedStatement.setString(7, account.getAddressJob());
+            preparedStatement.setString(8, account.getEmail());
+            preparedStatement.setString(9, account.getAboutMe());
+            preparedStatement.setString(10, account.getUsername());
+            preparedStatement.setString(11, account.getPassword());
+            System.out.println(preparedStatement);
+            int rows = preparedStatement.executeUpdate();
             System.out.println("Added " + rows + " rows");
         } catch (Exception ex) {
             System.out.println("Connection failed... createAccount");
@@ -95,6 +97,8 @@ public class AccountDao {
                 account.setAddressJob(resultSet.getString(9));
                 account.setEmail(resultSet.getString(10));
                 account.setAboutMe(resultSet.getString(11));
+                account.setUsername(resultSet.getString(12));
+                account.setPassword(resultSet.getString(13));
             }
         } catch (Exception ex) {
             System.out.println("Connection failed...at readAccount");
@@ -120,6 +124,8 @@ public class AccountDao {
                 account.setAddressJob(resultSet.getString(9));
                 account.setEmail(resultSet.getString(10));
                 account.setAboutMe(resultSet.getString(11));
+                account.setUsername(resultSet.getString(12));
+                account.setPassword(resultSet.getString(13));
                 accountList.add(account);
             }
             System.out.println("get account from readAccounts");
