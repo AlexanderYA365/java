@@ -3,14 +3,6 @@ public class Phone {
     private String phoneNumber;
     private boolean sign;
 
-    public void setIdPhone(int idPhone) {
-        this.idPhone = idPhone;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
     public void setSign(boolean sign) {
         this.sign = sign;
     }
@@ -19,8 +11,16 @@ public class Phone {
         return idPhone;
     }
 
+    public void setIdPhone(int idPhone) {
+        this.idPhone = idPhone;
+    }
+
     public String getPhoneNumber() {
         return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public boolean getIsSign() {

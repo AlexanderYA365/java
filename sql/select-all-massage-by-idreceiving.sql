@@ -1,1 +1,3 @@
-SELECT * FROM wallmassage WHERE idReceiving = 11;
+SELECT *
+FROM wallmassage
+WHERE idReceiving = 11;

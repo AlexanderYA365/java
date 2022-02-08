@@ -86,7 +86,7 @@ public class ConnectionMYSQL {
                     GroupDao groupDAO = new GroupDao();
                     Group group = new Group("test", "c", 1, 3);
                     try {
-                        boolean result = groupDAO.createGroup(group);
+                        boolean result = groupDAO.create(group);
                         System.out.println(result);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -98,7 +98,7 @@ public class ConnectionMYSQL {
                     Group group = new Group("test1", "c1", 1, 3);
                     group.setIdGroup(3);
                     try {
-                        boolean result = groupDAO.updateGroup(group);
+                        boolean result = groupDAO.update(group);
                         System.out.println(result);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -108,7 +108,7 @@ public class ConnectionMYSQL {
                 case 7: {
                     GroupDao groupDAO = new GroupDao();
                     try {
-                        Group group = groupDAO.readGroup(5);
+                        Group group = groupDAO.read(5);
                         System.out.println(group);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -120,7 +120,7 @@ public class ConnectionMYSQL {
                     Group group = new Group("test1", "c1", 1, 3);
                     group.setIdGroup(3);
                     try {
-                        boolean result = groupDAO.deleteGroup(group);
+                        boolean result = groupDAO.delete(group);
                         System.out.println(result);
                     } catch (Exception e) {
                         e.printStackTrace();

@@ -11,7 +11,7 @@ public class WallMassageDao {
     private String password;
     private Connection connection;
 
-    WallMassageDao(){
+    WallMassageDao() {
         System.out.println("WallMassageDao - start");
         try (InputStream input = AccountDao.class.getClassLoader().getResourceAsStream("database.properties")) {
             Properties prop = new Properties();
@@ -46,14 +46,14 @@ public class WallMassageDao {
 
     }
 
-    public boolean create(WallMassage wallMassage){
+    public boolean create(WallMassage wallMassage) {
         if (wallMassage.getMassage() == null) {
             return false;
         }
         String sql = "INSERT INTO wallmassage(idSender, idReceiving, massage, picture, publicationDate, edited) " +
                 "VALUES (?,?,?,?, NOW(), ?);";
         System.out.println(sql);
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)){//TODO
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {//TODO
             preparedStatement.setInt(1, wallMassage.getIdSender());
             preparedStatement.setInt(2, wallMassage.getIdReceiving());
             preparedStatement.setString(3, wallMassage.getMassage());
@@ -65,7 +65,7 @@ public class WallMassageDao {
         } catch (Exception ex) {
             System.out.println("Connection failed... createAccount");
             System.out.println(ex);
-        }finally {
+        } finally {
             try {
                 connection.commit();
             } catch (SQLException e) {
@@ -77,10 +77,10 @@ public class WallMassageDao {
 
     public List<WallMassage> readWallMassageUserId(int id) {
         System.out.println("readWallMassageUserId - start");
-        List<WallMassage>  massageList = new ArrayList<WallMassage>();
+        List<WallMassage> massageList = new ArrayList<WallMassage>();
         String sql = "SELECT * FROM wallmassage WHERE idReceiving = ?";
         System.out.println(sql);
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)){
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
@@ -89,10 +89,10 @@ public class WallMassageDao {
                 massage.setIdReceiving(resultSet.getInt(3));
                 massage.setMassage(resultSet.getString(4));
                 massage.setPicture(resultSet.getString(5));
-                //massage.setPublicationDate(resultSet.getDate(5));
+                massage.setPublicationDate(resultSet.getDate(6));
                 //massage.setEdited(resultSet.getBoolean(6));
                 massageList.add(massage);
-                }
+            }
         } catch (Exception ex) {
             System.out.println("Connection failed...readWallMassageUserId");
             System.out.println(ex);

@@ -11,7 +11,7 @@ public class AccountDao {
     private String password;
     private Connection connection;
 
-    public AccountDao(){
+    public AccountDao() {
         try (InputStream input = AccountDao.class.getClassLoader().getResourceAsStream("database.properties")) {
             Properties prop = new Properties();
             if (input == null) {
@@ -42,7 +42,7 @@ public class AccountDao {
     }
 
     public boolean createAccount(Account account) throws Exception {
-        if(account.getName()  == null){
+        if (account.getName() == null) {
             throw new Exception("user name equals null");
         }
         String sql = "INSERT INTO account(name, surname, lastname, date, phone, icq, addresshome, " +
@@ -50,7 +50,7 @@ public class AccountDao {
                 "VALUES (?,?,?,NOW(),?,?,?,?,?,?,?,?);";
         System.out.println(sql);
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)){//TODO
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {//TODO
             preparedStatement.setString(1, account.getName());
             preparedStatement.setString(2, account.getSurname());
             preparedStatement.setString(3, account.getLastName());
@@ -69,7 +69,7 @@ public class AccountDao {
         } catch (Exception ex) {
             System.out.println("Connection failed... createAccount");
             System.out.println(ex);
-        }finally {
+        } finally {
             try {
                 connection.commit();
             } catch (SQLException e) {
@@ -81,7 +81,7 @@ public class AccountDao {
 
     public Account readAccount(int id) {
         Account account = new Account();
-        try (PreparedStatement query = connection.prepareStatement("SELECT * FROM account WHERE idAccount = ?")){
+        try (PreparedStatement query = connection.prepareStatement("SELECT * FROM account WHERE idAccount = ?")) {
             System.out.println("Test connection to server at readAccount");
             query.setInt(1, id);
             ResultSet resultSet = query.executeQuery();
@@ -107,9 +107,43 @@ public class AccountDao {
         return account;
     }
 
+    public List<Account> readAccountsName(String name){
+        List<Account> accounts = new ArrayList<Account>();
+        String sql = "SELECT * FROM account WHERE name = ?";
+        System.out.println(sql);
+        try (PreparedStatement query = connection.prepareStatement(sql)) {
+            System.out.println("readAccountsName");
+            query.setString(1, name);
+            ResultSet resultSet = query.executeQuery();
+            while (resultSet.next()) {
+                Account account = new Account();
+                account.setId(resultSet.getInt(1));
+                account.setName(resultSet.getString(2));
+                account.setSurname(resultSet.getString(3));
+                account.setLastName(resultSet.getString(4));
+                account.setDate(resultSet.getDate(5));
+                account.setPhone(resultSet.getString(6));
+                account.setIcq(resultSet.getInt(7));
+                account.setAddressHome(resultSet.getString(8));
+                account.setAddressJob(resultSet.getString(9));
+                account.setEmail(resultSet.getString(10));
+                account.setAboutMe(resultSet.getString(11));
+                account.setUsername(resultSet.getString(12));
+                account.setPassword(resultSet.getString(13));
+                accounts.add(account);
+            }
+            System.out.println("get account from readAccounts");
+
+        } catch (Exception ex) {
+            System.out.println("Connection failed...readAccounts");
+            System.out.println(ex);
+        }
+        return accounts;
+    }
+
     public List<Account> readAccounts() {
-        List<Account> accountList = new ArrayList<Account>();
-        try (Statement statement = connection.createStatement()){
+        List<Account> accounts = new ArrayList<Account>();
+        try (Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery("SELECT * FROM account");
             while (resultSet.next()) {
                 Account account = new Account();
@@ -126,7 +160,7 @@ public class AccountDao {
                 account.setAboutMe(resultSet.getString(11));
                 account.setUsername(resultSet.getString(12));
                 account.setPassword(resultSet.getString(13));
-                accountList.add(account);
+                accounts.add(account);
             }
             System.out.println("get account from readAccounts");
 
@@ -134,11 +168,11 @@ public class AccountDao {
             System.out.println("Connection failed...readAccounts");
             System.out.println(ex);
         }
-        return accountList;
+        return accounts;
     }
 
     public boolean updateAccount(Account account) {
-        try (Statement statement = connection.createStatement()){
+        try (Statement statement = connection.createStatement()) {
             String sql = "UPDATE account" +
                     " SET name =" + "'" + account.getName() + "'," +
                     " surname =" + "'" + account.getSurname() + "'," +
@@ -151,12 +185,13 @@ public class AccountDao {
                     " email =" + "'" + account.getEmail() + "'," +
                     " aboutme =" + "'" + account.getAboutMe() + "'" +
                     " WHERE idAccount = " + account.getId() + ";";
+            System.out.println("updateAccount - " + sql);
             int rows = statement.executeUpdate(sql);
             System.out.println("Updated rows = " + rows);
         } catch (Exception ex) {
             System.out.println("Connection failed...updateAccount");
             System.out.println(ex);
-        }finally {
+        } finally {
             try {
                 connection.commit();
             } catch (SQLException e) {
@@ -167,11 +202,11 @@ public class AccountDao {
     }
 
     public boolean deleteAccount(Account account) {
-        try (Statement statement = connection.createStatement()){
+        try (Statement statement = connection.createStatement()) {
             statement.executeUpdate("DELETE FROM account WHERE idAccount = " + account.getId());
         } catch (SQLException throwables) {
             throwables.printStackTrace();
-        }finally {
+        } finally {
             try {
                 connection.commit();
             } catch (SQLException e) {

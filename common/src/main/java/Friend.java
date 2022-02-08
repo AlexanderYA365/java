@@ -7,8 +7,16 @@ public class Friend {
         return idAccount;
     }
 
+    public void setIdAccount(int idAccount) {
+        this.idAccount = idAccount;
+    }
+
     public int getIdFriendsAccount() {
         return idFriendsAccount;
+    }
+
+    public void setIdFriendsAccount(int idFriendsAccount) {
+        this.idFriendsAccount = idFriendsAccount;
     }
 
     public int getIdFriends() {
@@ -19,11 +27,13 @@ public class Friend {
         this.idFriends = idFriends;
     }
 
-    public void setIdAccount(int idAccount) {
-        this.idAccount = idAccount;
+    @Override
+    public String toString() {
+        return "Friend{" +
+                "idFriends=" + idFriends +
+                ", idAccount=" + idAccount +
+                ", idFriendsAccount=" + idFriendsAccount +
+                '}';
     }
 
-    public void setIdFriendsAccount(int idFriendsAccount) {
-        this.idFriendsAccount = idFriendsAccount;
-    }
 }

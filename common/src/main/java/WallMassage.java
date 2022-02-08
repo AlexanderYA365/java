@@ -11,30 +11,55 @@ public class WallMassage implements Serializable {
     private Date publicationDate;
     private boolean edited;
 
-    public WallMassage(){}
+    public WallMassage() {
+    }
 
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getIdSender() {
         return idSender;
     }
 
+    public void setIdSender(int idSender) {
+        this.idSender = idSender;
+    }
+
     public int getIdReceiving() {
         return idReceiving;
+    }
+
+    public void setIdReceiving(int idReceiving) {
+        this.idReceiving = idReceiving;
     }
 
     public String getMassage() {
         return massage;
     }
 
+    public void setMassage(String massage) {
+        this.massage = massage;
+    }
+
     public String getPicture() {
         return picture;
     }
 
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
+
     public Date getPublicationDate() {
         return publicationDate;
+    }
+
+    public void setPublicationDate(Date publicationDate) {
+        this.publicationDate = publicationDate;
     }
 
     public boolean isEdited() {
@@ -43,30 +68,6 @@ public class WallMassage implements Serializable {
 
     public void setEdited(boolean edited) {
         this.edited = edited;
-    }
-
-    public void setPublicationDate(Date publicationDate) {
-        this.publicationDate = publicationDate;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setIdSender(int idSender) {
-        this.idSender = idSender;
-    }
-
-    public void setIdReceiving(int idReceiving) {
-        this.idReceiving = idReceiving;
-    }
-
-    public void setMassage(String massage) {
-        this.massage = massage;
-    }
-
-    public void setPicture(String picture) {
-        this.picture = picture;
     }
 
     @Override

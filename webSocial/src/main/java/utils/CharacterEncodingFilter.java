@@ -8,7 +8,7 @@ public class CharacterEncodingFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) {
-       encoding = filterConfig.getInitParameter("encoding");
+        encoding = filterConfig.getInitParameter("encoding");
     }
 
     @Override

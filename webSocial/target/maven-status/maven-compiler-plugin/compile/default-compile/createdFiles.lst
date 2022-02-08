@@ -1,3 +1,11 @@
+AccountFriends.class
 utils\CharacterEncodingFilter.class
-FriendsList.class
+AccountEditSettings.class
+AccountSettings.class
 RegisterAccount.class
+AccountCreateGroup.class
+AddFriendAccount.class
+AccountLogin.class
+AccountGroup.class
+AccountPage.class
+FriendsList.class

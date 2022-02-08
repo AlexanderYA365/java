@@ -11,7 +11,7 @@
     <title>Welcome</title>
 </head>
 <body>
-<form action = "index.jsp">
+<form action="index.jsp">
     <label>username:
         <input type="text" name="username">
     </label>
@@ -21,10 +21,10 @@
     </label>
     <div>
         <button onclick>go</button>
-</div>
+    </div>
 </form>
 <div>
-<button onclick="location.href='Account.jsp'">Registered new account</button>
+    <button onclick="location.href='Account.jsp'">Registered new account</button>
 </div>
 </body>
 </html>

@@ -5,10 +5,10 @@ public class Group {
     private String logo;
     private int idAdministrator;
 
-    public Group(){
+    public Group() {
     }
 
-    public Group(String groupName, String logo, int idAdministrator, int idAccount){
+    public Group(String groupName, String logo, int idAdministrator, int idAccount) {
         this.groupName = groupName;
         this.logo = logo;
         this.idAdministrator = idAdministrator;
@@ -19,16 +19,32 @@ public class Group {
         return idAccount;
     }
 
+    public void setIdAccount(int idAccount) {
+        this.idAccount = idAccount;
+    }
+
     public String getGroupName() {
         return groupName;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
     }
 
     public String getLogo() {
         return logo;
     }
 
+    public void setLogo(String logo) {
+        this.logo = logo;
+    }
+
     public int getIdAdministrator() {
         return idAdministrator;
+    }
+
+    public void setIdAdministrator(int idAdministrator) {
+        this.idAdministrator = idAdministrator;
     }
 
     public int getIdGroup() {
@@ -37,22 +53,6 @@ public class Group {
 
     public void setIdGroup(int idGroup) {
         this.idGroup = idGroup;
-    }
-
-    public void setIdAccount(int idAccount) {
-        this.idAccount = idAccount;
-    }
-
-    public void setGroupName(String groupName) {
-        this.groupName = groupName;
-    }
-
-    public void setLogo(String logo) {
-        this.logo = logo;
-    }
-
-    public void setIdAdministrator(int idAdministrator) {
-        this.idAdministrator = idAdministrator;
     }
 
     @Override

@@ -13,16 +13,25 @@
 </head>
 <body>
 <div>
-    <br>friends
-    <br>groups
-    <br>my account
+    <div>
+        <button onclick="location.href='AccountFriends.jsp'">Account Friends</button>
+    </div>
+    <div>
+        <button onclick="location.href='AccountGroup.jsp'">Account Groups</button>
+    </div>
+    <div>
+        <button onclick="location.href='myAccount.jsp'">My Account</button>
+    </div>
+    <div>
+        <button onclick="location.href='AccountMassage.jsp'">My message</button>
+    </div>
     <br>message
     <div>
-    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-    <c:forEach var="massage" items="${massages}">
-    <br>
-        <c:out value="${massage.massage}" />
-    </c:forEach>
+        <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+        <c:forEach var="massage" items="${massages}">
+            <br>
+            <c:out value="${massage.massage}"/>
+        </c:forEach>
     </div>
 </div>
 </body>

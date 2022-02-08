@@ -49,6 +49,62 @@
         <servlet-name>AccountLogin</servlet-name>
         <url-pattern>/index.jsp</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>AccountSettings</servlet-name>
+        <servlet-class>AccountSettings</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AccountSettings</servlet-name>
+        <url-pattern>/myAccount.jsp</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>AccountEditSettings</servlet-name>
+        <servlet-class>AccountEditSettings</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AccountEditSettings</servlet-name>
+        <url-pattern>/EditAccountSettings.jsp</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>AccountGroup</servlet-name>
+        <servlet-class>AccountGroup</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AccountGroup</servlet-name>
+        <url-pattern>/AccountGroup.jsp</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>AccountCreateGroup</servlet-name>
+        <servlet-class>AccountCreateGroup</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AccountCreateGroup</servlet-name>
+        <url-pattern>/CreateGroup.jsp</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>AccountFriends</servlet-name>
+        <servlet-class>AccountFriends</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AccountFriends</servlet-name>
+        <url-pattern>/AccountFriends.jsp</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>AddFriendAccount</servlet-name>
+        <servlet-class>AddFriendAccount</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AddFriendAccount</servlet-name>
+        <url-pattern>/AddFriendAccount.jsp</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>AccountMassage</servlet-name>
+        <servlet-class>AccountMassage</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AccountMassage</servlet-name>
+        <url-pattern>/AccountMassage.jsp</url-pattern>
+    </servlet-mapping>
     <welcome-file-list>
         <welcome-file>jsp/index.jsp</welcome-file>
     </welcome-file-list>

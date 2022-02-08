@@ -11,7 +11,7 @@ public class FriendDao {
     private String password;
     private Connection connection;
 
-    public FriendDao(){
+    public FriendDao() {
         try (InputStream input = AccountDao.class.getClassLoader().getResourceAsStream("database.properties")) {
             Properties prop = new Properties();
             if (input == null) {
@@ -35,9 +35,9 @@ public class FriendDao {
         }
     }
 
-    public boolean createFriend(Friend friend) {
+    public boolean create(Friend friend) {
         try (PreparedStatement query = connection.prepareStatement(
-                "INSERT INTO friends(idAccount, idFriendsAccount) VALUES (?, ?)")){
+                "INSERT INTO friends(idAccount, idFriendsAccount) VALUES (?, ?)")) {
             query.setInt(1, friend.getIdAccount());
             query.setInt(2, friend.getIdFriendsAccount());
             int rows = query.executeUpdate();
@@ -45,7 +45,7 @@ public class FriendDao {
         } catch (Exception ex) {
             System.out.println("Connection failed...createFriend");
             System.out.println(ex);
-        }finally {
+        } finally {
             try {
                 connection.commit();
             } catch (SQLException e) {
@@ -58,7 +58,7 @@ public class FriendDao {
     public List<Friend> readFriends(int id) {
         List<Friend> friendList = new ArrayList<>();
 
-        try (PreparedStatement query = connection.prepareStatement("SELECT * FROM friends WHERE idAccount = ?")){
+        try (PreparedStatement query = connection.prepareStatement("SELECT * FROM friends WHERE idAccount = ?")) {
             query.setInt(1, id);
             ResultSet resultSet = query.executeQuery();
             while (resultSet.next()) {
@@ -75,9 +75,9 @@ public class FriendDao {
         return friendList;
     }
 
-    public Friend readFriend(int id) {
+    public Friend read(int id) {
         Friend friend = new Friend();
-        try (PreparedStatement query = connection.prepareStatement("SELECT * FROM friends WHERE idfriends = ?")){
+        try (PreparedStatement query = connection.prepareStatement("SELECT * FROM friends WHERE idfriends = ?")) {
             query.setInt(1, id);
             ResultSet resultSet = query.executeQuery();
             while (resultSet.next()) {
@@ -94,7 +94,7 @@ public class FriendDao {
 
     public List<Friend> readAllFriends() {
         List<Friend> friendList = new ArrayList<>();
-        try (Statement statement = connection.createStatement()){
+        try (Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery("SELECT * FROM friends");
             while (resultSet.next()) {
                 Friend friend = new Friend();
@@ -109,9 +109,9 @@ public class FriendDao {
         return friendList;
     }
 
-    public boolean updateFriend(Friend friend) {
+    public boolean update(Friend friend) {
         try (PreparedStatement query = connection.prepareStatement(
-                "UPDATE friends SET idAccount = ?, idFriendsAccount = ? WHERE idFriends = ?")){
+                "UPDATE friends SET idAccount = ?, idFriendsAccount = ? WHERE idFriends = ?")) {
             query.setInt(1, friend.getIdAccount());
             query.setInt(2, friend.getIdFriendsAccount());
             query.setInt(2, friend.getIdFriends());
@@ -120,7 +120,7 @@ public class FriendDao {
         } catch (Exception ex) {
             System.out.println("Connection failed...updateFriend");
             System.out.println(ex);
-        }finally {
+        } finally {
             try {
                 connection.commit();
             } catch (SQLException e) {
@@ -131,7 +131,7 @@ public class FriendDao {
     }
 
     public boolean deleteFriendIdAccountIdFriendAccount(int idAccount, int idFriend) {
-        try (PreparedStatement query = connection.prepareStatement("DELETE FROM friends WHERE idAccount = ?, idFriendsAccount = ? ")){
+        try (PreparedStatement query = connection.prepareStatement("DELETE FROM friends WHERE idAccount = ?, idFriendsAccount = ? ")) {
             query.setInt(1, idAccount);
             query.setInt(2, idFriend);
             int rows = query.executeUpdate();
@@ -140,7 +140,7 @@ public class FriendDao {
             System.out.println("Connection failed...deleteFriendIdAccountIdFriendAccount");
 
             throwables.printStackTrace();
-        }finally {
+        } finally {
             try {
                 connection.commit();
             } catch (SQLException e) {
@@ -150,8 +150,8 @@ public class FriendDao {
         return true;
     }
 
-    public boolean deleteFriend(Friend friend) {
-        try (PreparedStatement query = connection.prepareStatement("DELETE FROM friends WHERE idFriends = ?")){
+    public boolean delete(Friend friend) {
+        try (PreparedStatement query = connection.prepareStatement("DELETE FROM friends WHERE idFriends = ?")) {
             query.setInt(1, friend.getIdFriends());
             int rows = query.executeUpdate();
             System.out.println("Delete rows = " + rows);
@@ -159,7 +159,7 @@ public class FriendDao {
             System.out.println("Connection failed...deleteFriend");
 
             throwables.printStackTrace();
-        }finally {
+        } finally {
             try {
                 connection.commit();
             } catch (SQLException e) {

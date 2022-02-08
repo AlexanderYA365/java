@@ -3,7 +3,7 @@ public class User {
     private String password;
     private int idAccount;
 
-    User(String userName, String password, int idAccount){
+    User(String userName, String password, int idAccount) {
         this.userName = userName;
         this.password = password;
         this.idAccount = idAccount;
@@ -14,20 +14,20 @@ public class User {
         return userName;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public int getIdAccount() {
-        return idAccount;
-    }
-
     public void setUserName(String userName) {
         this.userName = userName;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public int getIdAccount() {
+        return idAccount;
     }
 
     public void setIdAccount(int idAccount) {
