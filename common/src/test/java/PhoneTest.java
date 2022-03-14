@@ -6,8 +6,8 @@ class PhoneTest {
     @Test
     void getIdPhone() {
         Phone phone = new Phone();
-        phone.setIdPhone(1);
-        Assert.assertEquals(1, phone.getIdPhone());
+        phone.setIdAccount(1);
+        Assert.assertEquals(1, phone.getIdAccount());
     }
 
     @Test
@@ -18,9 +18,10 @@ class PhoneTest {
     }
 
     @Test
-    void isSign() {
+    void getPhoneType(){
         Phone phone = new Phone();
-        phone.setSign(true);
-        Assert.assertEquals(true, phone.getIsSign());
+        phone.setPhoneType(1);
+        Assert.assertEquals(1, phone.getPhoneType());
     }
+
 }

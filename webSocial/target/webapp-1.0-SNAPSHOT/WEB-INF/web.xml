@@ -17,6 +17,21 @@
         <filter-name>CharacterEncoding</filter-name>
         <url-pattern>/</url-pattern>
     </filter-mapping>
+
+    <filter>
+        <filter-name>AuthorizationFilter</filter-name>
+        <filter-class>utils.AuthorizationFilter</filter-class>
+        <init-param>
+            <param-name>active</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>AuthorizationFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
     <servlet>
         <servlet-name>Servlet</servlet-name>
         <servlet-class>FriendsList</servlet-class>
@@ -31,7 +46,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>RegisterAccount</servlet-name>
-        <url-pattern>/Account.jsp</url-pattern>
+        <url-pattern>/RegistrationAccount.jsp</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>AccountPage</servlet-name>
@@ -104,6 +119,30 @@
     <servlet-mapping>
         <servlet-name>AccountMassage</servlet-name>
         <url-pattern>/AccountMassage.jsp</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>AccountFindGroup</servlet-name>
+        <servlet-class>AccountFindGroup</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AccountFindGroup</servlet-name>
+        <url-pattern>/AccountFindGroup.jsp</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>AccountWriteMassage</servlet-name>
+        <servlet-class>AccountWriteMassage</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AccountWriteMassage</servlet-name>
+        <url-pattern>/AccountWriteMassage.jsp</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ShowGroup</servlet-name>
+        <servlet-class>ShowGroup</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ShowGroup</servlet-name>
+        <url-pattern>/showGroup</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>jsp/index.jsp</welcome-file>

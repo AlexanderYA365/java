@@ -50,22 +50,18 @@ public class AccountService {
 
     public List<Friend> accountFriends(Account account) {
         FriendDao friendDAO = new FriendDao();
-        List<Friend> friendList = friendDAO.readFriends(account.getId());
-        return friendList;
+        return friendDAO.readFriends(account.getId());
     }
 
     public List<Account> getAllAccounts() {
         AccountDao accountDAO = new AccountDao();
         System.out.println("create account dao");
-        List<Account> accounts = accountDAO.readAccounts();
-        System.out.println("read from account dao");
-        return accounts;
+        return accountDAO.readAccounts();
     }
 
     public boolean createWallMassage(WallMassage massage) {
         WallMassageDao massageDao = new WallMassageDao();
         try {
-
             massageDao.create(massage);
             return true;
         } catch (Exception e) {
@@ -77,7 +73,7 @@ public class AccountService {
     public List<WallMassage> readWallMassage(Account account) {
         System.out.println("readWallMassage, account.getId() - " + account.getId());
         WallMassageDao massageDao = new WallMassageDao();
-        return massageDao.readWallMassageUserId(account.getId());
+        return massageDao.readWallMassageUserIdNameSender(account.getId());
     }
 
     public List<Group> readAccountGroups(Account account) {
@@ -104,18 +100,49 @@ public class AccountService {
 
     public List<Account> getAccountName(String name) throws Exception {
         System.out.println("getAccountName, name - " + name);
-        if(name == null) {
-            throw new Exception("getAccountName name == null");
-        } else {
-            AccountDao dao = new AccountDao();
-            return dao.readAccountsName(name);
-        }
+        AccountDao dao = new AccountDao();
+        return dao.readAccountsName(name);
     }
 
     public List<Massage> readMassage(Account account){
         System.out.println("read massage account - " + account);
         MassageDao massageDao = new MassageDao();
-        return massageDao.readMassageUserId(account.getId());
+        return massageDao.readMassageUserIdNameSender(account.getId());
+    }
+
+    public List<Group> getGroupName(String groupName){
+        System.out.println("getGroupName groupName - " + groupName);
+        GroupDao groupDao = new GroupDao();
+        return groupDao.read(groupName);
+    }
+
+    public Group readGroupID(int idGroup){
+        System.out.println("getGroupID idGroup - " + idGroup);
+        GroupDao groupDao = new GroupDao();
+        return groupDao.read(idGroup);
+    }
+
+    public boolean insertAccountGroup(Group group, int idAccount) {
+        System.out.println("Group read idGroup - " + group + " , idAccount - " + idAccount);
+        GroupDao groupDao = new GroupDao();
+        return groupDao.insertAccount(group, idAccount);
+    }
+
+    public List<Friend> insertAccountFriends(int idAccount) {
+        System.out.println("insertAccountFriends idAccount - " + idAccount);
+        FriendDao friendDao = new FriendDao();
+        return friendDao.readFriendsName(idAccount);
+    }
+
+    public List<Massage> accountMassage(int idSender, int idReceiving) { //TODO
+        System.out.println("insertAccountFriends idSender - " + idSender + " ,idReceiving - " + idReceiving);
+        MassageDao massageDao = new MassageDao();
+        return massageDao.readsMassageAccounts(idSender, idReceiving);
+    }
+
+    public boolean createMassage(Massage massage){
+        MassageDao massageDao = new MassageDao();
+        return massageDao.create(massage);
     }
 
 }

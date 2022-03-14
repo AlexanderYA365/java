@@ -1,18 +1,30 @@
+import java.util.Date;
+
 public class Group {
     private int idGroup;
     private int idAccount;
     private String groupName;
     private String logo;
+    private Date dateCreateGroup;
     private int idAdministrator;
 
     public Group() {
     }
 
-    public Group(String groupName, String logo, int idAdministrator, int idAccount) {
+    public Group(String groupName, String logo, int idAdministrator, int idAccount, Date dateCreateGroup) {
         this.groupName = groupName;
         this.logo = logo;
         this.idAdministrator = idAdministrator;
         this.idAccount = idAccount;
+        this.dateCreateGroup = dateCreateGroup;
+    }
+
+    public Date getDateCreateGroup() {
+        return dateCreateGroup;
+    }
+
+    public void setDateCreateGroup(Date dateCreateGroup) {
+        this.dateCreateGroup = dateCreateGroup;
     }
 
     public int getIdAccount() {

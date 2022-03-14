@@ -1,0 +1,29 @@
+p {
+    color: black;
+    font-size: 25px;
+}
+.field {clear:both; text-align:right;}
+label {float:left;}
+.modal {
+    width: 300px;
+    margin: 0 auto;
+}
+
+div.form
+{
+    display: block;
+    text-align: center;
+}
+
+.reg {
+    text-align: left;
+    position: relative;
+    left:2.6%;
+}
+
+body {background-color: lightblue;}
+
+.error{
+    color: red;
+    size: A5;
+}

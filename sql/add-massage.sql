@@ -1,2 +1,2 @@
 INSERT INTO massage(idSender, idReceiving, massage, picture, publicationDate, edited)
-VALUES (11, 1, 'second massage', 'none', NOW(), FALSE);
+VALUES (31, 1, 'massage', 'none', NOW(), FALSE);

@@ -10,22 +10,26 @@
 
 <html>
 <head>
-    <title>Title</title>
+    <title>Поиск друга</title>
+    <style>
+        <%@include file='css/style.css' %>
+    </style>
 </head>
 <body>
-<form method="post">
+<form method="post" class = "modal">
     <br>name: <input name="name"/>
     <br><input type="submit" value="Submit"/>
 </form>
-<form method="post">
+<form method="post" class = "modal">
 <div>
-
+    <table>
+        <tr><th>Имя пользователя</th><th>добавить</th></tr>
     <c:forEach var="account" items="${accounts}">
         <input type="hidden" name="accountId" value="${account.id}"/>
-        ${room.id}
-        <br> <c:out value="${account.name}"/>
-        <input type="submit" name="button1" value="add"/>
+        <tr><td><c:out value="${account.name}"/></td>
+            <td><input type="submit" name="button1" value="да"/></td></tr>
     </c:forEach>
+    </table>
 </div>
 </form>
 <br>

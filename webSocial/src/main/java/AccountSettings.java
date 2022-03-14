@@ -9,17 +9,13 @@ import java.io.IOException;
 public class AccountSettings extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("AccountSettings doGet");
         HttpSession session = request.getSession();
         Account account = (Account) session.getAttribute("account");
         request.setAttribute("account", account);
-        try {
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher("jsp/myAccount.jsp");
-            requestDispatcher.forward(request, response);
-        } catch (Exception e) {
-            System.out.println("AccountSettings.doPost Exception - " + e);
-        }
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher("jsp/myAccount.jsp");
+        requestDispatcher.forward(request, response);
     }
 
 }

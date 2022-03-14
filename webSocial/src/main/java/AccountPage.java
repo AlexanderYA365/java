@@ -10,25 +10,15 @@ import java.util.List;
 public class AccountPage extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("AccountPage doGet");
         HttpSession session = request.getSession();
         Account account = (Account) session.getAttribute("account");
         List<WallMassage> massages = printMassage(account);
         System.out.println("AccountPage - " + massages);
         request.setAttribute("massages", massages);
-        try {
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher("jsp/main.jsp");
-            requestDispatcher.forward(request, response);
-        } catch (Exception e) {
-            System.out.println("AccountPage.doPost Exception - " + e);
-        }
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse response) {
-        System.out.println("AccountPage doPost");
-        doGet(req, response);
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher("jsp/main.jsp");
+        requestDispatcher.forward(request, response);
     }
 
     private List<WallMassage> printMassage(Account account) {

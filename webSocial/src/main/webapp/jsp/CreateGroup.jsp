@@ -9,9 +9,12 @@
 <html>
 <head>
     <title>Создать группу</title>
+    <style>
+        <%@include file='css/style.css' %>
+    </style>
 </head>
 <body>
-<form method="post">
+<form method="post" class = "modal">
     <br>name: <input name="name"/>
     <br>logo: <input name="logo"/>
     <br><input type="submit" value="Submit"/>

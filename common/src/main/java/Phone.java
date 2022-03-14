@@ -1,18 +1,22 @@
 public class Phone {
-    private int idPhone;
+    private int idAccount;
     private String phoneNumber;
-    private boolean sign;
+    private PhoneType phoneType;
 
-    public void setSign(boolean sign) {
-        this.sign = sign;
+    public int getPhoneType() {
+        return phoneType.getStatus();
     }
 
-    public int getIdPhone() {
-        return idPhone;
+    public void setPhoneType(int status) {
+        this.phoneType = PhoneType.values()[status];
     }
 
-    public void setIdPhone(int idPhone) {
-        this.idPhone = idPhone;
+    public int getIdAccount() {
+        return idAccount;
+    }
+
+    public void setIdAccount(int idAccount) {
+        this.idAccount = idAccount;
     }
 
     public String getPhoneNumber() {
@@ -23,7 +27,12 @@ public class Phone {
         this.phoneNumber = phoneNumber;
     }
 
-    public boolean getIsSign() {
-        return sign;
+    @Override
+    public String toString() {
+        return "Phone{" +
+                "idAccount=" + idAccount +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", phoneType=" + phoneType +
+                '}';
     }
 }

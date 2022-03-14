@@ -10,23 +10,24 @@
 
 <html>
 <head>
-    <title>page ${account.name}</title>
+    <title>Странница ${account.name}</title>
+    <style>
+        <%@include file='css/style.css' %>
+    </style>
 </head>
 <body>
-
+<form class = "modal">
 <br>name: ${account.name}
 <br>surname: ${account.surname}
 <br>lastName: ${account.lastName}
 <br>Date: ${account.date}
-<br>phone: ${account.phone}
 <br>icq: ${account.icq}
 <br>addressHome: ${account.addressHome}
 <br>addressJob: ${account.addressJob}
 <br>email: ${account.email}
 <br>aboutMe: ${account.aboutMe}
-<br>
+</form>
 <button onclick="location.href='EditAccountSettings.jsp'">Изменить данные пользователя</button>
-<br>
 <button onclick="location.href='main.jsp'">На главную</button>
 </body>
 </html>

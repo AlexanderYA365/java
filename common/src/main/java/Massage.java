@@ -10,6 +10,33 @@ public class Massage  implements Serializable {
     private String picture;
     private Date publicationDate;
     private boolean edited;
+    private String usernameSender;
+    private String usernameReceiving;
+    private MessageType messageType;
+
+    public int getMessageType() {
+        return messageType.getStatus();
+    }
+
+    public void setMessageType(int status) {
+        this.messageType = MessageType.values()[status];
+    }
+
+    public String getUsernameReceiving() {
+        return usernameReceiving;
+    }
+
+    public void setUsernameReceiving(String usernameReceiving) {
+        this.usernameReceiving = usernameReceiving;
+    }
+
+    public String getUsernameSender() {
+        return usernameSender;
+    }
+
+    public void setUsernameSender(String usernameSender) {
+        this.usernameSender = usernameSender;
+    }
 
     public int getId() {
         return id;

@@ -9,6 +9,9 @@
 <html>
 <head>
     <title>All Accounts</title>
+    <style>
+        <%@include file='css/style.css' %>
+    </style>
 </head>
 <body>
 

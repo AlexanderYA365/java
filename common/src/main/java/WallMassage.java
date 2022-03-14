@@ -10,8 +10,17 @@ public class WallMassage implements Serializable {
     private String picture;
     private Date publicationDate;
     private boolean edited;
+    private String usernameSender;
 
     public WallMassage() {
+    }
+
+    public String getUsernameSender() {
+        return usernameSender;
+    }
+
+    public void setUsernameSender(String usernameSender) {
+        this.usernameSender = usernameSender;
     }
 
     public int getId() {

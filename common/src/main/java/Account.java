@@ -1,4 +1,6 @@
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 public class Account {
     private int id;
@@ -6,7 +8,7 @@ public class Account {
     private String surname;
     private String lastName;
     private Date date;
-    private String phone;
+    private List<Phone> phones;//TODO
     private int icq;
     private String addressHome;
     private String addressJob;
@@ -14,19 +16,19 @@ public class Account {
     private String aboutMe;
     private String username;
     private String password;
-    private int role;
+    private Role role;//TODO
 
     public Account() {
     }
 
-    public Account(String name, String surname, String lastName, Date date, String phone,
+    public Account(String name, String surname, String lastName, Date date, List<Phone> phones,
                    int icq, String addressHome, String addressJob, String email, String aboutMe, String username,
-                   String password) {
+                   String password, Role role) {
         this.name = name;
         this.surname = surname;
         this.lastName = lastName;
         this.date = date;
-        this.phone = phone;
+        this.phones = phones;
         this.icq = icq;
         this.addressHome = addressHome;
         this.addressJob = addressJob;
@@ -34,6 +36,16 @@ public class Account {
         this.aboutMe = aboutMe;
         this.username = username;
         this.password = password;
+        this.phones = phones;
+        this.role = role;
+    }
+
+    public int getRole() {
+        return role.getStatus();
+    }
+
+    public void setRole(int status) {
+        this.role = Role.values()[status];
     }
 
     public String getUsername() {
@@ -92,12 +104,12 @@ public class Account {
         this.date = date;
     }
 
-    public String getPhone() {
-        return phone;
+    public List<Phone> getPhones() {
+        return phones;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setPhones(List<Phone> phones) {
+        this.phones = phones;
     }
 
     public int getIcq() {
@@ -140,14 +152,6 @@ public class Account {
         this.aboutMe = aboutMe;
     }
 
-    public int getRole() {
-        return role;
-    }
-
-    public void setRole(int role) {
-        this.role = role;
-    }
-
     @Override
     public String toString() {
         return "Account{" +
@@ -156,7 +160,7 @@ public class Account {
                 ", surname='" + surname + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", date=" + date +
-                ", phone='" + phone + '\'' +
+                ", phones ='" + phones + '\'' +
                 ", icq=" + icq +
                 ", addressHome='" + addressHome + '\'' +
                 ", addressJob='" + addressJob + '\'' +
@@ -164,7 +168,7 @@ public class Account {
                 ", aboutMe='" + aboutMe + '\'' +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
-                ", role=" + role +
+                ", role=" + role.getStatus() +
                 '}';
     }
 

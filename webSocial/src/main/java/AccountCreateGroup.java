@@ -17,26 +17,22 @@ public class AccountCreateGroup extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("AccountCreateGroup doPost");
-        try {
-            HttpSession session = request.getSession();
-            Account account = (Account) session.getAttribute("account");
-            AccountService service = new AccountService();
-            List<Group> groups = service.readGroups();
-            if (createGroup(groups, request.getParameter("name"))) {
-                Group group = new Group();
-                group.setIdAdministrator(account.getId());
-                group.setIdAccount(account.getId());
-                group.setGroupName(request.getParameter("name"));
-                group.setLogo(request.getParameter("logo"));
-                System.out.println("AccountCreateGroup doPost - " + group);
-                service.createAccountGroups(group);
-                RequestDispatcher requestDispatcher = request.getRequestDispatcher("jsp/AccountGroup.jsp");
-                requestDispatcher.forward(request, response);
-            }
-        } catch (Exception e) {
-            System.out.println("AccountCreateGroup Exception - " + e);
+        HttpSession session = request.getSession();
+        Account account = (Account) session.getAttribute("account");
+        AccountService service = new AccountService();
+        List<Group> groups = service.readGroups();
+        if (createGroup(groups, request.getParameter("name"))) {
+            Group group = new Group();
+            group.setIdAdministrator(account.getId());
+            group.setIdAccount(account.getId());
+            group.setGroupName(request.getParameter("name"));
+            group.setLogo(request.getParameter("logo"));
+            System.out.println("AccountCreateGroup doPost - " + group);
+            service.createAccountGroups(group);
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher("jsp/AccountGroup.jsp");
+            requestDispatcher.forward(request, response);
         }
     }
 

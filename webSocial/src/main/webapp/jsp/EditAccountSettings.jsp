@@ -9,9 +9,12 @@
 <html>
 <head>
     <title>Изменение данных пользователя</title>
+    <style>
+        <%@include file='css/style.css' %>
+    </style>
 </head>
 <body>
-<form method="post">
+<form method="post" class = "modal">
     <br>name: <input name="name"/>
     <br>surname: <input name="surname"/>
     <br>lastName: <input name="lastName"/>

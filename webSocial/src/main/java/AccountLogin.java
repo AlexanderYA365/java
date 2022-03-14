@@ -30,6 +30,8 @@ public class AccountLogin extends HttpServlet {
         } else {
             System.out.println("AccountLogin.doGet -> else");
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("jsp/index.jsp");
+            int errorLogin = 1;
+            request.setAttribute("errorLogin",errorLogin);
             requestDispatcher.forward(request, response);
         }
     }

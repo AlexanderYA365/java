@@ -10,14 +10,21 @@
 <html>
 <head>
     <title>Друзья аккаунта ${account.name}</title>
+    <style>
+        <%@include file='css/style.css' %>
+    </style>
 </head>
 <body>
 <br>друзья аккаунта ${account.name}
 <div>
-    <c:forEach var="friend" items="${friendsname}">
-        <br>
-        <c:out value="${friend}"/>
-    </c:forEach>
+    <table>
+        <tr><th>Имя пользователя</th><th>Имя друга</th><th>написать сообщение</th></tr>
+        <c:forEach var="friend" items="${friends}">
+            <tr><td><c:out value="${friend.username}"/></td>
+                <td><c:out value="${friend.name}"/></td>
+                <td><input type="submit" name="button1" value="написать"/></td></tr>
+        </c:forEach>
+    </table>
 </div>
 <br>
 <button onclick="location.href='main.jsp'">На главную</button>

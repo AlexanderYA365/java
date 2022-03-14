@@ -21,16 +21,18 @@ public class ConnectionMYSQL {
 
     public static void main(String[] args) {
         //connectDataBase();
-        ConnectionPool connectionPool = ConnectionPool.getInstance();
-        try {
-            connectionPool.create();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        Connection connection;
+        Pool connectionPool;
+        connectionPool = ConnectionPool.getInstance();
+        for(int i = 0; i < 10; i++){
+            connection = connectionPool.getConnection();
+            connectionPool.returnConnection(connection);
         }
-        connection = connectionPool.getConnection();
-        Scanner scanner = new Scanner(System.in);
+        //testConnection();
+    }
+
+    private static void testConnection() {
+        /*Scanner scanner = new Scanner(System.in);
         while (true) {
             System.out.println("Select options:");
             System.out.println("1 - create new account");
@@ -132,6 +134,8 @@ public class ConnectionMYSQL {
                 break;
             }
         }
+
+         */
     }
 
 }

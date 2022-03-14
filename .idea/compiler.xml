@@ -9,6 +9,7 @@
         <module name="webSocial" />
         <module name="common" />
         <module name="service" />
+        <module name="webapp" />
         <module name="dao" />
       </profile>
     </annotationProcessing>

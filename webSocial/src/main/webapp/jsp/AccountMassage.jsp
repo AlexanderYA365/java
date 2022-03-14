@@ -10,19 +10,25 @@
 
 <html>
 <head>
-    <title>Account massage</title>
+    <title>Сообщения пользователя</title>
+    <style>
+        <%@include file='css/style.css' %>
+    </style>
 </head>
 <body>
-<table>
-    <tr><th>Имя пользователя</th><th>дата сообщения</th><th>сообщение</th><th>ответить</th></tr>
-    <c:forEach var="massage" items="${massageList}">
-        <input type="hidden" name="accountId" value="${account.id}"/>
-        <tr><td><c:out value="${massage.idSender}"/></td>
-            <td><c:out value="${massage.publicationDate}"/></td>
-            <td><c:out value="${massage.massage}"/></td>
-            <td><input type="submit" name="button1" value="ответить"/></td></tr>
-    </c:forEach>
-</table>
+<form action="AccountWriteMassage.jsp" class = "modal">
+    <table>
+        <tr><th>Имя пользователя</th><th>дата сообщения</th><th>сообщение</th><th>ответить</th></tr>
+        <c:forEach var="massage" items="${massageList}">
+            <tr><td><c:out value="${massage.usernameSender}"/></td>
+                <td><c:out value="${massage.publicationDate}"/></td>
+                <td><c:out value="${massage.massage}"/></td>
+                <td><button type="submit" name="selectUser"
+                            value=${massage.idSender}>ответить</button></td></tr>
+        </c:forEach>
+    </table>
+</form>
 <button onclick="location.href='main.jsp'">На главную</button>
+
 </body>
 </html>

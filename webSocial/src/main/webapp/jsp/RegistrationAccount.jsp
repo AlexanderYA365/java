@@ -8,10 +8,13 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Create Account</title>
+    <title>Создание аккаунта</title>
+    <style>
+        <%@include file='css/style.css' %>
+    </style>
 </head>
 <body>
-<form method="post">
+<form method="post" class = "modal">
     <br>Username: <input name="username"/>
     <br>password: <input id="password" name="password" type="password" pattern="^\S{6,}$"
                          onchange="this.setCustomValidity(this.validity.patternMismatch ? 'Must have at least 6 characters' : ''); if(this.checkValidity()) form.password_two.pattern = this.value;"

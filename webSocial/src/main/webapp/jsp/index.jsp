@@ -6,25 +6,40 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <html>
 <head>
-    <title>Welcome</title>
+    <title>Добро пожаловать</title>
+    <style>
+        <%@include file='css/style.css' %>
+    </style>
 </head>
 <body>
-<form action="index.jsp">
-    <label>username:
-        <input type="text" name="username">
-    </label>
-
-    <label>password:
-        <input type="password" name="password">
-    </label>
-    <div>
-        <button onclick>go</button>
-    </div>
-</form>
-<div>
-    <button onclick="location.href='Account.jsp'">Registered new account</button>
+<p align="center">
+    Добро пожаловать
+</p>
+<div class="form">
+    <form action="index.jsp" class = "modal">
+        <c:if test="${errorLogin == 1}">
+            <label class="error">
+                Ошибка при вводе логина или пароль
+            </label>
+        </c:if>
+        <div class="field">
+            <label>имя пользователя:</label><input type="text" name="username">
+        </div>
+        <div class="field">
+            <label>пароль:</label> <input type="password" name="password">
+        </div>
+        <div class="field">
+            <button onclick>войти</button>
+        </div>
+    </form>
+    <button class="reg" onclick="location.href='RegistrationAccount.jsp'">Зарегистрировать новый аккаунт</button>
 </div>
+
 </body>
 </html>
+
+

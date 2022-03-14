@@ -6,44 +6,11 @@ import java.util.List;
 import java.util.Properties;
 
 public class WallMassageDao {
-    private String url;
-    private String username;
-    private String password;
     private Connection connection;
+    private final Pool connectionPool;
 
     WallMassageDao() {
-        System.out.println("WallMassageDao - start");
-        try (InputStream input = AccountDao.class.getClassLoader().getResourceAsStream("database.properties")) {
-            Properties prop = new Properties();
-            if (input == null) {
-                throw new Exception("Sorry, unable to find database.properties");
-            }
-            System.out.println("try read properties ");
-            prop.load(input);
-            url = prop.getProperty("url");
-            username = prop.getProperty("username");
-            password = prop.getProperty("password");
-            System.out.println("url = " + url);
-            System.out.println("username = " + username);
-            System.out.println("password = " + password);
-
-        } catch (IOException ex) {
-            System.out.println(ex);
-            ex.printStackTrace();
-        } catch (Exception e) {
-            System.out.println(e);
-            e.printStackTrace();
-        }
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            connection = DriverManager.getConnection(url, username, password);//TODO connection pool
-            connection.setAutoCommit(false);
-        } catch (SQLException | ClassNotFoundException throwables) {
-            System.out.println("Connection failed... WallMassageDao");
-            throwables.printStackTrace();
-        }
-        System.out.println("WallMassageDao - finish");
-
+        connectionPool = ConnectionPool.getInstance();
     }
 
     public boolean create(WallMassage wallMassage) {
@@ -53,6 +20,7 @@ public class WallMassageDao {
         String sql = "INSERT INTO wallmassage(idSender, idReceiving, massage, picture, publicationDate, edited) " +
                 "VALUES (?,?,?,?, NOW(), ?);";
         System.out.println(sql);
+        connection = connectionPool.getConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {//TODO
             preparedStatement.setInt(1, wallMassage.getIdSender());
             preparedStatement.setInt(2, wallMassage.getIdReceiving());
@@ -68,6 +36,7 @@ public class WallMassageDao {
         } finally {
             try {
                 connection.commit();
+                connectionPool.returnConnection(connection);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -80,6 +49,7 @@ public class WallMassageDao {
         List<WallMassage> massageList = new ArrayList<WallMassage>();
         String sql = "SELECT * FROM wallmassage WHERE idReceiving = ?";
         System.out.println(sql);
+        connection = connectionPool.getConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -98,6 +68,35 @@ public class WallMassageDao {
             System.out.println(ex);
         }
         System.out.println("readWallMassageUserId - finish");
+        connectionPool.returnConnection(connection);
         return massageList;
     }
+
+    public List<WallMassage> readWallMassageUserIdNameSender(int id) {
+        System.out.println("readWallMassageUserIdNameSender - start");
+        List<WallMassage> massageList = new ArrayList<WallMassage>();
+        String sql = "SELECT username, massage, picture, publicationDate FROM account JOIN wallmassage " +
+                "ON idAccount = idSender WHERE idReceiving = ?";
+        System.out.println(sql);
+        connection = connectionPool.getConnection();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                WallMassage massage = new WallMassage();
+                massage.setUsernameSender(resultSet.getString(1));
+                massage.setMassage(resultSet.getString(2));
+                massage.setPicture(resultSet.getString(3));
+                massage.setPublicationDate(resultSet.getDate(4));
+                massageList.add(massage);
+            }
+        } catch (Exception ex) {
+            System.out.println("Connection failed...readWallMassageUserId");
+            System.out.println(ex);
+        }
+        System.out.println("readWallMassageUserId - finish");
+        connectionPool.returnConnection(connection);
+        return massageList;
+    }
+
 }

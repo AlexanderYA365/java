@@ -54,8 +54,6 @@ class AccountTest {
     @org.junit.jupiter.api.Test
     void getPhone() {
         Account account = new Account();
-        account.setPhone("test");
-        Assert.assertEquals(expectedString, account.getPhone());
     }
 
     @org.junit.jupiter.api.Test
@@ -145,13 +143,6 @@ class AccountTest {
     @org.junit.jupiter.api.Test
     void setDate() {
         //TODO
-    }
-
-    @org.junit.jupiter.api.Test
-    void setPhone() {
-        Account account = new Account();
-        account.setPhone("test");
-        Assert.assertEquals(expectedString, account.getPhone());
     }
 
     @org.junit.jupiter.api.Test

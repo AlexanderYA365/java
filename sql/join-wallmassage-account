@@ -1,0 +1,4 @@
+SELECT username, massage, picture, publicationDate
+FROM account
+JOIN wallmassage ON idAccount = idSender
+WHERE idReceiving = 1
