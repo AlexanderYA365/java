@@ -15,28 +15,25 @@
     </style>
 </head>
 <body>
-
-
-<form method="post" class = "modal">
-    <div>
-        <table>
-            <tr><th>Имя пользователя</th><th>дата</th><th>сообщение</th></tr>
-            <c:forEach var="massage" items="${massageList}">
-                <tr><td><c:out value="${massage.usernameSender}"/></td>
-                    <td><c:out value="${massage.publicationDate}"/></td>
-                    <td><c:out value="${massage.massage}"/></td></tr>
-            </c:forEach>
-        </table>
+<jsp:include page="navbar.jsp"/>
+<main role="main">
+    <div id="main" class = "modal">
+        <div class="article1">
+                    <table>
+                        <tr><th>Имя пользователя</th><th>дата</th><th>сообщение</th></tr>
+                        <c:forEach var="massage" items="${massageList}">
+                            <tr><td><c:out value="${massage.usernameSender}"/></td>
+                                <td><c:out value="${massage.publicationDate}"/></td>
+                                <td><c:out value="${massage.massage}"/></td></tr>
+                        </c:forEach>
+                    </table>
+        </div>
+        <div method="post">
+            Сообщение
+                <textarea name="NewMessage" cols="40" rows="3"></textarea>
+                <input type="submit"  value="отправить"/>
+        </div>
     </div>
-</form>
-
-<form method="post" class = "modal">
-    Сообщение
-    <div>
-        <textarea name="NewMessage" cols="40" rows="3"></textarea>
-        <input type="submit"  value="отправить"/>
-    </div>
-</form>
-
+</main>
 </body>
 </html>

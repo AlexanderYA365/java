@@ -23,7 +23,7 @@ public class AccountPage extends HttpServlet {
 
     private List<WallMassage> printMassage(Account account) {
         System.out.println("printMassage");
-        AccountService service = new AccountService();
+        MessageService service = new MessageService();
         List<WallMassage> massageList = service.readWallMassage(account);
         return massageList;
     }

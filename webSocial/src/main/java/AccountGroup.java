@@ -14,7 +14,7 @@ public class AccountGroup extends HttpServlet {
         System.out.println("AccountSettings doGet");
         HttpSession session = request.getSession();
         Account account = (Account) session.getAttribute("account");
-        AccountService service = new AccountService();
+        GroupService service = new GroupService();
         List<Group> groups = service.readAccountGroups(account);
         System.out.println(groups);
         session.setAttribute("groups", groups);

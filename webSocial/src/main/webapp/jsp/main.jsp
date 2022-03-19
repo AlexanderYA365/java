@@ -10,34 +10,25 @@
 
 <html>
 <head>
+    <title>Ваша страница</title>
     <style>
         <%@include file='css/style.css' %>
     </style>
 </head>
 <body>
-<div>
+<jsp:include page="navbar.jsp"/>
+<main role="main">
     <div>
-        <button onclick="location.href='AccountFriends.jsp'">Account Friends</button>
+        <table>
+            <tr><th>Имя пользователя</th><th>дата сообщения</th><th>сообщение</th><th>ответить</th></tr>
+                <c:forEach var="massage" items="${massages}">
+                    <tr><td><c:out value="${massage.usernameSender}"/></td>
+                        <td><c:out value="${massage.publicationDate}"/></td>
+                        <td><c:out value="${massage.massage}"/></td>
+                        <td><input type="submit" name="button1" value="ответить"/></td></tr>
+                </c:forEach>
+        </table>
     </div>
-    <div>
-        <button onclick="location.href='AccountGroup.jsp'">Account Groups</button>
-    </div>
-    <div>
-        <button onclick="location.href='myAccount.jsp'">My Account</button>
-    </div>
-    <div>
-        <button onclick="location.href='AccountMassage.jsp'">My message</button>
-    </div>
-
-    <table>
-        <tr><th>Имя пользователя</th><th>дата сообщения</th><th>сообщение</th><th>ответить</th></tr>
-            <c:forEach var="massage" items="${massages}">
-                <tr><td><c:out value="${massage.usernameSender}"/></td>
-                    <td><c:out value="${massage.publicationDate}"/></td>
-                    <td><c:out value="${massage.massage}"/></td>
-                    <td><input type="submit" name="button1" value="ответить"/></td></tr>
-            </c:forEach>
-    </table>
-</div>
+</main>
 </body>
 </html>

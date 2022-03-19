@@ -20,7 +20,7 @@ public class AccountWriteMassage extends HttpServlet {
         System.out.println("selectUser - " + selectUser);
         int idSender = Integer.parseInt(selectUser);
         request.setAttribute("account", account);
-        AccountService service = new AccountService();
+        MessageService service = new MessageService();
         List<Massage> massageList = service.accountMassage(idSender, account.getId());
         System.out.println("AccountWriteMassage.massageList" + massageList);
         request.setAttribute("massageList", massageList);
@@ -39,7 +39,7 @@ public class AccountWriteMassage extends HttpServlet {
         System.out.println("selectUser - " + selectUser);
         int IdReceiving = Integer.parseInt(selectUser);
         System.out.println("IdReceiving - " + IdReceiving);
-        AccountService service = new AccountService();
+        MessageService service = new MessageService();
         Massage massage = new Massage();
         massage.setIdReceiving(IdReceiving);
         massage.setIdSender(account.getId());

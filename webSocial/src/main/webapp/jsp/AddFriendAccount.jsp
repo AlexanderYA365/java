@@ -16,24 +16,24 @@
     </style>
 </head>
 <body>
-<form method="post" class = "modal">
-    <br>name: <input name="name"/>
-    <br><input type="submit" value="Submit"/>
-</form>
-<form method="post" class = "modal">
-<div>
-    <table>
-        <tr><th>Имя пользователя</th><th>добавить</th></tr>
-    <c:forEach var="account" items="${accounts}">
-        <input type="hidden" name="accountId" value="${account.id}"/>
-        <tr><td><c:out value="${account.name}"/></td>
-            <td><input type="submit" name="button1" value="да"/></td></tr>
-    </c:forEach>
-    </table>
-</div>
-</form>
-<br>
-<button onclick="location.href='main.jsp'">На главную</button>
-
+<jsp:include page="navbar.jsp"/>
+<main role="main">
+    <form method="post" class = "modal">
+        <br>name: <input name="name"/>
+        <br><input type="submit" value="Submit"/>
+    </form>
+    <form method="post" class = "modal">
+    <div>
+        <table>
+            <tr><th>Имя пользователя</th><th>добавить</th></tr>
+        <c:forEach var="account" items="${accounts}">
+            <input type="hidden" name="accountId" value="${account.id}"/>
+            <tr><td><c:out value="${account.name}"/></td>
+                <td><input type="submit" name="button1" value="да"/></td></tr>
+        </c:forEach>
+        </table>
+    </div>
+    </form>
+</main>
 </body>
 </html>

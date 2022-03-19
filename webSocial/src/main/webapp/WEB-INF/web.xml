@@ -144,9 +144,19 @@
         <servlet-name>ShowGroup</servlet-name>
         <url-pattern>/showGroup</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>AccountLogout</servlet-name>
+        <servlet-class>AccountLogout</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AccountLogout</servlet-name>
+        <url-pattern>/AccountLogout.jsp</url-pattern>
+    </servlet-mapping>
+
     <welcome-file-list>
         <welcome-file>jsp/index.jsp</welcome-file>
     </welcome-file-list>
+
     <session-config>
         <session-timeout>10</session-timeout>
     </session-config>

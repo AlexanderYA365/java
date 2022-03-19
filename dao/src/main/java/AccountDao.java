@@ -51,11 +51,44 @@ public class AccountDao {
         return true;
     }
 
+    public Account readAccount(String username, String password){
+        System.out.println("readAccount - username = " + username + " ,password = " + password);
+        Account account = new Account();
+        connection = connectionPool.getConnection();
+        String sql = "SELECT * FROM account WHERE username = ? AND password = ?";
+        try (PreparedStatement query = connection.prepareStatement(sql)) {
+            query.setString(1, username);
+            query.setString(2, password);
+            ResultSet resultSet = query.executeQuery();
+            while (resultSet.next()) {
+                account.setId(resultSet.getInt(1));
+                account.setName(resultSet.getString(2));
+                account.setSurname(resultSet.getString(3));
+                account.setLastName(resultSet.getString(4));
+                account.setDate(resultSet.getDate(5));
+                account.setPhones(phoneDao.read(resultSet.getInt(1)));
+                account.setIcq(resultSet.getInt(6));
+                account.setAddressHome(resultSet.getString(7));
+                account.setAddressJob(resultSet.getString(8));
+                account.setEmail(resultSet.getString(9));
+                account.setAboutMe(resultSet.getString(10));
+                account.setUsername(resultSet.getString(11));
+                account.setPassword(resultSet.getString(12));
+                account.setRole(resultSet.getInt(13));
+            }
+        } catch (Exception ex) {
+            System.out.println("Connection failed...at readAccount");
+            System.out.println(ex);
+        }
+        connectionPool.returnConnection(connection);
+        return account;
+    }
+
     public Account readAccount(int id) {
+        System.out.println("readAccount(int id)");
         Account account = new Account();
         connection = connectionPool.getConnection();
         try (PreparedStatement query = connection.prepareStatement("SELECT * FROM account WHERE idAccount = ?")) {
-            System.out.println("Test connection to server at readAccount");
             query.setInt(1, id);
             ResultSet resultSet = query.executeQuery();
             while (resultSet.next()) {

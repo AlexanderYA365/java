@@ -14,18 +14,21 @@
     </style>
 </head>
 <body>
-<form method="post" class = "modal">
-    <br>name: <input name="name"/>
-    <br>surname: <input name="surname"/>
-    <br>lastName: <input name="lastName"/>
-    <br>Date: <input name="Date"/>
-    <br>phone: <input name="phone"/>
-    <br>icq: <input name="icq"/>
-    <br>addressHome: <input name="addressHome"/>
-    <br>addressJob: <input name="addressJob"/>
-    <br>email: <input name="email"/>
-    <br>aboutMe: <input name="aboutMe"/>
-    <br><input type="submit" value="Submit"/>
-</form>
+<jsp:include page="navbar.jsp"/>
+<main role="main">
+    <form method="post" class = "modal">
+        <br>name: <input name="name"/>
+        <br>surname: <input name="surname"/>
+        <br>lastName: <input name="lastName"/>
+        <br>Date: <input name="Date"/>
+        <br>phone: <input name="phone"/>
+        <br>icq: <input name="icq"/>
+        <br>addressHome: <input name="addressHome"/>
+        <br>addressJob: <input name="addressJob"/>
+        <br>email: <input name="email"/>
+        <br>aboutMe: <input name="aboutMe"/>
+        <br><input type="submit" value="Submit"/>
+    </form>
+</main>
 </body>
 </html>

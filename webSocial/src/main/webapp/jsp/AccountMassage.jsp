@@ -16,19 +16,20 @@
     </style>
 </head>
 <body>
-<form action="AccountWriteMassage.jsp" class = "modal">
-    <table>
-        <tr><th>Имя пользователя</th><th>дата сообщения</th><th>сообщение</th><th>ответить</th></tr>
-        <c:forEach var="massage" items="${massageList}">
-            <tr><td><c:out value="${massage.usernameSender}"/></td>
-                <td><c:out value="${massage.publicationDate}"/></td>
-                <td><c:out value="${massage.massage}"/></td>
-                <td><button type="submit" name="selectUser"
-                            value=${massage.idSender}>ответить</button></td></tr>
-        </c:forEach>
-    </table>
-</form>
-<button onclick="location.href='main.jsp'">На главную</button>
-
+<jsp:include page="navbar.jsp"/>
+<main role="main">
+    <form action="AccountWriteMassage.jsp" class = "modal">
+        <table>
+            <tr><th>Имя пользователя</th><th>дата сообщения</th><th>сообщение</th><th>ответить</th></tr>
+            <c:forEach var="massage" items="${massageList}">
+                <tr><td><c:out value="${massage.usernameSender}"/></td>
+                    <td><c:out value="${massage.publicationDate}"/></td>
+                    <td><c:out value="${massage.massage}"/></td>
+                    <td><button type="submit" name="selectUser"
+                                value=${massage.idSender}>ответить</button></td></tr>
+            </c:forEach>
+        </table>
+    </form>
+</main>
 </body>
 </html>

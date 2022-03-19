@@ -15,20 +15,20 @@
     </style>
 </head>
 <body>
-<br>друзья аккаунта ${account.name}
-<div>
-    <table>
-        <tr><th>Имя пользователя</th><th>Имя друга</th><th>написать сообщение</th></tr>
-        <c:forEach var="friend" items="${friends}">
-            <tr><td><c:out value="${friend.username}"/></td>
-                <td><c:out value="${friend.name}"/></td>
-                <td><input type="submit" name="button1" value="написать"/></td></tr>
-        </c:forEach>
-    </table>
-</div>
-<br>
-<button onclick="location.href='main.jsp'">На главную</button>
-<br>
-<button onclick="location.href='AddFriendAccount.jsp'">добавить друга</button>
+<jsp:include page="navbar.jsp"/>
+<main role="main">
+    <br>друзья аккаунта ${account.name}
+    <div>
+        <table>
+            <tr><th>Имя пользователя</th><th>Имя друга</th><th>написать сообщение</th></tr>
+            <c:forEach var="friend" items="${friends}">
+                <tr><td><c:out value="${friend.username}"/></td>
+                    <td><c:out value="${friend.name}"/></td>
+                    <td><input type="submit" name="button1" value="написать"/></td></tr>
+            </c:forEach>
+        </table>
+    </div>
+    <button onclick="location.href='AddFriendAccount.jsp'">добавить друга</button>
+</main>
 </body>
 </html>

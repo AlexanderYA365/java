@@ -15,20 +15,19 @@
     </style>
 </head>
 <body>
-<div>
-    <table>
-        <tr><th>Имя группы</th><th>картинка</th></tr>
-    <c:forEach var="group" items="${groups}">
-        <tr><td><a href='<c:url value = "/showGroup?id=${group.idGroup}" />'>${group.groupName}</a></td>
-            <td><c:out value="${group.logo}"/></td></tr>
-    </c:forEach>
-    </table>
-</div>
-<br>
-<button onclick="location.href='CreateGroup.jsp'">Создать группу</button>
-<br>
-<button onclick="location.href='AccountFindGroup.jsp'">поиск группы</button>
-<br>
-<button onclick="location.href='main.jsp'">На главную</button>
+<jsp:include page="navbar.jsp"/>
+<main role="main">
+    <div>
+        <table>
+            <tr><th>Имя группы</th><th>картинка</th></tr>
+        <c:forEach var="group" items="${groups}">
+            <tr><td><a href='<c:url value = "/showGroup?id=${group.idGroup}" />'>${group.groupName}</a></td>
+                <td><c:out value="${group.logo}"/></td></tr>
+        </c:forEach>
+        </table>
+    </div>
+    <br><button onclick="location.href='CreateGroup.jsp'">Создать группу</button>
+    <br><button onclick="location.href='AccountFindGroup.jsp'">поиск группы</button>
+</main>
 </body>
 </html>

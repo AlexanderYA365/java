@@ -15,7 +15,7 @@ public class AccountMassage extends HttpServlet {
         HttpSession session = request.getSession();
         Account account = (Account) session.getAttribute("account");
         request.setAttribute("account", account);
-        AccountService service = new AccountService();
+        MessageService service = new MessageService();
         List<Massage> massageList = service.readMassage(account);
         System.out.println("AccountMassage.massageList" + massageList);
         request.setAttribute("massageList", massageList);

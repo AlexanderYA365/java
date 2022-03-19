@@ -10,7 +10,7 @@ public class ShowGroup extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("ShowGroup doGet");
-        AccountService service = new AccountService();
+        GroupService service = new GroupService();
         Group group = service.readGroupID(Integer.parseInt(req.getParameter("id")));
         System.out.println(group);
         req.setAttribute("group", group);

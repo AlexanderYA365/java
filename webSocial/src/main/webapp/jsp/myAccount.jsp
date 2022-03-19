@@ -16,18 +16,20 @@
     </style>
 </head>
 <body>
-<form class = "modal">
-<br>name: ${account.name}
-<br>surname: ${account.surname}
-<br>lastName: ${account.lastName}
-<br>Date: ${account.date}
-<br>icq: ${account.icq}
-<br>addressHome: ${account.addressHome}
-<br>addressJob: ${account.addressJob}
-<br>email: ${account.email}
-<br>aboutMe: ${account.aboutMe}
-</form>
-<button onclick="location.href='EditAccountSettings.jsp'">Изменить данные пользователя</button>
-<button onclick="location.href='main.jsp'">На главную</button>
+<jsp:include page="navbar.jsp"/>
+<main role="main">
+    <form class = "modal">
+    <br>name: ${account.name}
+    <br>surname: ${account.surname}
+    <br>lastName: ${account.lastName}
+    <br>Date: ${account.date}
+    <br>icq: ${account.icq}
+    <br>addressHome: ${account.addressHome}
+    <br>addressJob: ${account.addressJob}
+    <br>email: ${account.email}
+    <br>aboutMe: ${account.aboutMe}
+    </form>
+    <button onclick="location.href='EditAccountSettings.jsp'">Изменить данные пользователя</button>
+</main>
 </body>
 </html>

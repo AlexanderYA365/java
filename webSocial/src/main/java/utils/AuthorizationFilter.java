@@ -2,54 +2,49 @@ package utils;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 @WebFilter(filterName = "AuthorizationFilter")
 public class AuthorizationFilter implements Filter {
-    private FilterConfig filterConfig;
-    private static List<String> pages;
-
-    public AuthorizationFilter()
-    {
-        if (pages == null) {
-            pages = new ArrayList<String>();
-        }
-    }
 
     public void destroy() {
-        filterConfig = null;
     }
 
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain)
+    public void doFilter(ServletRequest req, ServletResponse resp, FilterChain filterChain)
             throws ServletException, IOException {
-        if (filterConfig.getInitParameter("active").equalsIgnoreCase("true")) {
-            HttpServletRequest req = (HttpServletRequest)request;
-            String[] list = req.getRequestURI().split("/");
-            String page = null;
-            if (list[list.length - 1].indexOf(".jsp") > 0) {
-                page = list[list.length - 1];
-            }
-            if (page != null) {
-                if (pages.contains("index.jsp") || pages.contains("RegistrationAccount.jsp")) {
-                    filterChain.doFilter(request, response);
-                } else {
-                    ServletContext ctx = filterConfig.getServletContext();
-                    RequestDispatcher dispatcher = ctx.getRequestDispatcher("/index.jsp");
-                    dispatcher.forward(request, response);
-                }
-                if (!pages.contains(page)) {
-                    pages.add(page);
-                }
+        System.out.println("AuthorizationFilter.doFilter");
+        HttpServletRequest request = (HttpServletRequest) req;
+        HttpServletResponse response = (HttpServletResponse) resp;
+        HttpSession session = request.getSession(false);
+        Cookie[] cookies = request.getCookies();
+        Map<String, Cookie> cookieMap = new HashMap<>();
+        if (cookies != null) {
+            for (Cookie item : cookies) {
+                cookieMap.put(item.getName(), item);
             }
         }
-        filterChain.doFilter(request, response);
+        boolean isLogged = session != null && session.getAttribute("username") != null;
+        boolean isCookieExists = cookieMap.get("username") != null;
+        System.out.println("0");
+        System.out.println("session - " + session);
+        System.out.println("isLogged - " + isLogged + " isCookieExists - " + isCookieExists);
+        if (request.getServletPath().equals("/index.jsp") || request.getServletPath().equals("/RegistrationAccount.jsp")) {
+            filterChain.doFilter(request, response);
+        } else if (!isLogged && !isCookieExists) {
+            RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp?cookie=true");
+            dispatcher.forward(request, response);
+        } else {
+            filterChain.doFilter(request, response);
+        }
     }
 
     public void init(FilterConfig config) throws ServletException {
-        filterConfig = config;
     }
 
 }

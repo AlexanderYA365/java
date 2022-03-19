@@ -14,12 +14,13 @@
     </style>
 </head>
 <body>
-<form method="post" class = "modal">
-    <br>name: <input name="name"/>
-    <br>logo: <input name="logo"/>
-    <br><input type="submit" value="Submit"/>
-</form>
-<br>
-<button onclick="location.href='main.jsp'">На главную</button>
+<jsp:include page="navbar.jsp"/>
+<main role="main">
+    <form method="post" class = "modal">
+        <br>name: <input name="name"/>
+        <br>logo: <input name="logo"/>
+        <br><input type="submit" value="Submit"/>
+    </form>
+</main>>
 </body>
 </html>

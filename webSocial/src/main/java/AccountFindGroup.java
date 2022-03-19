@@ -22,7 +22,7 @@ public class AccountFindGroup extends HttpServlet {
         System.out.println("groupId - " + groupId);
         System.out.println("AccountFindGroup doPost");
         String groupName = request.getParameter("GroupName");
-        AccountService service = new AccountService();
+        GroupService service = new GroupService();
         if (groupId == null) {
             try {
                 List<Group> groups = service.getGroupName(groupName);

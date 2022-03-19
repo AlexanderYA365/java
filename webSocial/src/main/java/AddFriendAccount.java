@@ -21,10 +21,11 @@ public class AddFriendAccount extends HttpServlet {
         String[] accountId = request.getParameterValues("accountId");
         System.out.println("AddFriendAccount doPost");
         String name = request.getParameter("name");
-        AccountService service = new AccountService();
+        FriendService friendService = new FriendService();
+        AccountService accountService  = new AccountService();
         if (accountId == null) {
             try {
-                List<Account> accounts = service.getAccountName(name);
+                List<Account> accounts = accountService.getAccountName(name);
                 System.out.println(accounts);
                 request.setAttribute("accounts", accounts);
             } catch (Exception e) {
@@ -34,10 +35,10 @@ public class AddFriendAccount extends HttpServlet {
         if (accountId != null) {
             HttpSession session = request.getSession();
             Account account = (Account) session.getAttribute("account");
-            Account accountFriend = service.read(Integer.parseInt(accountId[0]));//TODO
+            Account accountFriend = accountService.read(Integer.parseInt(accountId[0]));//TODO
             System.out.println("account - " + account);
             System.out.println("friend - " + accountFriend);
-            service.addFriend(account, accountFriend);
+            friendService.addFriend(account, accountFriend);
         }
         doGet(request, response);
     }

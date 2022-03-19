@@ -14,7 +14,7 @@ public class AccountFriends extends HttpServlet {
         System.out.println("AccountFriends doGet");
         HttpSession session = request.getSession();
         Account account = (Account) session.getAttribute("account");
-        AccountService service = new AccountService();
+        FriendService service = new FriendService();
         List<Friend> friends = service.insertAccountFriends(account.getId());
         System.out.println(friends);
         request.setAttribute("friends", friends);

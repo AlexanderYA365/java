@@ -1,10 +1,7 @@
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.*;
 import java.io.IOException;
 import java.util.List;
 
@@ -14,18 +11,37 @@ public class AccountLogin extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         System.out.println("AccountLogin doGet");
-        AccountDao accountDao = new AccountDao();
-        List<Account> accounts = accountDao.readAccounts();
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        System.out.println("username - " + username + " password - " + password);
-        Account registeredAccount = idAccount(accounts, username, password);
-        HttpSession session = request.getSession();
-        session.setAttribute("account", registeredAccount);
+        String username = null;
+        String password = null;
+        boolean useCookies = Boolean.parseBoolean(request.getParameter("cookie"));
+        if (useCookies) {
+            Cookie[] cookies = request.getCookies();
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("username")) {
+                    username = cookie.getValue();
+                }
+                if (cookie.getName().equals("password")) {
+                    password = cookie.getValue();
+                }
+            }
+        } else {
+            username = request.getParameter("username");
+            password = request.getParameter("password");
+            System.out.println("username - " + username + " password - " + password);
+        }
+        AccountService service = new AccountService();
+        Account registeredAccount = service.getAccount(username, password);
         if (registeredAccount.getId() != 0) {
-            List<WallMassage> massages = printMassage(registeredAccount);
+            HttpSession session = request.getSession();
+            session.setAttribute("account", registeredAccount);
+            List<WallMassage> massages = printMessage(registeredAccount);
             System.out.println("wallMassage - " + massages);
             request.setAttribute("massages", massages);
+            session.setAttribute("username", registeredAccount.getUsername());
+            Cookie cookieUsername = new Cookie("username", username);
+            Cookie cookiePassword = new Cookie("password", password);
+            response.addCookie(cookieUsername);
+            response.addCookie(cookiePassword);
             getServletContext().getRequestDispatcher("/main.jsp").forward(request, response);
         } else {
             System.out.println("AccountLogin.doGet -> else");
@@ -36,21 +52,11 @@ public class AccountLogin extends HttpServlet {
         }
     }
 
-    private List<WallMassage> printMassage(Account registeredAccount) {
-        System.out.println("printMassage");
-        AccountService service = new AccountService();
+    private List<WallMassage> printMessage(Account registeredAccount) {
+        System.out.println("printMessage");
+        MessageService service = new MessageService();
         List<WallMassage> massageList = service.readWallMassage(registeredAccount);
         return massageList;
     }
 
-    private Account idAccount(List<Account> accounts, String username, String password) {
-        Account findAccount = new Account();
-        for (Account account : accounts) {
-            if (account.getUsername().equals(username) && account.getPassword().equals(password)) {
-                findAccount = account;
-                break;
-            }
-        }
-        return findAccount;
-    }
 }

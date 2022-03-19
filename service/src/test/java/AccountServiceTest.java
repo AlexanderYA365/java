@@ -31,7 +31,7 @@ class AccountServiceTest {
     @Test
     void addFriend() {
         Account account = Mockito.mock(Account.class);
-        AccountService accountService = Mockito.mock(AccountService.class);
+        FriendService accountService = Mockito.mock(FriendService.class);
         Mockito.when(accountService.addFriend(account, account)).thenReturn(true);
         Assert.assertEquals(true, accountService.addFriend(account, account));
     }
@@ -39,7 +39,7 @@ class AccountServiceTest {
     @Test
     void deleteFriend() {
         Account account = Mockito.mock(Account.class);
-        AccountService accountService = Mockito.mock(AccountService.class);
+        FriendService accountService = Mockito.mock(FriendService.class);
         Mockito.when(accountService.deleteFriend(account, account)).thenReturn(true);
         Assert.assertEquals(true, accountService.deleteFriend(account, account));
     }
@@ -47,7 +47,7 @@ class AccountServiceTest {
     @Test
     void accountFriends() {
         Account account = Mockito.mock(Account.class);
-        AccountService accountService = Mockito.mock(AccountService.class);
+        FriendService accountService = Mockito.mock(FriendService.class);
         Mockito.when(accountService.accountFriends(account)).thenReturn(null);
         Assert.assertEquals(null, accountService.accountFriends(account));
     }

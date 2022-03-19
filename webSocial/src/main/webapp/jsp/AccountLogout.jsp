@@ -1,23 +1,21 @@
 <%--
   Created by IntelliJ IDEA.
   User: Александр
-  Date: 03.03.2022
-  Time: 22:45
+  Date: 17.03.2022
+  Time: 21:57
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
-    <title>Группа ${group.groupName}</title>
+    <title>Группы ${account.name}</title>
     <style>
         <%@include file='css/style.css' %>
     </style>
 </head>
 <body>
-<jsp:include page="navbar.jsp"/>
-<main role="main">
-    <br>name - ${group}
-</main>
+    <div id="main" class = "modal">
+        До скорой встречи
+    </div>
 </body>
 </html>
