@@ -8,12 +8,12 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("AccountWriteMassage.jsp")
-public class AccountWriteMassage extends HttpServlet {
+@WebServlet("AccountWriteMessage.jsp")
+public class AccountWriteMessage extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("AccountWriteMassage doGet");
+        System.out.println("AccountWriteMessage doGet");
         HttpSession session = request.getSession();
         Account account = (Account) session.getAttribute("account");
         String selectUser = request.getParameter("selectUser");
@@ -21,30 +21,31 @@ public class AccountWriteMassage extends HttpServlet {
         int idSender = Integer.parseInt(selectUser);
         request.setAttribute("account", account);
         MessageService service = new MessageService();
-        List<Massage> massageList = service.accountMassage(idSender, account.getId());
-        System.out.println("AccountWriteMassage.massageList" + massageList);
-        request.setAttribute("massageList", massageList);
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("jsp/AccountWriteMassage.jsp");
+        List<Message> personalMail = service.accountMessage(idSender, account.getId());
+        System.out.println("AccountWriteMessage.personalMail" + personalMail);
+        request.setAttribute("personalMail", personalMail);
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher("jsp/AccountWriteMessage.jsp");
         requestDispatcher.forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("AccountWriteMassage doPost");
+        System.out.println("AccountWriteMessage doPost");
         HttpSession session = request.getSession();
         Account account = (Account) session.getAttribute("account");
-        String message = request.getParameter("NewMessage");
-        System.out.println("NewMessage - " + message);
+        String newMessage = request.getParameter("NewMessage");
+        System.out.println("NewMessage - " + newMessage);
         String selectUser = request.getParameter("selectUser");
         System.out.println("selectUser - " + selectUser);
         int IdReceiving = Integer.parseInt(selectUser);
         System.out.println("IdReceiving - " + IdReceiving);
         MessageService service = new MessageService();
-        Massage massage = new Massage();
-        massage.setIdReceiving(IdReceiving);
-        massage.setIdSender(account.getId());
-        massage.setMassage(message);
-        service.createMassage(massage);
+        Message message = new Message();
+        message.setIdReceiving(IdReceiving);
+        message.setIdSender(account.getId());
+        message.setMessage(newMessage);
+        message.setMessageType(1);
+        service.createMassage(message);
         doGet(request, response);
     }
 

@@ -3,6 +3,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class ShowGroup extends HttpServlet {
@@ -12,6 +13,16 @@ public class ShowGroup extends HttpServlet {
         System.out.println("ShowGroup doGet");
         GroupService service = new GroupService();
         Group group = service.readGroupID(Integer.parseInt(req.getParameter("id")));
+        ApplicationService applicationService = new ApplicationService();
+        HttpSession session = req.getSession();
+        Account account = (Account) session.getAttribute("account");
+        Application application = applicationService.readGroupAccount(group, account.getId());
+        System.out.println("Application - " + application);
+        if (application != null) {
+            req.setAttribute("application", application);
+            int newUserGroup = application.getStatus();
+            req.setAttribute("newUserGroup", newUserGroup);
+        }
         System.out.println(group);
         req.setAttribute("group", group);
         RequestDispatcher requestDispatcher = req.getRequestDispatcher("jsp/showGroup.jsp");

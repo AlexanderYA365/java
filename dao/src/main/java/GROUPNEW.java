@@ -1,10 +1,15 @@
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GROUPNEW {
-    private Connection connection;
     private final Pool connectionPool;
+    private Connection connection;
 
     public GROUPNEW(Pool connectionPool) {
         this.connectionPool = connectionPool;

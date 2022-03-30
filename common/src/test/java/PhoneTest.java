@@ -18,7 +18,7 @@ class PhoneTest {
     }
 
     @Test
-    void getPhoneType(){
+    void getPhoneType() {
         Phone phone = new Phone();
         phone.setPhoneType(1);
         Assert.assertEquals(1, phone.getPhoneType());

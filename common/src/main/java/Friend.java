@@ -1,5 +1,5 @@
 public class Friend {
-    private int idFriends;
+    private int id;
     private int idAccount;
     private int idFriendsAccount;
     private String name;
@@ -37,18 +37,18 @@ public class Friend {
         this.idFriendsAccount = idFriendsAccount;
     }
 
-    public int getIdFriends() {
-        return idFriends;
+    public int getId() {
+        return id;
     }
 
-    public void setIdFriends(int idFriends) {
-        this.idFriends = idFriends;
+    public void setId(int id) {
+        this.id = id;
     }
 
     @Override
     public String toString() {
         return "Friend{" +
-                "idFriends=" + idFriends +
+                "idFriends=" + id +
                 ", idAccount=" + idAccount +
                 ", idFriendsAccount=" + idFriendsAccount +
                 '}';

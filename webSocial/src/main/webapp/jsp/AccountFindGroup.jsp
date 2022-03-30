@@ -25,12 +25,17 @@
     <form method="post">
         <div>
             <table>
-                <tr><th>Имя группы</th><th>добавить</th></tr>
-            <c:forEach var="group" items="${findGroups}">
-                <input type="hidden" name="groupId" value="${group.idGroup}"/>
-                <tr><td><c:out value="${group.groupName}"/></td>
-                    <td><input type="submit" name="button1" value="добавить"/></td></tr>
-            </c:forEach>
+                <tr>
+                    <th>Имя группы</th>
+                    <th>добавить</th>
+                </tr>
+                <c:forEach var="group" items="${findGroups}">
+                    <input type="hidden" name="groupId" value="${group.idGroup}"/>
+                    <tr>
+                        <td><c:out value="${group.groupName}"/></td>
+                        <td><input type="submit" name="button1" value="добавить"/></td>
+                    </tr>
+                </c:forEach>
             </table>
         </div>
     </form>

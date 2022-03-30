@@ -18,16 +18,30 @@
 <body>
 <jsp:include page="navbar.jsp"/>
 <main role="main">
-    <form class = "modal">
-    <br>name: ${account.name}
-    <br>surname: ${account.surname}
-    <br>lastName: ${account.lastName}
-    <br>Date: ${account.date}
-    <br>icq: ${account.icq}
-    <br>addressHome: ${account.addressHome}
-    <br>addressJob: ${account.addressJob}
-    <br>email: ${account.email}
-    <br>aboutMe: ${account.aboutMe}
+    <form class="modal">
+        <br>name: ${account.name}
+        <br>surname: ${account.surname}
+        <br>lastName: ${account.lastName}
+        <br>Date: ${account.date}
+        <br>icq: ${account.icq}
+
+        <c:forEach var="phone" items="${account.phones}">
+            <c:if test="${phone.phoneType == 0}">
+                <br>домашний телефон -
+            </c:if>
+            <c:if test="${phone.phoneType == 1}">
+                <br>рабочий телефон -
+            </c:if>
+            <c:if test="${phone.phoneType == 2}">
+                <br>личный телефон -
+            </c:if>
+            ${phone.phoneNumber}
+        </c:forEach>
+
+        <br>addressHome: ${account.addressHome}
+        <br>addressJob: ${account.addressJob}
+        <br>email: ${account.email}
+        <br>aboutMe: ${account.aboutMe}
     </form>
     <button onclick="location.href='EditAccountSettings.jsp'">Изменить данные пользователя</button>
 </main>

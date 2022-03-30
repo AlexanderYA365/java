@@ -1,9 +1,10 @@
-import java.io.IOException;
-import java.io.InputStream;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 public class FriendDao {
     private Connection connection;
@@ -44,7 +45,7 @@ public class FriendDao {
             ResultSet resultSet = query.executeQuery();
             while (resultSet.next()) {
                 Friend friend = new Friend();
-                friend.setIdFriends(resultSet.getInt(1));
+                friend.setId(resultSet.getInt(1));
                 friend.setIdAccount(resultSet.getInt(2));
                 friend.setIdFriendsAccount(resultSet.getInt(3));
                 friendList.add(friend);
@@ -64,7 +65,7 @@ public class FriendDao {
             query.setInt(1, id);
             ResultSet resultSet = query.executeQuery();
             while (resultSet.next()) {
-                friend.setIdFriends(resultSet.getInt(1));
+                friend.setId(resultSet.getInt(1));
                 friend.setIdAccount(resultSet.getInt(2));
                 friend.setIdFriendsAccount(resultSet.getInt(3));
             }
@@ -101,7 +102,7 @@ public class FriendDao {
                 "UPDATE friends SET idAccount = ?, idFriendsAccount = ? WHERE idFriends = ?")) {
             query.setInt(1, friend.getIdAccount());
             query.setInt(2, friend.getIdFriendsAccount());
-            query.setInt(3, friend.getIdFriends());
+            query.setInt(3, friend.getId());
             int rows = query.executeUpdate();
             System.out.println("Updated rows = " + rows);
         } catch (Exception ex) {
@@ -120,7 +121,7 @@ public class FriendDao {
 
     public boolean deleteFriendIdAccountIdFriendAccount(int idAccount, int idFriend) {
         connection = connectionPool.getConnection();
-        try (PreparedStatement query = connection.prepareStatement("DELETE FROM friends WHERE idAccount = ?, idFriendsAccount = ? ")) {
+        try (PreparedStatement query = connection.prepareStatement("DELETE FROM friends WHERE idAccount = ? AND idFriendsAccount = ? ")) {
             query.setInt(1, idAccount);
             query.setInt(2, idFriend);
             int rows = query.executeUpdate();
@@ -143,7 +144,7 @@ public class FriendDao {
     public boolean delete(Friend friend) {
         connection = connectionPool.getConnection();
         try (PreparedStatement query = connection.prepareStatement("DELETE FROM friends WHERE idFriends = ?")) {
-            query.setInt(1, friend.getIdFriends());
+            query.setInt(1, friend.getId());
             int rows = query.executeUpdate();
             System.out.println("Delete rows = " + rows);
         } catch (SQLException throwables) {
@@ -164,22 +165,25 @@ public class FriendDao {
     public List<Friend> readFriendsName(int id) {
         System.out.println("readFriendsName - start");
         List<Friend> friends = new ArrayList<>();
-        String sql = "SELECT username, name FROM friends JOIN account " +
-                "ON friends.idFriendsAccount = account.idAccount WHERE friends.idAccount = ? AND friends.idFriendsAccount <> ?";
+        String sql = "SELECT a.username, a.name,  " +
+                "f.idAccount, f.idFriendsAccount, f.idFriends FROM friends f JOIN account a " +
+                "ON f.idFriendsAccount = a.idAccount WHERE f.idAccount = ?";
         System.out.println(sql);
         connection = connectionPool.getConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, id);
-            preparedStatement.setInt(2, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 Friend friend = new Friend();
                 friend.setUsername(resultSet.getString(1));
                 friend.setName(resultSet.getString(2));
+                friend.setIdAccount(resultSet.getInt(3));
+                friend.setIdFriendsAccount(resultSet.getInt(4));
+                friend.setId(resultSet.getInt(5));
                 friends.add(friend);
             }
         } catch (Exception ex) {
-            System.out.println("Connection failed...readWallMassageUserId");
+            System.out.println("Connection failed...readFriendsName");
             System.out.println(ex);
         }
         System.out.println("readWallMassageUserId - finish");

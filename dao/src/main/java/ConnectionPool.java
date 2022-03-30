@@ -8,7 +8,7 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Semaphore;
 
-public class ConnectionPool implements Pool{
+public class ConnectionPool implements Pool {
     private static final int POOL_SIZE = 10;
     private static String URL;
     private static String USERNAME;
@@ -22,15 +22,6 @@ public class ConnectionPool implements Pool{
             create();
         } catch (SQLException | ClassNotFoundException throwables) {
             System.out.println("ConnectionPoolException - " + throwables);
-        }
-    }
-
-    private void create() throws SQLException, ClassNotFoundException {
-        getProperty();
-        freeConnections = new ConcurrentLinkedQueue<>();
-        semaphore = new Semaphore(POOL_SIZE);
-        for (int i = 0; i < POOL_SIZE; i++) {
-            freeConnections.add(createConnection());
         }
     }
 
@@ -53,9 +44,18 @@ public class ConnectionPool implements Pool{
 
     public static ConnectionPool getInstance() {
         if (instance == null) {
-                instance = new ConnectionPool();
+            instance = new ConnectionPool();
         }
         return instance;
+    }
+
+    private void create() throws SQLException, ClassNotFoundException {
+        getProperty();
+        freeConnections = new ConcurrentLinkedQueue<>();
+        semaphore = new Semaphore(POOL_SIZE);
+        for (int i = 0; i < POOL_SIZE; i++) {
+            freeConnections.add(createConnection());
+        }
     }
 
     public void returnConnection(Connection connection) {

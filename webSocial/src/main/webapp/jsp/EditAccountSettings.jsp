@@ -16,7 +16,7 @@
 <body>
 <jsp:include page="navbar.jsp"/>
 <main role="main">
-    <form method="post" class = "modal">
+    <form method="post" class="modal">
         <br>name: <input name="name"/>
         <br>surname: <input name="surname"/>
         <br>lastName: <input name="lastName"/>

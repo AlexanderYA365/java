@@ -1,1 +1,2 @@
-ALTER TABLE account ADD COLUMN role INT;
+ALTER TABLE account
+    ADD COLUMN role INT;

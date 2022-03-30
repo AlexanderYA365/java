@@ -15,11 +15,19 @@ public class AccountFriends extends HttpServlet {
         HttpSession session = request.getSession();
         Account account = (Account) session.getAttribute("account");
         FriendService service = new FriendService();
-        List<Friend> friends = service.insertAccountFriends(account.getId());
-        System.out.println(friends);
+        List<Friend> friends = service.readAccountFriends(account.getId());
+        System.out.println("friends - " + friends);
         request.setAttribute("friends", friends);
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("jsp/AccountFriends.jsp");
         requestDispatcher.forward(request, response);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("AccountFriends doPost");
+        String[] idFriendsAccount = request.getParameterValues("idFriendsAccount");
+        System.out.println("idFriendsAccount - " + idFriendsAccount);
+        doGet(request, response);
     }
 
 }

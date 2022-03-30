@@ -20,15 +20,15 @@ class FriendTest {
     @Test
     void getIdFriends() {
         Friend friend = new Friend();
-        friend.setIdFriends(1);
-        Assert.assertEquals(1, friend.getIdFriends());
+        friend.setId(1);
+        Assert.assertEquals(1, friend.getId());
     }
 
     @Test
     void setIdFriends() {
         Friend friend = new Friend();
-        friend.setIdFriends(1);
-        Assert.assertEquals(1, friend.getIdFriends());
+        friend.setId(1);
+        Assert.assertEquals(1, friend.getId());
     }
 
     @Test

@@ -26,10 +26,16 @@ public class FriendService {
         return friendDAO.readFriends(account.getId());
     }
 
-    public List<Friend> insertAccountFriends(int idAccount) {
-        System.out.println("insertAccountFriends idAccount - " + idAccount);
+    public List<Friend> readAccountFriends(int idAccount) {
+        System.out.println("readAccountFriends idAccount - " + idAccount);
         FriendDao friendDao = new FriendDao();
         return friendDao.readFriendsName(idAccount);
+    }
+
+    public Friend read(int id) {
+        System.out.println("readAccountFriends id - " + id);
+        FriendDao friendDao = new FriendDao();
+        return friendDao.read(id);
     }
 
 }

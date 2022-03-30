@@ -1,1 +1,3 @@
-SELECT * FROM account WHERE name = 'ALEX'
+SELECT *
+FROM account
+WHERE name = 'ALEX'

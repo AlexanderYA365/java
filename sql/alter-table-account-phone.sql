@@ -1,1 +1,2 @@
-ALTER TABLE account DROP COLUMN phone;
+ALTER TABLE account
+    DROP COLUMN phone;

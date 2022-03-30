@@ -20,9 +20,9 @@
     Добро пожаловать
 </p>
 <div class="form">
-       <form action="index.jsp" class = "modal">
-           <fieldset>
-               <legend>Введите данные:</legend>
+    <form action="index.jsp" class="modal">
+        <fieldset>
+            <legend>Введите данные:</legend>
             <c:if test="${errorLogin == 1}">
                 <label class="error">
                     Ошибка при вводе логина или пароль
@@ -37,8 +37,8 @@
             <div class="field">
                 <button onclick>войти</button>
             </div>
-           </fieldset>
-       </form>
+        </fieldset>
+    </form>
     <button class="reg" onclick="location.href='RegistrationAccount.jsp'">Зарегистрировать новый аккаунт</button>
 </div>
 

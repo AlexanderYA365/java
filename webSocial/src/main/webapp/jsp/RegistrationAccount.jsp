@@ -14,7 +14,7 @@
     </style>
 </head>
 <body>
-<form method="post" class = "modal">
+<form method="post" class="modal">
     <br>Username: <input name="username"/>
     <br>password: <input id="password" name="password" type="password" pattern="^\S{6,}$"
                          onchange="this.setCustomValidity(this.validity.patternMismatch ? 'Must have at least 6 characters' : ''); if(this.checkValidity()) form.password_two.pattern = this.value;"

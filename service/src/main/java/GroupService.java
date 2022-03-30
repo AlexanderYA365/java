@@ -24,13 +24,13 @@ public class GroupService {
         return groupDao.readGroups();
     }
 
-    public List<Group> getGroupName(String groupName){
+    public List<Group> getGroupName(String groupName) {
         System.out.println("getGroupName groupName - " + groupName);
         GroupDao groupDao = new GroupDao();
         return groupDao.read(groupName);
     }
 
-    public Group readGroupID(int idGroup){
+    public Group readGroupID(int idGroup) {
         System.out.println("getGroupID idGroup - " + idGroup);
         GroupDao groupDao = new GroupDao();
         return groupDao.read(idGroup);

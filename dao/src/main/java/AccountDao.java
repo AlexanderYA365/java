@@ -1,11 +1,16 @@
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 public class AccountDao {
+    private final Pool connectionPool;
+    private final PhoneDao phoneDao;
     private Connection connection;
-    private Pool connectionPool;
-    private PhoneDao phoneDao;
 
     public AccountDao() {
         connectionPool = ConnectionPool.getInstance();
@@ -51,7 +56,7 @@ public class AccountDao {
         return true;
     }
 
-    public Account readAccount(String username, String password){
+    public Account readAccount(String username, String password) {
         System.out.println("readAccount - username = " + username + " ,password = " + password);
         Account account = new Account();
         connection = connectionPool.getConnection();
@@ -115,7 +120,7 @@ public class AccountDao {
         return account;
     }
 
-    public List<Account> readAccountsName(String name){
+    public List<Account> readAccountsName(String name) {
         List<Account> accounts = new ArrayList<Account>();
         String sql = "SELECT * FROM account WHERE name = ?";
         System.out.println(sql);

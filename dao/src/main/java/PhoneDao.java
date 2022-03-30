@@ -15,7 +15,7 @@ public class PhoneDao {
     }
 
     public boolean create(Phone phone) {
-        String sql = "INSERT INTO phone(idaccount, phonenumber, phonetype) " +
+        String sql = "INSERT INTO phone(id, phonenumber, phonetype) " +
                 "VALUES (?,?,?);";
         System.out.println(sql);
         connection = connectionPool.getConnection();
@@ -37,7 +37,7 @@ public class PhoneDao {
 
     public List<Phone> read(int id) {
         List<Phone> phones = new ArrayList<>();
-        String sql = "SELECT * FROM phone WHERE id = ?;";
+        String sql = "SELECT * FROM phone WHERE idaccount = ?;";
         System.out.println(sql);
         connection = connectionPool.getConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -61,7 +61,7 @@ public class PhoneDao {
     public boolean update(Phone phone) {
         connection = connectionPool.getConnection();
         try (PreparedStatement query = connection.prepareStatement(
-                "UPDATE phone SET phonenumber = ?, phonetype = ? WHERE idaccount = ?")) {
+                "UPDATE phone SET phonenumber = ?, phonetype = ? WHERE IdAccount = ?")) {
             query.setString(1, phone.getPhoneNumber());
             query.setString(2, phone.getPhoneNumber());
             query.setInt(3, phone.getIdAccount());
@@ -83,7 +83,7 @@ public class PhoneDao {
 
     public boolean delete(Phone phone) {
         connection = connectionPool.getConnection();
-        try (PreparedStatement query = connection.prepareStatement("DELETE FROM phone WHERE idaccount = ? AND phonenumber = ?")) {
+        try (PreparedStatement query = connection.prepareStatement("DELETE FROM phone WHERE IdAccount = ? AND phonenumber = ?")) {
             query.setInt(1, phone.getIdAccount());
             query.setString(2, phone.getPhoneNumber());
             int rows = query.executeUpdate();

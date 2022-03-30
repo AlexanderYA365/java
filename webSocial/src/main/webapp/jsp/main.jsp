@@ -20,13 +20,20 @@
 <main role="main">
     <div>
         <table>
-            <tr><th>Имя пользователя</th><th>дата сообщения</th><th>сообщение</th><th>ответить</th></tr>
-                <c:forEach var="massage" items="${massages}">
-                    <tr><td><c:out value="${massage.usernameSender}"/></td>
-                        <td><c:out value="${massage.publicationDate}"/></td>
-                        <td><c:out value="${massage.massage}"/></td>
-                        <td><input type="submit" name="button1" value="ответить"/></td></tr>
-                </c:forEach>
+            <tr>
+                <th>Имя пользователя</th>
+                <th>дата сообщения</th>
+                <th>сообщение</th>
+                <th>ответить</th>
+            </tr>
+            <c:forEach var="message" items="${messages}">
+                <tr>
+                    <td><c:out value="${message.usernameSender}"/></td>
+                    <td><c:out value="${message.publicationDate}"/></td>
+                    <td><c:out value="${message.message}"/></td>
+                    <td><input type="submit" name="button1" value="ответить"/></td>
+                </tr>
+            </c:forEach>
         </table>
     </div>
 </main>

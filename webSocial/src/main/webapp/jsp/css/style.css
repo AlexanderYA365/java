@@ -2,15 +2,22 @@ p {
     color: black;
     font-size: 25px;
 }
-.field {clear:both; text-align:right;}
-label {float:left;}
+
+.field {
+    clear: both;
+    text-align: right;
+}
+
+label {
+    float: left;
+}
+
 .modal {
     width: 350px;
     margin: 0 auto;
 }
 
-div.form
-{
+div.form {
     display: block;
     text-align: center;
 }
@@ -18,20 +25,22 @@ div.form
 .reg {
     text-align: left;
     position: relative;
-    left:2%;
+    left: 2%;
 }
 
-body {background-color: lightblue;}
+body {
+    background-color: lightblue;
+}
 
-.error{
+.error {
     color: #ff0000;
     size: A5;
 }
 
-.article1{
+.article1 {
     width: 400px;
     height: 500px;
-    margin:15px;
+    margin: 15px;
     border: 1px solid #ccc;
     overflow: auto;
 }

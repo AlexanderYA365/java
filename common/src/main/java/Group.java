@@ -3,6 +3,7 @@ import java.util.Date;
 public class Group {
     private int idGroup;
     private int idAccount;
+    private String nameAccount;
     private String groupName;
     private String logo;
     private Date dateCreateGroup;
@@ -17,6 +18,14 @@ public class Group {
         this.idAdministrator = idAdministrator;
         this.idAccount = idAccount;
         this.dateCreateGroup = dateCreateGroup;
+    }
+
+    public String getNameAccount() {
+        return nameAccount;
+    }
+
+    public void setNameAccount(String nameAccount) {
+        this.nameAccount = nameAccount;
     }
 
     public Date getDateCreateGroup() {
@@ -72,9 +81,12 @@ public class Group {
         return "Group{" +
                 "idGroup=" + idGroup +
                 ", idAccount=" + idAccount +
+                ", nameAccount='" + nameAccount + '\'' +
                 ", groupName='" + groupName + '\'' +
                 ", logo='" + logo + '\'' +
+                ", dateCreateGroup=" + dateCreateGroup +
                 ", idAdministrator=" + idAdministrator +
                 '}';
     }
+
 }

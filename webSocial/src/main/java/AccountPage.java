@@ -14,18 +14,18 @@ public class AccountPage extends HttpServlet {
         System.out.println("AccountPage doGet");
         HttpSession session = request.getSession();
         Account account = (Account) session.getAttribute("account");
-        List<WallMassage> massages = printMassage(account);
-        System.out.println("AccountPage - " + massages);
-        request.setAttribute("massages", massages);
+        List<Message> messages = printMassage(account);
+        System.out.println("AccountPage - " + messages);
+        request.setAttribute("messages", messages);
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("jsp/main.jsp");
         requestDispatcher.forward(request, response);
     }
 
-    private List<WallMassage> printMassage(Account account) {
+    private List<Message> printMassage(Account account) {
         System.out.println("printMassage");
         MessageService service = new MessageService();
-        List<WallMassage> massageList = service.readWallMassage(account);
-        return massageList;
+        List<Message> messageList = service.readWallMassageAccount(account);
+        return messageList;
     }
 
 }

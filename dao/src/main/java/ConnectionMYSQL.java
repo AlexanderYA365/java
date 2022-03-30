@@ -1,8 +1,6 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Date;
-import java.util.Scanner;
 
 public class ConnectionMYSQL {
     private static final String user = "root";
@@ -24,7 +22,7 @@ public class ConnectionMYSQL {
         Connection connection;
         Pool connectionPool;
         connectionPool = ConnectionPool.getInstance();
-        for(int i = 0; i < 10; i++){
+        for (int i = 0; i < 10; i++) {
             connection = connectionPool.getConnection();
             connectionPool.returnConnection(connection);
         }

@@ -1,16 +1,20 @@
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GroupDao {
-    private Connection connection;
     private final Pool connectionPool;
+    private Connection connection;
 
     public GroupDao() {
         connectionPool = ConnectionPool.getInstance();
     }
 
-    public boolean create(Group group) throws Exception {
+    public boolean create(Group group) {
         String sql = "INSERT INTO heroku_dc02d468f96562c.`group`(groupname, logo, idAdministrator, account)" +
                 " VALUES ('?', '?', ?, ?);";
         try (PreparedStatement query = connection.prepareStatement(sql)) {
@@ -107,7 +111,7 @@ public class GroupDao {
     }
 
     public List<Group> readGroupsAccount(int id) {
-        List<Group> groupList = new ArrayList<Group>();
+        List<Group> groupList = new ArrayList<>();
         try {
             connection = connectionPool.getConnection();
             Statement statement = connection.createStatement();

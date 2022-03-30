@@ -16,11 +16,12 @@
 <body>
 <jsp:include page="navbar.jsp"/>
 <main role="main">
-    <form method="post" class = "modal">
+    <form method="post" class="modal">
         <br>name: <input name="name"/>
         <br>logo: <input name="logo"/>
         <br><input type="submit" value="Submit"/>
     </form>
-</main>>
+</main>
+>
 </body>
 </html>

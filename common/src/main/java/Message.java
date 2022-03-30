@@ -1,12 +1,12 @@
 import java.io.Serializable;
 import java.util.Date;
 
-public class Massage  implements Serializable {
+public class Message implements Serializable {
     private static final long serialVersionUID = 2041275512219239992L;
     private int id;
     private int idSender;
     private int idReceiving;
-    private String massage;
+    private String message;
     private String picture;
     private Date publicationDate;
     private boolean edited;
@@ -62,12 +62,12 @@ public class Massage  implements Serializable {
         this.idReceiving = idReceiving;
     }
 
-    public String getMassage() {
-        return massage;
+    public String getMessage() {
+        return message;
     }
 
-    public void setMassage(String massage) {
-        this.massage = massage;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public String getPicture() {
@@ -95,12 +95,13 @@ public class Massage  implements Serializable {
     }
 
     @Override
-    public String toString() {
-        return "Massage{" +
+    public String toString() {//TODO как нормально выводить тип сообщений?
+        return "Message{" +
                 "id=" + id +
                 ", idSender=" + idSender +
                 ", idReceiving=" + idReceiving +
-                ", massage='" + massage + '\'' +
+                ", messageType=" + messageType.getStatus() +
+                ", message='" + message + '\'' +
                 ", picture='" + picture + '\'' +
                 ", publicationDate=" + publicationDate +
                 ", edited=" + edited +

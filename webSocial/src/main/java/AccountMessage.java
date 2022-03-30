@@ -7,7 +7,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
-public class AccountMassage extends HttpServlet {
+public class AccountMessage extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -16,10 +16,16 @@ public class AccountMassage extends HttpServlet {
         Account account = (Account) session.getAttribute("account");
         request.setAttribute("account", account);
         MessageService service = new MessageService();
-        List<Massage> massageList = service.readMassage(account);
-        System.out.println("AccountMassage.massageList" + massageList);
-        request.setAttribute("massageList", massageList);
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("jsp/AccountMassage.jsp");
+        List<Message> messageList = service.readMessage(account);
+        if (messageList.size() != 0) {
+            int haveMessage = 0;
+            request.setAttribute("haveMessage", haveMessage);
+            request.setAttribute("messageList", messageList);
+        } else {
+            int haveMessage = 1;
+            request.setAttribute("haveMessage", haveMessage);
+        }
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher("jsp/AccountMessage.jsp");
         requestDispatcher.forward(request, response);
     }
 

@@ -113,12 +113,12 @@
         <url-pattern>/AddFriendAccount.jsp</url-pattern>
     </servlet-mapping>
     <servlet>
-        <servlet-name>AccountMassage</servlet-name>
-        <servlet-class>AccountMassage</servlet-class>
+        <servlet-name>AccountMessage</servlet-name>
+        <servlet-class>AccountMessage</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>AccountMassage</servlet-name>
-        <url-pattern>/AccountMassage.jsp</url-pattern>
+        <servlet-name>AccountMessage</servlet-name>
+        <url-pattern>/AccountMessage.jsp</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>AccountFindGroup</servlet-name>
@@ -129,12 +129,12 @@
         <url-pattern>/AccountFindGroup.jsp</url-pattern>
     </servlet-mapping>
     <servlet>
-        <servlet-name>AccountWriteMassage</servlet-name>
-        <servlet-class>AccountWriteMassage</servlet-class>
+        <servlet-name>AccountWriteMessage</servlet-name>
+        <servlet-class>AccountWriteMessage</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>AccountWriteMassage</servlet-name>
-        <url-pattern>/AccountWriteMassage.jsp</url-pattern>
+        <servlet-name>AccountWriteMessage</servlet-name>
+        <url-pattern>/AccountWriteMessage.jsp</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>ShowGroup</servlet-name>
@@ -151,6 +151,14 @@
     <servlet-mapping>
         <servlet-name>AccountLogout</servlet-name>
         <url-pattern>/AccountLogout.jsp</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ShowFriend</servlet-name>
+        <servlet-class>ShowFriend</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ShowFriend</servlet-name>
+        <url-pattern>/ShowFriend</url-pattern>
     </servlet-mapping>
 
     <welcome-file-list>

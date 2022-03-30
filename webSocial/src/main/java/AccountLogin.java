@@ -1,9 +1,12 @@
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.*;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.List;
 
 @WebServlet("/")
 public class AccountLogin extends HttpServlet {
@@ -34,9 +37,6 @@ public class AccountLogin extends HttpServlet {
         if (registeredAccount.getId() != 0) {
             HttpSession session = request.getSession();
             session.setAttribute("account", registeredAccount);
-            List<WallMassage> massages = printMessage(registeredAccount);
-            System.out.println("wallMassage - " + massages);
-            request.setAttribute("massages", massages);
             session.setAttribute("username", registeredAccount.getUsername());
             Cookie cookieUsername = new Cookie("username", username);
             Cookie cookiePassword = new Cookie("password", password);
@@ -47,16 +47,9 @@ public class AccountLogin extends HttpServlet {
             System.out.println("AccountLogin.doGet -> else");
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("jsp/index.jsp");
             int errorLogin = 1;
-            request.setAttribute("errorLogin",errorLogin);
+            request.setAttribute("errorLogin", errorLogin);
             requestDispatcher.forward(request, response);
         }
-    }
-
-    private List<WallMassage> printMessage(Account registeredAccount) {
-        System.out.println("printMessage");
-        MessageService service = new MessageService();
-        List<WallMassage> massageList = service.readWallMassage(registeredAccount);
-        return massageList;
     }
 
 }

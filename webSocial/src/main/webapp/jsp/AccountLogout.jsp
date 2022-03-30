@@ -14,8 +14,8 @@
     </style>
 </head>
 <body>
-    <div id="main" class = "modal">
-        До скорой встречи
-    </div>
+<div id="main" class="modal">
+    До скорой встречи
+</div>
 </body>
 </html>

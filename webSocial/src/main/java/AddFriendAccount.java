@@ -22,7 +22,7 @@ public class AddFriendAccount extends HttpServlet {
         System.out.println("AddFriendAccount doPost");
         String name = request.getParameter("name");
         FriendService friendService = new FriendService();
-        AccountService accountService  = new AccountService();
+        AccountService accountService = new AccountService();
         if (accountId == null) {
             try {
                 List<Account> accounts = accountService.getAccountName(name);
