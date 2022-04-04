@@ -18,6 +18,12 @@
 <body>
 <jsp:include page="navbar.jsp"/>
 <main role="main">
+    <form method="post">
+        Сообщение
+        <textarea name="NewWallMessage" cols="40" rows="3"></textarea>
+        <input type="submit" value="отправить"/>
+    </form>
+
     <div>
         <table>
             <tr>

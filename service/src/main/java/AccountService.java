@@ -14,11 +14,13 @@ public class AccountService {
     }
 
     public boolean update(Account account) {
+        System.out.println("Account update idAccount - " + account);
         AccountDao accountDAO = new AccountDao();
         return accountDAO.updateAccount(account);
     }
 
     public boolean delete(Account account) {
+        System.out.println("Account delete idAccount - " + account);
         AccountDao accountDAO = new AccountDao();
         return accountDAO.deleteAccount(account);
     }
@@ -30,8 +32,8 @@ public class AccountService {
     }
 
     public List<Account> getAllAccounts() {
+        System.out.println("read all account dao");
         AccountDao accountDAO = new AccountDao();
-        System.out.println("create account dao");
         return accountDAO.readAccounts();
     }
 

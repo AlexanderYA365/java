@@ -12,12 +12,12 @@ public class MassageDao {
         connectionPool = ConnectionPool.getInstance();
     }
 
-    public boolean create(Message message) {
+    public boolean createWallMessage(Message message) {
         if (message.getMessage() == null) {
             return false;
         }//TODO для всех сообщений
         String sql = "INSERT INTO massage(idSender, idReceiving, massage, picture, publicationDate, edited, messageType) " +
-                "VALUES (?,?,?,?, NOW(), ?, 1);";
+                "VALUES (?,?,?,?, NOW(), ?, 0);";
         System.out.println(sql);
         connection = connectionPool.getConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -26,6 +26,33 @@ public class MassageDao {
             preparedStatement.setString(3, message.getMessage());
             preparedStatement.setString(4, message.getPicture());
             preparedStatement.setBoolean(5, message.isEdited());
+            System.out.println(preparedStatement);
+            int rows = preparedStatement.executeUpdate();
+            System.out.println("Added " + rows + " rows");
+            connection.commit();
+        } catch (Exception ex) {
+            System.out.println("Connection failed... MessageDao");
+            System.out.println(ex);
+        }
+        connectionPool.returnConnection(connection);
+        return true;
+    }
+
+    public boolean create(Message message) {
+        if (message.getMessage() == null) {
+            return false;
+        }//TODO для всех сообщений
+        String sql = "INSERT INTO massage(idSender, idReceiving, massage, picture, publicationDate, edited, messageType) " +
+                "VALUES (?,?,?,?, NOW(), ?, ?);";
+        System.out.println(sql);
+        connection = connectionPool.getConnection();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, message.getIdSender());
+            preparedStatement.setInt(2, message.getIdReceiving());
+            preparedStatement.setString(3, message.getMessage());
+            preparedStatement.setString(4, message.getPicture());
+            preparedStatement.setBoolean(5, message.isEdited());
+            preparedStatement.setInt(6, message.getMessageType());
             System.out.println(preparedStatement);
             int rows = preparedStatement.executeUpdate();
             System.out.println("Added " + rows + " rows");

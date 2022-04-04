@@ -14,18 +14,35 @@ public class AccountPage extends HttpServlet {
         System.out.println("AccountPage doGet");
         HttpSession session = request.getSession();
         Account account = (Account) session.getAttribute("account");
-        List<Message> messages = printMassage(account);
+        List<Message> messages = printMessage(account);
         System.out.println("AccountPage - " + messages);
         request.setAttribute("messages", messages);
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("jsp/main.jsp");
         requestDispatcher.forward(request, response);
     }
 
-    private List<Message> printMassage(Account account) {
+    private List<Message> printMessage(Account account) {
         System.out.println("printMassage");
         MessageService service = new MessageService();
         List<Message> messageList = service.readWallMassageAccount(account);
         return messageList;
+    }
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("AccountPage doPost");
+        HttpSession session = request.getSession();
+        Account account = (Account) session.getAttribute("account");
+        String newMessage = request.getParameter("NewWallMessage");
+        System.out.println("NewWallMessage - " + newMessage);
+        MessageService service = new MessageService();
+        Message message = new Message();
+        message.setIdReceiving(account.getId());
+        message.setIdSender(account.getId());
+        message.setMessage(newMessage);
+        message.setMessageType(0);
+        System.out.println("message - " + message);
+        service.createMassage(message);
+        doGet(request, response);
     }
 
 }
