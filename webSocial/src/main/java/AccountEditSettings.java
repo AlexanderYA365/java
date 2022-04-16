@@ -35,7 +35,13 @@ public class AccountEditSettings extends HttpServlet {
         account.setAboutMe(request.getParameter("aboutMe"));
         System.out.println(account);
         AccountService service = new AccountService();
-        service.update(account);
+        try {
+            service.update(account);
+        } catch (Exception e) {
+            System.out.println(e);//send redirect
+        } finally {
+            service.closeService();
+        }
         session.setAttribute("account", account);
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("jsp/myAccount.jsp");
         requestDispatcher.forward(request, response);

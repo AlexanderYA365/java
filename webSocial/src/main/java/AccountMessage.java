@@ -16,14 +16,20 @@ public class AccountMessage extends HttpServlet {
         Account account = (Account) session.getAttribute("account");
         request.setAttribute("account", account);
         MessageService service = new MessageService();
-        List<Message> messageList = service.readMessage(account);
-        if (messageList.size() != 0) {
-            int haveMessage = 0;
-            request.setAttribute("haveMessage", haveMessage);
-            request.setAttribute("messageList", messageList);
-        } else {
-            int haveMessage = 1;
-            request.setAttribute("haveMessage", haveMessage);
+        try {
+            List<Message> messageList = service.readMessage(account);
+            if (messageList.size() != 0) {
+                int haveMessage = 0;
+                request.setAttribute("haveMessage", haveMessage);
+                request.setAttribute("messageList", messageList);
+            } else {
+                int haveMessage = 1;
+                request.setAttribute("haveMessage", haveMessage);
+            }
+        } catch (Exception e) {
+            System.out.println(e);//send redirect
+        } finally {
+            service.closeService();
         }
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("jsp/AccountMessage.jsp");
         requestDispatcher.forward(request, response);

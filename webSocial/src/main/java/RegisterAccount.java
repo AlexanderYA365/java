@@ -31,7 +31,13 @@ public class RegisterAccount extends HttpServlet {
         account.setAboutMe(request.getParameter("aboutMe"));
         System.out.println(account);
         AccountService service = new AccountService();
-        service.create(account);
+        try {
+            service.create(account);
+        } catch (Exception e) {
+            System.out.println(e);//send redirect
+        } finally {
+            service.closeService();
+        }
         HttpSession session = request.getSession();
         session.setAttribute("account", account);
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("jsp/main.jsp");

@@ -15,10 +15,16 @@ public class AccountGroup extends HttpServlet {
         HttpSession session = request.getSession();
         Account account = (Account) session.getAttribute("account");
         GroupService service = new GroupService();
-        List<Group> groups = service.readAccountGroups(account);
-        System.out.println(groups);
-        session.setAttribute("groups", groups);
-        request.setAttribute("groups", groups);
+        try {
+            List<Group> groups = service.readAccountGroups(account);
+            System.out.println(groups);
+            session.setAttribute("groups", groups);
+            request.setAttribute("groups", groups);
+        } catch (Exception e) {
+            System.out.println(e);//send redirect
+        } finally {
+            service.closeService();
+        }
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("jsp/AccountGroup.jsp");
         requestDispatcher.forward(request, response);
     }

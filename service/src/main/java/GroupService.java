@@ -1,45 +1,61 @@
 import java.util.List;
 
 public class GroupService {
+    private final GroupDao groupDao;
+    private final Pool connectionPool;
+
+    public GroupService(){
+        groupDao = GroupDao.getInstance();
+        connectionPool = ConnectionPool.getInstance();
+    }
 
     public List<Group> readAccountGroups(Account account) {
         System.out.println("readGroup, account.getId() - " + account.getId());
-        GroupDao groupDao = new GroupDao();
         return groupDao.readGroupsAccount(account.getId());
     }
 
     public void createAccountGroups(Group group) {
         System.out.println("createAccountGroups");
-        GroupDao groupDao = new GroupDao();
         try {
             groupDao.create(group);
-        } catch (Exception e) {
-            System.out.println("createAccountGroups Exception - " + e);
+            connectionPool.commit();
+        } catch (Exception e){
+            connectionPool.rollback();
+            e.printStackTrace();
         }
     }
 
     public List<Group> readGroups() {
         System.out.println("readGroups");
-        GroupDao groupDao = new GroupDao();
         return groupDao.readGroups();
     }
 
     public List<Group> getGroupName(String groupName) {
         System.out.println("getGroupName groupName - " + groupName);
-        GroupDao groupDao = new GroupDao();
         return groupDao.read(groupName);
     }
 
     public Group readGroupID(int idGroup) {
         System.out.println("getGroupID idGroup - " + idGroup);
-        GroupDao groupDao = new GroupDao();
         return groupDao.read(idGroup);
     }
 
     public boolean insertAccountGroup(Group group, int idAccount) {
         System.out.println("Group read idGroup - " + group + " , idAccount - " + idAccount);
-        GroupDao groupDao = new GroupDao();
-        return groupDao.insertAccount(group, idAccount);
+        boolean result = false;
+        try {
+            result = groupDao.insertAccount(group, idAccount);
+            connectionPool.commit();
+            return result;
+        } catch (Exception e){
+            connectionPool.rollback();
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public void closeService() {
+        connectionPool.returnConnection();
     }
 
 }

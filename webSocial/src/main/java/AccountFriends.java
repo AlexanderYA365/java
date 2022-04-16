@@ -15,9 +15,15 @@ public class AccountFriends extends HttpServlet {
         HttpSession session = request.getSession();
         Account account = (Account) session.getAttribute("account");
         FriendService service = new FriendService();
-        List<Friend> friends = service.readAccountFriends(account.getId());
-        System.out.println("friends - " + friends);
-        request.setAttribute("friends", friends);
+        try {
+            List<Friend> friends = service.readAccountFriends(account.getId());
+            System.out.println("friends - " + friends);
+            request.setAttribute("friends", friends);
+        } catch (Exception e) {
+            System.out.println(e);//send redirect
+        } finally {
+            service.closeService();
+        }
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("jsp/AccountFriends.jsp");
         requestDispatcher.forward(request, response);
     }

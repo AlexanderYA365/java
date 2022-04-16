@@ -4,6 +4,10 @@ public interface Pool {
 
     Connection getConnection();
 
-    void returnConnection(Connection connection);
+    void returnConnection();
+
+    void rollback();
+
+    void commit();
 
 }

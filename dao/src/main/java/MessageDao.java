@@ -4,38 +4,19 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MassageDao {
-    private Connection connection;
-    private Pool connectionPool;
+public class MessageDao {
+    private final Pool connectionPool;
+    private static MessageDao messageDao;
 
-    MassageDao() {
+    MessageDao() {
         connectionPool = ConnectionPool.getInstance();
     }
 
-    public boolean createWallMessage(Message message) {
-        if (message.getMessage() == null) {
-            return false;
-        }//TODO для всех сообщений
-        String sql = "INSERT INTO massage(idSender, idReceiving, massage, picture, publicationDate, edited, messageType) " +
-                "VALUES (?,?,?,?, NOW(), ?, 0);";
-        System.out.println(sql);
-        connection = connectionPool.getConnection();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setInt(1, message.getIdSender());
-            preparedStatement.setInt(2, message.getIdReceiving());
-            preparedStatement.setString(3, message.getMessage());
-            preparedStatement.setString(4, message.getPicture());
-            preparedStatement.setBoolean(5, message.isEdited());
-            System.out.println(preparedStatement);
-            int rows = preparedStatement.executeUpdate();
-            System.out.println("Added " + rows + " rows");
-            connection.commit();
-        } catch (Exception ex) {
-            System.out.println("Connection failed... MessageDao");
-            System.out.println(ex);
+    public static MessageDao getInstance() {
+        if(messageDao == null){
+            messageDao = new MessageDao();
         }
-        connectionPool.returnConnection(connection);
-        return true;
+        return messageDao;
     }
 
     public boolean create(Message message) {
@@ -45,7 +26,7 @@ public class MassageDao {
         String sql = "INSERT INTO massage(idSender, idReceiving, massage, picture, publicationDate, edited, messageType) " +
                 "VALUES (?,?,?,?, NOW(), ?, ?);";
         System.out.println(sql);
-        connection = connectionPool.getConnection();
+        Connection connection = connectionPool.getConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, message.getIdSender());
             preparedStatement.setInt(2, message.getIdReceiving());
@@ -61,7 +42,6 @@ public class MassageDao {
             System.out.println("Connection failed... MessageDao");
             System.out.println(ex);
         }
-        connectionPool.returnConnection(connection);
         return true;
     }
 
@@ -70,7 +50,7 @@ public class MassageDao {
         List<Message> massageList = new ArrayList<>();
         String sql = "SELECT * FROM massage WHERE idReceiving = ?";
         System.out.println(sql);
-        connection = connectionPool.getConnection();
+        Connection connection = connectionPool.getConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -90,7 +70,6 @@ public class MassageDao {
             System.out.println("Connection failed...readWallMessageUserId");
             System.out.println(ex);
         }
-        connectionPool.returnConnection(connection);
         System.out.println("readWallMessageUserId - finish");
         return massageList;
     }
@@ -101,7 +80,7 @@ public class MassageDao {
         String sql = "SELECT id, idSender, idReceiving, name, massage, picture, publicationDate FROM account JOIN massage " +
                 "ON idAccount = idSender WHERE idReceiving = ? AND messageType = 1";
         System.out.println(sql);
-        connection = connectionPool.getConnection();
+        Connection connection = connectionPool.getConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -120,7 +99,6 @@ public class MassageDao {
             System.out.println("Connection failed...readMessageUserId");
             System.out.println(ex);
         }
-        connectionPool.returnConnection(connection);
         System.out.println("readMessageUserId - finish");
         return messageList;
     }
@@ -133,7 +111,7 @@ public class MassageDao {
                 "INNER JOIN account b ON idSender = b.idAccount " +
                 "WHERE (idSender = ? AND idReceiving = ?) OR (idSender = ? AND idReceiving = ?) AND messageType = 1";
         System.out.println(sql);
-        connection = connectionPool.getConnection();
+        Connection connection = connectionPool.getConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, idSender);
             preparedStatement.setInt(2, idReceiving);
@@ -158,7 +136,6 @@ public class MassageDao {
             System.out.println("Connection failed...readsMessageAccounts");
             System.out.println(ex);
         }
-        connectionPool.returnConnection(connection);
         System.out.println("readsMessageAccounts - finish");
         return massageList;
     }
@@ -171,7 +148,7 @@ public class MassageDao {
                 "INNER JOIN account b ON idSender = b.idAccount " +
                 "WHERE idReceiving = ? AND messageType = 0";
         System.out.println(sql);
-        connection = connectionPool.getConnection();
+        Connection connection = connectionPool.getConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -193,7 +170,6 @@ public class MassageDao {
             System.out.println("Connection failed...readsMessageAccounts");
             System.out.println(ex);
         }
-        connectionPool.returnConnection(connection);
         System.out.println("readWallMassage - finish");
         return massageList;
     }

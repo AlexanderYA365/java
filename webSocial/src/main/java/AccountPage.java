@@ -35,13 +35,19 @@ public class AccountPage extends HttpServlet {
         String newMessage = request.getParameter("NewWallMessage");
         System.out.println("NewWallMessage - " + newMessage);
         MessageService service = new MessageService();
-        Message message = new Message();
-        message.setIdReceiving(account.getId());
-        message.setIdSender(account.getId());
-        message.setMessage(newMessage);
-        message.setMessageType(0);
-        System.out.println("message - " + message);
-        service.createMassage(message);
+        try {
+            Message message = new Message();
+            message.setIdReceiving(account.getId());
+            message.setIdSender(account.getId());
+            message.setMessage(newMessage);
+            message.setMessageType(0);
+            System.out.println("message - " + message);
+            service.createMassage(message);
+        } catch (Exception e) {
+            System.out.println(e);//send redirect
+        } finally {
+            service.closeService();
+        }
         doGet(request, response);
     }
 

@@ -11,9 +11,9 @@ public class FriendsList extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws IOException, ServletException {
-        AccountDao accountDAO = new AccountDao();
+        AccountService accountService = new AccountService();
         System.out.println("FriendsList");
-        List<Account> accounts = accountDAO.readAccounts();
+        List<Account> accounts = accountService.getAllAccounts();
         PrintWriter out = resp.getWriter();
         out.print("<html>");
         out.print("<title>" + "Users account" + "</title>");

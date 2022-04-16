@@ -15,19 +15,27 @@ public class ShowFriend extends HttpServlet {
         ApplicationService applicationService = new ApplicationService();
         System.out.println(req.getParameter("id"));
         FriendService friendService = new FriendService();
-        Friend friend = friendService.read(Integer.parseInt(req.getParameter("id")));
-        System.out.println(friend);
-        Account friendAccount = accountService.read(friend.getIdFriendsAccount());
-        System.out.println("ShowFriend friendAccount - " + friendAccount);
-        Application application = applicationService.readAccount(friend);
-        if (application != null) {
-            int friendFlag = application.getStatus();
-            req.setAttribute("friendFlag", friendFlag);
-            req.setAttribute("friendAccount", friendAccount);
-            MessageService messageService = new MessageService();
-            List<Message> messages = messageService.readWallMassageAccount(friendAccount);
-            System.out.println("messages - " + messages);
-            req.setAttribute("messages", messages);
+        try {
+            Friend friend = friendService.read(Integer.parseInt(req.getParameter("id")));
+            System.out.println(friend);
+            Account friendAccount = accountService.read(friend.getIdFriendsAccount());
+            System.out.println("ShowFriend friendAccount - " + friendAccount);
+            Application application = applicationService.readAccount(friend);
+            if (application != null) {
+                int friendFlag = application.getStatus();
+                req.setAttribute("friendFlag", friendFlag);
+                req.setAttribute("friendAccount", friendAccount);
+                MessageService messageService = new MessageService();
+                List<Message> messages = messageService.readWallMassageAccount(friendAccount);
+                System.out.println("messages - " + messages);
+                req.setAttribute("messages", messages);
+            }
+        } catch (Exception e) {
+            System.out.println(e);//send redirect
+        } finally {
+            accountService.closeService();
+            applicationService.closeService();
+            friendService.closeService();
         }
         RequestDispatcher requestDispatcher = req.getRequestDispatcher("jsp/ShowFriend.jsp");
         requestDispatcher.forward(req, response);

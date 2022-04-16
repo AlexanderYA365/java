@@ -23,22 +23,28 @@ public class AccountFindGroup extends HttpServlet {
         System.out.println("AccountFindGroup doPost");
         String groupName = request.getParameter("GroupName");
         GroupService service = new GroupService();
-        if (groupId == null) {
-            try {
-                List<Group> groups = service.getGroupName(groupName);
-                System.out.println(groups);
-                request.setAttribute("findGroups", groups);
-            } catch (Exception e) {
-                e.printStackTrace();
+        try {
+            if (groupId == null) {
+                try {
+                    List<Group> groups = service.getGroupName(groupName);
+                    System.out.println(groups);
+                    request.setAttribute("findGroups", groups);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
-        }
-        if (groupId != null) {
-            HttpSession session = request.getSession();
-            Account account = (Account) session.getAttribute("account");
-            Group addGroup = service.readGroupID(Integer.parseInt(groupId[0]));//TODO
-            System.out.println("Account - " + account);
-            System.out.println("addGroup - " + addGroup);
-            service.insertAccountGroup(addGroup, account.getId());
+            if (groupId != null) {
+                HttpSession session = request.getSession();
+                Account account = (Account) session.getAttribute("account");
+                Group addGroup = service.readGroupID(Integer.parseInt(groupId[0]));//TODO
+                System.out.println("Account - " + account);
+                System.out.println("addGroup - " + addGroup);
+                service.insertAccountGroup(addGroup, account.getId());
+            }
+        } catch (Exception e) {
+            System.out.println(e);//send redirect
+        } finally {
+            service.closeService();
         }
         doGet(request, response);
     }

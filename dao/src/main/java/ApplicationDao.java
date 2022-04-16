@@ -8,15 +8,23 @@ import java.util.List;
 
 public class ApplicationDao {
     private final Pool connectionPool;
-    private Connection connection;
+    private static ApplicationDao applicationDao;
 
-    public ApplicationDao() {
+    private ApplicationDao() {
         connectionPool = ConnectionPool.getInstance();
+    }
+
+    public static ApplicationDao getInstance() {
+        if (applicationDao == null) {
+            applicationDao = new ApplicationDao();
+        }
+        return applicationDao;
     }
 
     public boolean create(Application application) {
         String sql = "INSERT INTO application (applicationType, idApplicant,idRecipient, status)" +
                 " VALUES (?, ?, ?, ?);";
+        Connection connection = connectionPool.getConnection();
         try (PreparedStatement query = connection.prepareStatement(sql)) {
             query.setInt(1, application.getApplicationType());
             query.setInt(2, application.getIdApplicant());
@@ -27,13 +35,6 @@ public class ApplicationDao {
         } catch (Exception ex) {
             System.out.println("Connection failed...createFriend");
             System.out.println(ex);
-        } finally {
-            try {
-                connection.commit();
-                connectionPool.returnConnection(connection);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
         return true;
     }
@@ -41,7 +42,7 @@ public class ApplicationDao {
     public Application read(int id) {
         Application application = new Application();
         try {
-            connection = connectionPool.getConnection();
+            Connection connection = connectionPool.getConnection();
             PreparedStatement query = connection.prepareStatement("SELECT * FROM application WHERE id = ?");
             query.setInt(1, id);
             ResultSet resultSet = query.executeQuery();
@@ -56,7 +57,6 @@ public class ApplicationDao {
             System.out.println("Connection failed...readGroup");
             System.out.println(ex);
         }
-        connectionPool.returnConnection(connection);
         return application;
     }
 
@@ -65,7 +65,7 @@ public class ApplicationDao {
         String sql = "SELECT * FROM application WHERE idApplicant = ? AND idRecipient = ? AND applicationType = 0";
         System.out.println(sql);
         try {
-            connection = connectionPool.getConnection();
+            Connection connection = connectionPool.getConnection();
             PreparedStatement query = connection.prepareStatement(sql);
             query.setInt(1, group.getIdGroup());
             query.setInt(2, idRecipient);
@@ -82,7 +82,6 @@ public class ApplicationDao {
             System.out.println("Connection failed...Application read(Group group, int idRecipient)");
             System.out.println(ex);
         }
-        connectionPool.returnConnection(connection);
         System.out.println("Application read(group, idRecipient) - " + application);
         return application;
     }
@@ -92,7 +91,7 @@ public class ApplicationDao {
         String sql = "SELECT * FROM application WHERE idApplicant = ? AND idRecipient = ? AND applicationType = 1";
         System.out.println(sql);
         try {
-            connection = connectionPool.getConnection();
+            Connection connection = connectionPool.getConnection();
             PreparedStatement query = connection.prepareStatement(sql);
             query.setInt(1, friend.getIdAccount());
             query.setInt(2, friend.getIdFriendsAccount());
@@ -109,7 +108,6 @@ public class ApplicationDao {
             System.out.println("Connection failed...Application read(Group group, int idRecipient)");
             System.out.println(ex);
         }
-        connectionPool.returnConnection(connection);
         System.out.println("Application read(group, idRecipient) - " + application);
         return application;
     }
@@ -117,7 +115,7 @@ public class ApplicationDao {
     public List<Application> readApplications() {
         List<Application> applications = new ArrayList<>();
         try {
-            connection = connectionPool.getConnection();
+            Connection connection = connectionPool.getConnection();
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM application");
             while (resultSet.next()) {
@@ -130,16 +128,16 @@ public class ApplicationDao {
                 applications.add(application);
             }
         } catch (Exception ex) {
-            System.out.println("Connection failed...readGroups");
+            System.out.println("Connection failed...readApplications");
             System.out.println(ex);
         }
-        connectionPool.returnConnection(connection);
         return applications;
     }
 
     public boolean update(Application application) {
         String sql = "UPDATE application SET id = ?, applicationType = ?, idAdministrator = ?, " +
                 "idAdministrator = ?;";
+        Connection connection = connectionPool.getConnection();
         try (PreparedStatement query = connection.prepareStatement(sql)) {
             query.setInt(1, application.getId());
             query.setInt(2, application.getApplicationType());
@@ -151,31 +149,17 @@ public class ApplicationDao {
         } catch (Exception ex) {
             System.out.println("Connection failed...createFriend");
             System.out.println(ex);
-        } finally {
-            try {
-                connection.commit();
-                connectionPool.returnConnection(connection);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
         return true;
     }
 
     public boolean delete(Application application) {
         try {
-            connection = connectionPool.getConnection();
+            Connection connection = connectionPool.getConnection();
             Statement statement = connection.createStatement();
             statement.executeUpdate("DELETE FROM application WHERE id = " + application.getId());
         } catch (SQLException throwables) {
             throwables.printStackTrace();
-        } finally {
-            try {
-                connection.commit();
-                connectionPool.returnConnection(connection);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
         return true;
     }

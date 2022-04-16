@@ -40,12 +40,18 @@ public class AccountWriteMessage extends HttpServlet {
         int IdReceiving = Integer.parseInt(selectUser);
         System.out.println("IdReceiving - " + IdReceiving);
         MessageService service = new MessageService();
-        Message message = new Message();
-        message.setIdReceiving(IdReceiving);
-        message.setIdSender(account.getId());
-        message.setMessage(newMessage);
-        message.setMessageType(1);
-        service.createMassage(message);
+        try {
+            Message message = new Message();
+            message.setIdReceiving(IdReceiving);
+            message.setIdSender(account.getId());
+            message.setMessage(newMessage);
+            message.setMessageType(1);
+            service.createMassage(message);
+        } catch (Exception e) {
+            System.out.println(e);//send redirect
+        } finally {
+            service.closeService();
+        }
         doGet(request, response);
     }
 

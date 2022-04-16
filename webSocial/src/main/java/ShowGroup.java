@@ -12,19 +12,26 @@ public class ShowGroup extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("ShowGroup doGet");
         GroupService service = new GroupService();
-        Group group = service.readGroupID(Integer.parseInt(req.getParameter("id")));
         ApplicationService applicationService = new ApplicationService();
-        HttpSession session = req.getSession();
-        Account account = (Account) session.getAttribute("account");
-        Application application = applicationService.readGroupAccount(group, account.getId());
-        System.out.println("Application - " + application);
-        if (application != null) {
-            req.setAttribute("application", application);
-            int newUserGroup = application.getStatus();
-            req.setAttribute("newUserGroup", newUserGroup);
+        try {
+            Group group = service.readGroupID(Integer.parseInt(req.getParameter("id")));
+            HttpSession session = req.getSession();
+            Account account = (Account) session.getAttribute("account");
+            Application application = applicationService.readGroupAccount(group, account.getId());
+            System.out.println("Application - " + application);
+            if (application != null) {
+                req.setAttribute("application", application);
+                int newUserGroup = application.getStatus();
+                req.setAttribute("newUserGroup", newUserGroup);
+            }
+            System.out.println(group);
+            req.setAttribute("group", group);
+        } catch (Exception e) {
+            System.out.println(e);//send redirect
+        } finally {
+            applicationService.closeService();
+            service.closeService();
         }
-        System.out.println(group);
-        req.setAttribute("group", group);
         RequestDispatcher requestDispatcher = req.getRequestDispatcher("jsp/showGroup.jsp");
         requestDispatcher.forward(req, response);
     }

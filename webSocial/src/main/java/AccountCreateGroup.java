@@ -23,16 +23,22 @@ public class AccountCreateGroup extends HttpServlet {
         Account account = (Account) session.getAttribute("account");
         GroupService service = new GroupService();
         List<Group> groups = service.readGroups();
-        if (createGroup(groups, request.getParameter("name"))) {
-            Group group = new Group();
-            group.setIdAdministrator(account.getId());
-            group.setIdAccount(account.getId());
-            group.setGroupName(request.getParameter("name"));
-            group.setLogo(request.getParameter("logo"));
-            System.out.println("AccountCreateGroup doPost - " + group);
-            service.createAccountGroups(group);
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher("jsp/AccountGroup.jsp");
-            requestDispatcher.forward(request, response);
+        try {
+            if (createGroup(groups, request.getParameter("name"))) {
+                Group group = new Group();
+                group.setIdAdministrator(account.getId());
+                group.setIdAccount(account.getId());
+                group.setGroupName(request.getParameter("name"));
+                group.setLogo(request.getParameter("logo"));
+                System.out.println("AccountCreateGroup doPost - " + group);
+                service.createAccountGroups(group);
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher("jsp/AccountGroup.jsp");
+                requestDispatcher.forward(request, response);
+            }
+        } catch (Exception e) {
+            System.out.println("Error");//TODO redirect
+        } finally {
+            service.closeService();
         }
     }
 

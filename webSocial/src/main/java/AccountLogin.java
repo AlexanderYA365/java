@@ -33,22 +33,28 @@ public class AccountLogin extends HttpServlet {
             System.out.println("username - " + username + " password - " + password);
         }
         AccountService service = new AccountService();
-        Account registeredAccount = service.getAccount(username, password);
-        if (registeredAccount.getId() != 0) {
-            HttpSession session = request.getSession();
-            session.setAttribute("account", registeredAccount);
-            session.setAttribute("username", registeredAccount.getUsername());
-            Cookie cookieUsername = new Cookie("username", username);
-            Cookie cookiePassword = new Cookie("password", password);
-            response.addCookie(cookieUsername);
-            response.addCookie(cookiePassword);
-            getServletContext().getRequestDispatcher("/main.jsp").forward(request, response);
-        } else {
-            System.out.println("AccountLogin.doGet -> else");
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher("jsp/index.jsp");
-            int errorLogin = 1;
-            request.setAttribute("errorLogin", errorLogin);
-            requestDispatcher.forward(request, response);
+        try {
+            Account registeredAccount = service.getAccount(username, password);
+            if (registeredAccount.getId() != 0) {
+                HttpSession session = request.getSession();
+                session.setAttribute("account", registeredAccount);
+                session.setAttribute("username", registeredAccount.getUsername());
+                Cookie cookieUsername = new Cookie("username", username);
+                Cookie cookiePassword = new Cookie("password", password);
+                response.addCookie(cookieUsername);
+                response.addCookie(cookiePassword);
+                getServletContext().getRequestDispatcher("/main.jsp").forward(request, response);
+            } else {
+                System.out.println("AccountLogin.doGet -> else");
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher("jsp/index.jsp");
+                int errorLogin = 1;
+                request.setAttribute("errorLogin", errorLogin);
+                requestDispatcher.forward(request, response);
+            }
+        } catch (Exception e) {
+            System.out.println(e);//send redirect
+        } finally {
+            service.closeService();
         }
     }
 

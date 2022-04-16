@@ -23,25 +23,31 @@ public class AddFriendAccount extends HttpServlet {
         String name = request.getParameter("name");
         FriendService friendService = new FriendService();
         AccountService accountService = new AccountService();
-        if (accountId == null) {
-            try {
-                List<Account> accounts = accountService.getAccountName(name);
-                System.out.println(accounts);
-                request.setAttribute("accounts", accounts);
-            } catch (Exception e) {
-                e.printStackTrace();
+        try {
+            if (accountId == null) {
+                try {
+                    List<Account> accounts = accountService.getAccountName(name);
+                    System.out.println(accounts);
+                    request.setAttribute("accounts", accounts);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
-        }
-        if (accountId != null) {
-            HttpSession session = request.getSession();
-            Account account = (Account) session.getAttribute("account");
-            Account accountFriend = accountService.read(Integer.parseInt(accountId[0]));//TODO
-            System.out.println("account - " + account);
-            System.out.println("friend - " + accountFriend);
-            friendService.addFriend(account, accountFriend);
+            if (accountId != null) {
+                HttpSession session = request.getSession();
+                Account account = (Account) session.getAttribute("account");
+                Account accountFriend = accountService.read(Integer.parseInt(accountId[0]));//TODO
+                System.out.println("account - " + account);
+                System.out.println("friend - " + accountFriend);
+                friendService.addFriend(account, accountFriend);
+            }
+        } catch (Exception e) {
+            System.out.println(e);//send redirect
+        } finally {
+            friendService.closeService();
+            accountService.closeService();
         }
         doGet(request, response);
     }
-
 
 }

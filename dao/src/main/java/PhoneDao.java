@@ -7,18 +7,25 @@ import java.util.List;
 
 public class PhoneDao {
 
-    private Connection connection;
     private Pool connectionPool;
+    private static PhoneDao phoneDAO;
 
-    PhoneDao() {
+    private PhoneDao() {
         connectionPool = ConnectionPool.getInstance();
+    }
+
+    public static PhoneDao getInstance() {
+        if (phoneDAO == null) {
+            phoneDAO = new PhoneDao();
+        }
+        return phoneDAO;
     }
 
     public boolean create(Phone phone) {
         String sql = "INSERT INTO phone(id, phonenumber, phonetype) " +
                 "VALUES (?,?,?);";
         System.out.println(sql);
-        connection = connectionPool.getConnection();
+        Connection connection = connectionPool.getConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, phone.getIdAccount());
             preparedStatement.setString(2, phone.getPhoneNumber());
@@ -31,7 +38,6 @@ public class PhoneDao {
             System.out.println("Connection failed... MassageDao");
             System.out.println(ex);
         }
-        connectionPool.returnConnection(connection);
         return true;
     }
 
@@ -39,7 +45,7 @@ public class PhoneDao {
         List<Phone> phones = new ArrayList<>();
         String sql = "SELECT * FROM phone WHERE idaccount = ?;";
         System.out.println(sql);
-        connection = connectionPool.getConnection();
+        Connection connection = connectionPool.getConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -54,12 +60,11 @@ public class PhoneDao {
             System.out.println("Connection failed... PhoneDao.read");
             System.out.println(ex);
         }
-        connectionPool.returnConnection(connection);
         return phones;
     }
 
     public boolean update(Phone phone) {
-        connection = connectionPool.getConnection();
+        Connection connection = connectionPool.getConnection();
         try (PreparedStatement query = connection.prepareStatement(
                 "UPDATE phone SET phonenumber = ?, phonetype = ? WHERE IdAccount = ?")) {
             query.setString(1, phone.getPhoneNumber());
@@ -70,19 +75,12 @@ public class PhoneDao {
         } catch (Exception ex) {
             System.out.println("Connection failed...updateFriend");
             System.out.println(ex);
-        } finally {
-            try {
-                connection.commit();
-                connectionPool.returnConnection(connection);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
         return true;
     }
 
     public boolean delete(Phone phone) {
-        connection = connectionPool.getConnection();
+        Connection connection = connectionPool.getConnection();
         try (PreparedStatement query = connection.prepareStatement("DELETE FROM phone WHERE IdAccount = ? AND phonenumber = ?")) {
             query.setInt(1, phone.getIdAccount());
             query.setString(2, phone.getPhoneNumber());
@@ -92,13 +90,6 @@ public class PhoneDao {
             System.out.println("Connection failed...deleteFriend");
 
             throwables.printStackTrace();
-        } finally {
-            try {
-                connection.commit();
-                connectionPool.returnConnection(connection);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
         return true;
     }

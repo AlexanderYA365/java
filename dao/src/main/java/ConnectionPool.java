@@ -15,7 +15,8 @@ public class ConnectionPool implements Pool {
     private static String PASSWORD;
     private static Queue<Connection> freeConnections;//TODO переделать
     private static ConnectionPool instance;
-    private Semaphore semaphore;
+    private static Semaphore semaphore;
+    private static ThreadLocal<Connection> threadLocal;
 
     private ConnectionPool() {
         try {
@@ -23,6 +24,7 @@ public class ConnectionPool implements Pool {
         } catch (SQLException | ClassNotFoundException throwables) {
             System.out.println("ConnectionPoolException - " + throwables);
         }
+        threadLocal = ThreadLocal.withInitial(ConnectionPool::getConnectionToThread);
     }
 
     private static void getProperty() {
@@ -35,9 +37,7 @@ public class ConnectionPool implements Pool {
             URL = prop.getProperty("url");
             USERNAME = prop.getProperty("username");
             PASSWORD = prop.getProperty("password");
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        } catch (Exception e) {
+        }  catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -58,43 +58,84 @@ public class ConnectionPool implements Pool {
         }
     }
 
-    public void returnConnection(Connection connection) {
+    private static Connection getConnectionToThread() {
+        Connection connection = null;
         try {
-            boolean isValid = connection.isValid(0);
-            if (!isValid) {
-                connection.close();
+            semaphore.acquire();
+            connection = freeConnections.poll();
+            if (connection != null) {
+                if (!connection.isValid(0)) {
+                    connection.close();
+                    connection = createConnection();
+                }
             }
-            freeConnections.add(isValid ? connection : createConnection());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return connection;
+    }
+
+    public void returnConnection() {
+        Connection connection = threadLocal.get();
+        threadLocal.remove();
+        try {
+            if (!connection.isValid(0)) {
+                connection.close();
+                freeConnections.add(createConnection());
+            } else {
+                freeConnections.add(connection);
+            }
         } catch (SQLException | ClassNotFoundException e) {
-            System.out.println("returnConnection Exception - " + e);
+            e.printStackTrace();
         }
         semaphore.release();
     }
 
     public Connection getConnection() {
-        Connection connection = null;
+        Connection connection = threadLocal.get();
         try {
-            semaphore.acquire();
-            connection = freeConnections.poll();
-            boolean isValid = false;
-            if (connection != null) {
-                isValid = connection.isValid(0);
-                if (!isValid) {
-                    connection.close();
-                }
+            if (!connection.isValid(0)) {
+                connection.close();
+                threadLocal.remove();
+                freeConnections.add(createConnection());
+                return threadLocal.get();
             }
-            return isValid ? connection : createConnection();
-        } catch (InterruptedException | SQLException | ClassNotFoundException e) {
-            System.out.println("returnConnection Exception - " + e);
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
         return connection;
     }
 
-    private Connection createConnection() throws SQLException, ClassNotFoundException {
+    private static Connection createConnection() throws SQLException, ClassNotFoundException {
         Class.forName("com.mysql.cj.jdbc.Driver");
         Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
         connection.setAutoCommit(false);
         return connection;
+    }
+
+    public void commit() {
+        for (Connection conn : freeConnections) {
+            try {
+                conn.commit();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        Connection connection = threadLocal.get();
+        try {
+            connection.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void rollback() {
+        Connection connection = threadLocal.get();
+        try {
+            connection.rollback();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 }
