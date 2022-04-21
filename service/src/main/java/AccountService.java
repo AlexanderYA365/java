@@ -4,12 +4,10 @@ import java.util.List;
 public class AccountService {
     AccountDao accountDAO;
     PhoneDao phoneDao;
-    private Pool connectionPool;
 
     public AccountService(){
-        accountDAO = AccountDao.getInstance();
-        phoneDao = PhoneDao.getInstance();
-        connectionPool = ConnectionPool.getInstance();
+        phoneDao = new PhoneDao();
+        accountDAO = new AccountDao();
     }
 
     public boolean create(Account account) {
@@ -21,13 +19,11 @@ public class AccountService {
                 phone.setIdAccount(id);
                 phoneDao.create(phone);
             }
-            connectionPool.commit();
             return true;
         } catch (Exception e) {
-            connectionPool.rollback();
-            e.printStackTrace();
+            System.out.println("AccountService.create Exception - " + e);
+            return false;
         }
-        return false;
     }
 
     public boolean update(Account account) {
@@ -39,11 +35,9 @@ public class AccountService {
                 phone.setIdAccount(id);
                 phoneDao.update(phone);
             }
-            connectionPool.commit();
             return true;
         } catch (Exception e) {
-            connectionPool.rollback();
-            e.printStackTrace();
+            System.out.println("AccountService.create Exception - " + e);
             return false;
         }
     }
@@ -57,11 +51,9 @@ public class AccountService {
                 phone.setIdAccount(id);
                 phoneDao.delete(phone);
             }
-            connectionPool.commit();
             return true;
         } catch (Exception e) {
-            connectionPool.rollback();
-            e.printStackTrace();
+            System.out.println("AccountService.create Exception - " + e);
             return false;
         }
     }
@@ -84,10 +76,6 @@ public class AccountService {
     public Account getAccount(String username, String password) {
         System.out.println("getAccount(String username, String password)");
         return accountDAO.readAccount(username, password);
-    }
-
-    public void closeService() {
-        connectionPool.returnConnection();
     }
 
 }

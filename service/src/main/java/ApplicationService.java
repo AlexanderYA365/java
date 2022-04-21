@@ -1,23 +1,19 @@
 import java.util.List;
 
 public class ApplicationService {
-    private ApplicationDao applicationDao;
-    private Pool connectionPool;
+    private  ApplicationDao applicationDao;
 
     public ApplicationService(){
-        applicationDao = ApplicationDao.getInstance();
-        connectionPool = ConnectionPool.getInstance();
+        applicationDao = new ApplicationDao();
     }
 
     public boolean create(Application application) {
         System.out.println("Creat new Application from ApplicationService.create");
         try {
             applicationDao.create(application);
-            connectionPool.commit();
             return true;
-        } catch (Exception e){
-            connectionPool.rollback();
-            e.printStackTrace();
+        } catch (Exception ex){
+            System.out.println("create Exception - " + ex);
         }
         return false;
     }
@@ -26,11 +22,9 @@ public class ApplicationService {
         System.out.println("update new Application from ApplicationService.update");
         try {
             applicationDao.update(application);
-            connectionPool.commit();
             return true;
-        } catch (Exception e){
-            connectionPool.rollback();
-            e.printStackTrace();
+        } catch (Exception ex){
+            System.out.println("update Exception - " + ex);
         }
         return false;
     }
@@ -39,11 +33,9 @@ public class ApplicationService {
         System.out.println("delete new Application from ApplicationService.update");
         try {
             applicationDao.delete(application);
-            connectionPool.commit();
             return true;
-        } catch (Exception e){
-            connectionPool.rollback();
-            e.printStackTrace();
+        } catch (Exception ex){
+            System.out.println("delete Exception - " + ex);
         }
         return false;
     }
@@ -64,12 +56,8 @@ public class ApplicationService {
     }
 
     public List<Application> readAllApplication() {
-        System.out.println("create account dao");
+        System.out.println("readAllApplication");
         return applicationDao.readApplications();
-    }
-
-    public void closeService() {
-        connectionPool.returnConnection();
     }
 
 }

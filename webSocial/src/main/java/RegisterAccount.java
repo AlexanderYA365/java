@@ -35,8 +35,6 @@ public class RegisterAccount extends HttpServlet {
             service.create(account);
         } catch (Exception e) {
             System.out.println(e);//send redirect
-        } finally {
-            service.closeService();
         }
         HttpSession session = request.getSession();
         session.setAttribute("account", account);

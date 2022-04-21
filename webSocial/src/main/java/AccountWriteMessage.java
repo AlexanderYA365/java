@@ -49,8 +49,6 @@ public class AccountWriteMessage extends HttpServlet {
             service.createMassage(message);
         } catch (Exception e) {
             System.out.println(e);//send redirect
-        } finally {
-            service.closeService();
         }
         doGet(request, response);
     }

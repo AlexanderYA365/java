@@ -2,24 +2,20 @@ import java.util.List;
 
 public class PhoneService {
     private final PhoneDao phoneDao;
-    private final Pool connectionPool;
 
     public PhoneService(){
-        phoneDao = PhoneDao.getInstance();
-        connectionPool = ConnectionPool.getInstance();
+        phoneDao = new PhoneDao();
     }
 
     public boolean create(Phone phone) {
         System.out.println("Create new Phone from PhoneService.create");
         boolean result = false;
         try {
-            result = phoneDao.create(phone);
-            connectionPool.commit();
-        }catch (Exception e){
-            connectionPool.rollback();
-            e.printStackTrace();
+            return phoneDao.create(phone);
+        }catch (Exception ex){
+            System.out.println("create exception - " + ex);
+            return false;
         }
-        return result;
     }
 
     public List<Phone> read(int idPhone) {
@@ -35,10 +31,6 @@ public class PhoneService {
     public boolean delete(Phone phone) {
         System.out.println("Delete Phone from PhoneService.delete");
         return phoneDao.delete(phone);
-    }
-
-    public void closeService() {
-        connectionPool.returnConnection();
     }
 
 }

@@ -18,7 +18,7 @@ public class AccountFindGroup extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String[] groupId = request.getParameterValues("groupId");
+        String groupId = request.getParameter("groupId");
         System.out.println("groupId - " + groupId);
         System.out.println("AccountFindGroup doPost");
         String groupName = request.getParameter("GroupName");
@@ -36,15 +36,13 @@ public class AccountFindGroup extends HttpServlet {
             if (groupId != null) {
                 HttpSession session = request.getSession();
                 Account account = (Account) session.getAttribute("account");
-                Group addGroup = service.readGroupID(Integer.parseInt(groupId[0]));//TODO
+                Group addGroup = service.readGroupID(Integer.parseInt(groupId));//TODO
                 System.out.println("Account - " + account);
                 System.out.println("addGroup - " + addGroup);
                 service.insertAccountGroup(addGroup, account.getId());
             }
         } catch (Exception e) {
             System.out.println(e);//send redirect
-        } finally {
-            service.closeService();
         }
         doGet(request, response);
     }

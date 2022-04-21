@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <Context>
-    <Resource name="jdbc/socnetwork" auth="Container" type="javax.sql.DataSource"
-              maxTotal="10" maxIdle="10" maxWaitMillis="10000"
-              username="bcf911e911a464" password="6a643aad" driverClassName="com.mysql.jdbc.Driver"
-              url="jdbc:mysql://bcf911e911a464:6a643aad@eu-cdbr-west-02.cleardb.net/heroku_dc02d468f96562c?reconnect=true"/>
+    <ResourceLink name="jdbc/socnetwork" global="jdbc/socnetwork" type="javax.sql.DataSource"/>
 </Context>

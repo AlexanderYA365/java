@@ -1,12 +1,10 @@
 import java.util.List;
 
 public class GroupService {
-    private final GroupDao groupDao;
-    private final Pool connectionPool;
+    private GroupDao groupDao;
 
     public GroupService(){
-        groupDao = GroupDao.getInstance();
-        connectionPool = ConnectionPool.getInstance();
+        groupDao = new GroupDao();
     }
 
     public List<Group> readAccountGroups(Account account) {
@@ -18,10 +16,8 @@ public class GroupService {
         System.out.println("createAccountGroups");
         try {
             groupDao.create(group);
-            connectionPool.commit();
-        } catch (Exception e){
-            connectionPool.rollback();
-            e.printStackTrace();
+        } catch (Exception ex){
+            System.out.println("createAccountGroups exception - " + ex);
         }
     }
 
@@ -42,20 +38,12 @@ public class GroupService {
 
     public boolean insertAccountGroup(Group group, int idAccount) {
         System.out.println("Group read idGroup - " + group + " , idAccount - " + idAccount);
-        boolean result = false;
         try {
-            result = groupDao.insertAccount(group, idAccount);
-            connectionPool.commit();
-            return result;
-        } catch (Exception e){
-            connectionPool.rollback();
-            e.printStackTrace();
+            return groupDao.insertAccount(group, idAccount);
+        } catch (Exception ex){
+            System.out.println("createAccountGroups exception - " + ex);
+            return false;
         }
-        return result;
-    }
-
-    public void closeService() {
-        connectionPool.returnConnection();
     }
 
 }

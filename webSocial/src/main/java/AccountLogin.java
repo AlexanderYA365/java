@@ -12,7 +12,7 @@ import java.io.IOException;
 public class AccountLogin extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         System.out.println("AccountLogin doGet");
         String username = null;
         String password = null;
@@ -53,8 +53,6 @@ public class AccountLogin extends HttpServlet {
             }
         } catch (Exception e) {
             System.out.println(e);//send redirect
-        } finally {
-            service.closeService();
         }
     }
 

@@ -28,9 +28,6 @@ public class ShowGroup extends HttpServlet {
             req.setAttribute("group", group);
         } catch (Exception e) {
             System.out.println(e);//send redirect
-        } finally {
-            applicationService.closeService();
-            service.closeService();
         }
         RequestDispatcher requestDispatcher = req.getRequestDispatcher("jsp/showGroup.jsp");
         requestDispatcher.forward(req, response);

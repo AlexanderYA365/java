@@ -28,8 +28,6 @@ public class AccountMessage extends HttpServlet {
             }
         } catch (Exception e) {
             System.out.println(e);//send redirect
-        } finally {
-            service.closeService();
         }
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("jsp/AccountMessage.jsp");
         requestDispatcher.forward(request, response);

@@ -1,5 +1,4 @@
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,63 +7,47 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AccountDao {
-    private final Pool connectionPool;
-    private static AccountDao accountDao;
+    private final JNDIPool connectionPool;
 
-    private AccountDao() {
-        connectionPool = ConnectionPool.getInstance();
+    public AccountDao() {
+        connectionPool = JNDIPool.getInstance();
     }
 
-    public static AccountDao getInstance() {
-        if (accountDao == null) {
-            accountDao = new AccountDao();
-        }
-        return accountDao;
-    }
-
-    public boolean createAccount(Account account) {
+    public void createAccount(Account account) {
         String sql = "INSERT INTO account(name, surname, lastname, date, icq, addresshome, " +
                 "addressjob, email, aboutme, username, password, role) " +
                 "VALUES (?,?,?,NOW(),?,?,?,?,?,?,?,?);";
         System.out.println(sql);
-        Connection connection = connectionPool.getConnection();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {//TODO
-            preparedStatement.setString(1, account.getName());
-            preparedStatement.setString(2, account.getSurname());
-            preparedStatement.setString(3, account.getLastName());
-            preparedStatement.setDate(4, (Date) account.getDate());
-            preparedStatement.setInt(5, account.getIcq());
-            preparedStatement.setString(6, account.getAddressHome());
-            preparedStatement.setString(7, account.getAddressJob());
-            preparedStatement.setString(8, account.getEmail());
-            preparedStatement.setString(9, account.getAboutMe());
-            preparedStatement.setString(10, account.getUsername());
-            preparedStatement.setString(11, account.getPassword());
-            preparedStatement.setInt(12, account.getRole());
-            System.out.println(preparedStatement);
-            int rows = preparedStatement.executeUpdate();
-            System.out.println("Added " + rows + " rows");
-        } catch (Exception ex) {
-            System.out.println("Connection failed... createAccount");
-            System.out.println(ex);
+        try (Connection connection = connectionPool.getConnection()) {
+            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+                fillAllFieldQuery(account, preparedStatement);
+                System.out.println(preparedStatement);
+                int rows = preparedStatement.executeUpdate();
+                System.out.println("Added " + rows + " rows");
+            } catch (Exception ex) {
+                System.out.println("createAccount Exception - " + ex);
+            }
+        } catch (SQLException ex) {
+            System.out.println("createAccount Exception - " + ex);
         }
-        return true;
     }
 
     public int readIdAccount(Account account) {
         System.out.println("readIdAccount - account = " + account);
-        Connection connection = connectionPool.getConnection();
         String sql = "SELECT idAccount FROM account WHERE username = ? AND password = ?";
-        try (PreparedStatement query = connection.prepareStatement(sql)) {
-            query.setString(1, account.getUsername());
-            query.setString(2, account.getPassword());
-            ResultSet resultSet = query.executeQuery();
-            while (resultSet.next()) {
-                account.setId(resultSet.getInt(1));
+        try (Connection connection = connectionPool.getConnection()) {
+            try (PreparedStatement query = connection.prepareStatement(sql)) {
+                query.setString(1, account.getUsername());
+                query.setString(2, account.getPassword());
+                ResultSet resultSet = query.executeQuery();
+                while (resultSet.next()) {
+                    account.setId(resultSet.getInt(1));
+                }
+            } catch (Exception ex) {
+                System.out.println("readIdAccount Exception - " + ex);
             }
         } catch (Exception ex) {
-            System.out.println("Connection failed...at readAccount");
-            System.out.println(ex);
+            System.out.println("readIdAccount Exception - " + ex);
         }
         return account.getId();
     }
@@ -72,161 +55,162 @@ public class AccountDao {
     public Account readAccount(String username, String password) {
         System.out.println("readAccount - username = " + username + " ,password = " + password);
         Account account = new Account();
-        Connection connection = connectionPool.getConnection();
         String sql = "SELECT * FROM account WHERE username = ? AND password = ?";
-        try (PreparedStatement query = connection.prepareStatement(sql)) {
-            query.setString(1, username);
-            query.setString(2, password);
-            ResultSet resultSet = query.executeQuery();
-            while (resultSet.next()) {
-                account.setId(resultSet.getInt(1));
-                account.setName(resultSet.getString(2));
-                account.setSurname(resultSet.getString(3));
-                account.setLastName(resultSet.getString(4));
-                account.setDate(resultSet.getDate(5));
-                account.setIcq(resultSet.getInt(6));
-                account.setAddressHome(resultSet.getString(7));
-                account.setAddressJob(resultSet.getString(8));
-                account.setEmail(resultSet.getString(9));
-                account.setAboutMe(resultSet.getString(10));
-                account.setUsername(resultSet.getString(11));
-                account.setPassword(resultSet.getString(12));
-                account.setRole(resultSet.getInt(13));
+        try (Connection connection = connectionPool.getConnection()) {
+            try (PreparedStatement query = connection.prepareStatement(sql)) {
+                query.setString(1, username);
+                query.setString(2, password);
+                fillFieldResult(account, query);
+            } catch (Exception ex) {
+                System.out.println("readAccount Exception - " + ex);
             }
         } catch (Exception ex) {
-            System.out.println("Connection failed...at readAccount");
-            System.out.println(ex);
-        }
+        System.out.println("readAccount Exception - " + ex);
+    }
         return account;
     }
 
     public Account readAccount(int id) {
         System.out.println("readAccount(int id)");
         Account account = new Account();
-        Connection connection = connectionPool.getConnection();
-        try (PreparedStatement query = connection.prepareStatement("SELECT * FROM account WHERE idAccount = ?")) {
-            query.setInt(1, id);
-            ResultSet resultSet = query.executeQuery();
-            while (resultSet.next()) {
-                account.setId(resultSet.getInt(1));
-                account.setName(resultSet.getString(2));
-                account.setSurname(resultSet.getString(3));
-                account.setLastName(resultSet.getString(4));
-                account.setDate(resultSet.getDate(5));
-                account.setIcq(resultSet.getInt(6));
-                account.setAddressHome(resultSet.getString(7));
-                account.setAddressJob(resultSet.getString(8));
-                account.setEmail(resultSet.getString(9));
-                account.setAboutMe(resultSet.getString(10));
-                account.setUsername(resultSet.getString(11));
-                account.setPassword(resultSet.getString(12));
-                account.setRole(resultSet.getInt(13));
+        String sql = "SELECT * FROM account WHERE idAccount = ?";
+        try (Connection connection = connectionPool.getConnection()) {
+            try (PreparedStatement query = connection.prepareStatement(sql)) {
+                query.setInt(1, id);
+                fillFieldResult(account, query);
+            } catch (Exception ex) {
+                System.out.println("readAccount Exception - " + ex);
             }
         } catch (Exception ex) {
-            System.out.println("Connection failed...at readAccount");
-            System.out.println(ex);
+            System.out.println("readAccount Exception - " + ex);
         }
         return account;
     }
 
     public List<Account> readAccountsName(String name) {
-        List<Account> accounts = new ArrayList<Account>();
+        System.out.println("readAccountsName");
+        List<Account> accounts = new ArrayList<>();
         String sql = "SELECT * FROM account WHERE name = ?";
         System.out.println(sql);
-        Connection connection = connectionPool.getConnection();
-        try (PreparedStatement query = connection.prepareStatement(sql)) {
-            System.out.println("readAccountsName");
-            query.setString(1, name);
-            ResultSet resultSet = query.executeQuery();
-            while (resultSet.next()) {
-                Account account = new Account();
-                account.setId(resultSet.getInt(1));
-                account.setName(resultSet.getString(2));
-                account.setSurname(resultSet.getString(3));
-                account.setLastName(resultSet.getString(4));
-                account.setDate(resultSet.getDate(5));
-                account.setIcq(resultSet.getInt(6));
-                account.setAddressHome(resultSet.getString(7));
-                account.setAddressJob(resultSet.getString(8));
-                account.setEmail(resultSet.getString(9));
-                account.setAboutMe(resultSet.getString(10));
-                account.setUsername(resultSet.getString(11));
-                account.setPassword(resultSet.getString(12));
-                account.setRole(resultSet.getInt(13));
-                accounts.add(account);
+        try (Connection connection = connectionPool.getConnection()) {
+            try (PreparedStatement query = connection.prepareStatement(sql)) {
+                query.setString(1, name);
+                try (ResultSet resultSet = query.executeQuery()) {
+                    while (resultSet.next()) {
+                        Account account = new Account();
+                        fillAccountInfoResult(account, resultSet);
+                        accounts.add(account);
+                    }
+                }
+            } catch (Exception ex) {
+                System.out.println("readAccountsName Exception - " + ex);
             }
-            System.out.println("get account from readAccounts");
         } catch (Exception ex) {
-            System.out.println("Connection failed...readAccounts");
-            System.out.println(ex);
+            System.out.println("readAccountsName Exception - " + ex);
         }
         return accounts;
     }
 
     public List<Account> readAccounts() {
-        List<Account> accounts = new ArrayList<Account>();
-        Connection connection = connectionPool.getConnection();
-        try (Statement statement = connection.createStatement()) {
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM account");
-            while (resultSet.next()) {
-                Account account = new Account();
-                account.setId(resultSet.getInt(1));
-                account.setName(resultSet.getString(2));
-                account.setSurname(resultSet.getString(3));
-                account.setLastName(resultSet.getString(4));
-                account.setDate(resultSet.getDate(5));
-                account.setIcq(resultSet.getInt(6));
-                account.setAddressHome(resultSet.getString(7));
-                account.setAddressJob(resultSet.getString(8));
-                account.setEmail(resultSet.getString(9));
-                account.setAboutMe(resultSet.getString(10));
-                account.setUsername(resultSet.getString(11));
-                account.setPassword(resultSet.getString(12));
-                account.setRole(resultSet.getInt(13));
-                accounts.add(account);
+        System.out.println("readAccountsName");
+        List<Account> accounts = new ArrayList<>();
+        try (Connection connection = connectionPool.getConnection()) {
+            try (Statement statement = connection.createStatement()) {
+                try (ResultSet resultSet = statement.executeQuery("SELECT * FROM account")) {
+                    while (resultSet.next()) {
+                        Account account = new Account();
+                        fillAccountInfoResult(account, resultSet);
+                        accounts.add(account);
+                    }
+                }
+            } catch (Exception ex) {
+                System.out.println("readAccounts Exception - " + ex);
             }
-            System.out.println("get account from readAccounts");
         } catch (Exception ex) {
-            System.out.println("Connection failed...readAccounts");
-            System.out.println(ex);
+            System.out.println("readAccounts Exception - " + ex);
         }
         return accounts;
     }
 
-    public boolean updateAccount(Account account) {
-        Connection connection = connectionPool.getConnection();
+    public void deleteAccount(Account account) {
+        try (Connection connection = connectionPool.getConnection()) {
+            try (Statement statement = connection.createStatement()) {
+                statement.executeUpdate("DELETE FROM account WHERE idAccount = " + account.getId());
+            } catch (SQLException ex) {
+                System.out.println("deleteAccount Exception - " + ex);
+            }
+        } catch (SQLException ex) {
+            System.out.println("deleteAccount Exception - " + ex);
+        }
+    }
+
+    public void updateAccount(Account account) {
+        System.out.println("updateAccount");
         String sql = "UPDATE account SET name ='?', surname ='?', lastname = '?', date = NOW(), icq = ?, " +
                 "addresshome ='?', addressjob ='?'," +
                 " email ='?', aboutme ='?', role = ? WHERE idAccount = ?";
-        try (PreparedStatement query = connection.prepareStatement(sql)) {
-            query.setString(1, account.getName());
-            query.setString(2, account.getSurname());
-            query.setString(3, account.getLastName());
-            query.setInt(4, account.getIcq());
-            query.setString(5, account.getAddressHome());
-            query.setString(6, account.getAddressJob());
-            query.setString(7, account.getEmail());
-            query.setString(8, account.getAboutMe());
-            query.setInt(9, account.getRole());
-            query.setInt(10, account.getId());
-            System.out.println("updateAccount - " + sql);
-            int rows = query.executeUpdate();
-            System.out.println("Updated rows = " + rows);
+        try (Connection connection = connectionPool.getConnection()) {
+            try (PreparedStatement query = connection.prepareStatement(sql)) {
+                fillAccountInfoQuery(account, query);
+                query.setInt(9, account.getRole());
+                query.setInt(10, account.getId());
+                System.out.println("updateAccount - " + sql);
+                int rows = query.executeUpdate();
+                System.out.println("Updated rows = " + rows);
+            } catch (Exception ex) {
+                System.out.println("Connection failed...updateAccount - " + ex);
+            }
         } catch (Exception ex) {
-            System.out.println("Connection failed...updateAccount");
-            System.out.println(ex);
+            System.out.println("Connection failed...updateAccount - " + ex);
         }
-        return true;
     }
 
-    public boolean deleteAccount(Account account) {
-        Connection connection = connectionPool.getConnection();
-        try (Statement statement = connection.createStatement()) {
-            statement.executeUpdate("DELETE FROM account WHERE idAccount = " + account.getId());
+    private void fillAllFieldQuery(Account account, PreparedStatement preparedStatement){
+        try {
+            fillAccountInfoQuery(account, preparedStatement);
+            preparedStatement.setString(9, account.getUsername());
+            preparedStatement.setString(10, account.getPassword());
+            preparedStatement.setInt(11, account.getRole());
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        return true;
+    }
+
+    private void fillAccountInfoQuery(Account account, PreparedStatement preparedStatement) throws SQLException {
+        preparedStatement.setString(1, account.getName());
+        preparedStatement.setString(2, account.getSurname());
+        preparedStatement.setString(3, account.getLastName());
+        preparedStatement.setInt(4, account.getIcq());
+        preparedStatement.setString(5, account.getAddressHome());
+        preparedStatement.setString(6, account.getAddressJob());
+        preparedStatement.setString(7, account.getEmail());
+        preparedStatement.setString(8, account.getAboutMe());
+    }
+
+    private void fillFieldResult(Account account, PreparedStatement query) {
+        try(ResultSet resultSet = query.executeQuery()) {
+            while (resultSet.next()) {
+                fillAccountInfoResult(account, resultSet);
+            }
+        }catch (Exception ex){
+            System.out.println("fillFieldResult exception - " + ex);
+        }
+    }
+
+    private void fillAccountInfoResult(Account account, ResultSet resultSet) throws SQLException {
+        account.setId(resultSet.getInt(1));
+        account.setName(resultSet.getString(2));
+        account.setSurname(resultSet.getString(3));
+        account.setLastName(resultSet.getString(4));
+        account.setDate(resultSet.getDate(5));
+        account.setIcq(resultSet.getInt(6));
+        account.setAddressHome(resultSet.getString(7));
+        account.setAddressJob(resultSet.getString(8));
+        account.setEmail(resultSet.getString(9));
+        account.setAboutMe(resultSet.getString(10));
+        account.setUsername(resultSet.getString(11));
+        account.setPassword(resultSet.getString(12));
+        account.setRole(resultSet.getInt(13));
     }
 
 }

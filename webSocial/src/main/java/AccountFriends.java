@@ -21,8 +21,6 @@ public class AccountFriends extends HttpServlet {
             request.setAttribute("friends", friends);
         } catch (Exception e) {
             System.out.println(e);//send redirect
-        } finally {
-            service.closeService();
         }
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("jsp/AccountFriends.jsp");
         requestDispatcher.forward(request, response);
@@ -31,7 +29,7 @@ public class AccountFriends extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("AccountFriends doPost");
-        String[] idFriendsAccount = request.getParameterValues("idFriendsAccount");
+        String idFriendsAccount = request.getParameter("idFriendsAccount");
         System.out.println("idFriendsAccount - " + idFriendsAccount);
         doGet(request, response);
     }

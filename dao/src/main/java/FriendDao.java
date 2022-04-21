@@ -7,135 +7,144 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FriendDao {
-    private final Pool connectionPool;
-    private static FriendDao friendDao;
+    private final JNDIPool connectionPool;
 
-    private FriendDao() {
-        connectionPool = ConnectionPool.getInstance();
-    }
-
-    public static FriendDao getInstance(){
-        if (friendDao == null) {
-            friendDao = new FriendDao();
-        }
-        return friendDao;
+    public FriendDao() {
+        connectionPool = JNDIPool.getInstance();
     }
 
     public boolean create(Friend friend) {
         System.out.println("FriendDao.create - start");
-        Connection connection = connectionPool.getConnection();
-        try (PreparedStatement query = connection.prepareStatement(
-                "INSERT INTO friends(idAccount, idFriendsAccount) VALUES (?, ?)")) {
-            query.setInt(1, friend.getIdAccount());
-            query.setInt(2, friend.getIdFriendsAccount());
-            int rows = query.executeUpdate();
-            System.out.println("Added " + rows + " rows");
+        String sql = "INSERT INTO friends(idAccount, idFriendsAccount) VALUES (?, ?)";
+        try (Connection connection = connectionPool.getConnection()) {
+            try (PreparedStatement query = connection.prepareStatement(sql)) {
+                query.setInt(1, friend.getIdAccount());
+                query.setInt(2, friend.getIdFriendsAccount());
+                int rows = query.executeUpdate();
+                System.out.println("Added " + rows + " rows");
+            } catch (Exception ex) {
+                System.out.println("create Exception - " + ex);
+            }
         } catch (Exception ex) {
-            System.out.println("Connection failed...createFriend");
-            System.out.println(ex);
+            System.out.println("create Exception - " + ex);
         }
         return true;
     }
 
     public List<Friend> readFriends(int id) {
         List<Friend> friendList = new ArrayList<>();
-        Connection connection = connectionPool.getConnection();
-        try (PreparedStatement query = connection.prepareStatement("SELECT * FROM friends WHERE idAccount = ?")) {
-            query.setInt(1, id);
-            ResultSet resultSet = query.executeQuery();
-            while (resultSet.next()) {
-                Friend friend = new Friend();
-                friend.setId(resultSet.getInt(1));
-                friend.setIdAccount(resultSet.getInt(2));
-                friend.setIdFriendsAccount(resultSet.getInt(3));
-                friendList.add(friend);
+        String sql = "SELECT * FROM friends WHERE idAccount = ?";
+        try (Connection connection = connectionPool.getConnection()) {
+            try (PreparedStatement query = connection.prepareStatement(sql)) {
+                query.setInt(1, id);
+                try (ResultSet resultSet = query.executeQuery()) {
+                    while (resultSet.next()) {
+                        Friend friend = new Friend();
+                        friend.setId(resultSet.getInt(1));
+                        friend.setIdAccount(resultSet.getInt(2));
+                        friend.setIdFriendsAccount(resultSet.getInt(3));
+                        friendList.add(friend);
+                    }
+                }
+            } catch (Exception ex) {
+                System.out.println("readFriends Exception - " + ex);
             }
         } catch (Exception ex) {
-            System.out.println("Connection failed...readFriends");
-            System.out.println(ex);
+            System.out.println("readFriends Exception - " + ex);
         }
         return friendList;
     }
 
     public Friend read(int id) {
         Friend friend = new Friend();
-        Connection connection = connectionPool.getConnection();
-        try (PreparedStatement query = connection.prepareStatement("SELECT * FROM friends WHERE idfriends = ?")) {
-            query.setInt(1, id);
-            ResultSet resultSet = query.executeQuery();
-            while (resultSet.next()) {
-                friend.setId(resultSet.getInt(1));
-                friend.setIdAccount(resultSet.getInt(2));
-                friend.setIdFriendsAccount(resultSet.getInt(3));
+        String sql = "SELECT * FROM friends WHERE idfriends = ?";
+        try (Connection connection = connectionPool.getConnection()) {
+            try (PreparedStatement query = connection.prepareStatement(sql)) {
+                query.setInt(1, id);
+                try (ResultSet resultSet = query.executeQuery()) {
+                    while (resultSet.next()) {
+                        friend.setId(resultSet.getInt(1));
+                        friend.setIdAccount(resultSet.getInt(2));
+                        friend.setIdFriendsAccount(resultSet.getInt(3));
+                    }
+                }
+            } catch (Exception ex) {
+                System.out.println("read Exception - " + ex);
             }
         } catch (Exception ex) {
-            System.out.println("Connection failed...readFriend");
-            System.out.println(ex);
+            System.out.println("read Exception - " + ex);
         }
         return friend;
     }
 
     public List<Friend> readAllFriends() {
         List<Friend> friendList = new ArrayList<>();
-        Connection connection = connectionPool.getConnection();
-        try (Statement statement = connection.createStatement()) {
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM friends");
-            while (resultSet.next()) {
-                Friend friend = new Friend();
-                friend.setIdAccount(resultSet.getInt(1));
-                friend.setIdFriendsAccount(resultSet.getInt(2));
-                friendList.add(friend);
+        String sql = "SELECT * FROM friends";
+        try (Connection connection = connectionPool.getConnection()) {
+            try (Statement statement = connection.createStatement()) {
+                try (ResultSet resultSet = statement.executeQuery(sql)) {
+                    while (resultSet.next()) {
+                        Friend friend = new Friend();
+                        friend.setIdAccount(resultSet.getInt(1));
+                        friend.setIdFriendsAccount(resultSet.getInt(2));
+                        friendList.add(friend);
+                    }
+                }
+            } catch (Exception ex) {
+                System.out.println("readAllFriends Exception - " + ex);
             }
         } catch (Exception ex) {
-            System.out.println("Connection failed...readAllFriends");
-            System.out.println(ex);
+            System.out.println("readAllFriends Exception - " + ex);
         }
         return friendList;
     }
 
-    public boolean update(Friend friend) {
-        Connection connection = connectionPool.getConnection();
-        try (PreparedStatement query = connection.prepareStatement(
-                "UPDATE friends SET idAccount = ?, idFriendsAccount = ? WHERE idFriends = ?")) {
-            query.setInt(1, friend.getIdAccount());
-            query.setInt(2, friend.getIdFriendsAccount());
-            query.setInt(3, friend.getId());
-            int rows = query.executeUpdate();
-            System.out.println("Updated rows = " + rows);
+    public void update(Friend friend) {
+        String sql = "UPDATE friends SET idAccount = ?, idFriendsAccount = ? WHERE idFriends = ?";
+        try (Connection connection = connectionPool.getConnection()) {
+            try (PreparedStatement query = connection.prepareStatement(sql)) {
+                query.setInt(1, friend.getIdAccount());
+                query.setInt(2, friend.getIdFriendsAccount());
+                query.setInt(3, friend.getId());
+                int rows = query.executeUpdate();
+                System.out.println("Updated rows = " + rows);
+            } catch (Exception ex) {
+                System.out.println("update Exception - " + ex);
+            }
         } catch (Exception ex) {
-            System.out.println("Connection failed...updateFriend");
-            System.out.println(ex);
+            System.out.println("update Exception - " + ex);
         }
-        return true;
     }
 
-    public boolean deleteFriendIdAccountIdFriendAccount(int idAccount, int idFriend) {
-        Connection connection = connectionPool.getConnection();
-        try (PreparedStatement query = connection.prepareStatement("DELETE FROM friends WHERE idAccount = ? AND idFriendsAccount = ? ")) {
-            query.setInt(1, idAccount);
-            query.setInt(2, idFriend);
-            int rows = query.executeUpdate();
-            System.out.println("Delete rows = " + rows);
-        } catch (SQLException throwables) {
-            System.out.println("Connection failed...deleteFriendIdAccountIdFriendAccount");
-
-            throwables.printStackTrace();
+    public void deleteFriendIdAccountIdFriendAccount(int idAccount, int idFriend) {
+        String sql = "DELETE FROM friends WHERE idAccount = ? AND idFriendsAccount = ? ";
+        try (Connection connection = connectionPool.getConnection()) {
+            try (PreparedStatement query = connection.prepareStatement(sql)) {
+                query.setInt(1, idAccount);
+                query.setInt(2, idFriend);
+                int rows = query.executeUpdate();
+                System.out.println("Delete rows = " + rows);
+            } catch (SQLException ex) {
+                System.out.println("deleteFriendIdAccountIdFriendAccount Exception - " + ex);
+            }
+        } catch (SQLException ex) {
+            System.out.println("deleteFriendIdAccountIdFriendAccount Exception - " + ex);
         }
-        return true;
     }
 
-    public boolean delete(Friend friend) {
-        Connection connection = connectionPool.getConnection();
-        try (PreparedStatement query = connection.prepareStatement("DELETE FROM friends WHERE idFriends = ?")) {
-            query.setInt(1, friend.getId());
-            int rows = query.executeUpdate();
-            System.out.println("Delete rows = " + rows);
-        } catch (SQLException throwables) {
-            System.out.println("Connection failed...deleteFriend");
-
-            throwables.printStackTrace();
+    public void delete(Friend friend) {
+        String sql = "DELETE FROM friends WHERE idFriends = ?";
+        try (Connection connection = connectionPool.getConnection()) {
+            try (PreparedStatement query = connection.prepareStatement(sql)) {
+                query.setInt(1, friend.getId());
+                int rows = query.executeUpdate();
+                System.out.println("Delete rows = " + rows);
+            } catch (SQLException ex) {
+                System.out.println("delete Exception - " + ex);
+            }
+        } catch (SQLException ex) {
+            System.out.println("delete Exception - " + ex);
         }
-        return true;
     }
 
     public List<Friend> readFriendsName(int id) {
@@ -145,24 +154,26 @@ public class FriendDao {
                 "f.idAccount, f.idFriendsAccount, f.idFriends FROM friends f JOIN account a " +
                 "ON f.idFriendsAccount = a.idAccount WHERE f.idAccount = ?";
         System.out.println(sql);
-        Connection connection = connectionPool.getConnection();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setInt(1, id);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                Friend friend = new Friend();
-                friend.setUsername(resultSet.getString(1));
-                friend.setName(resultSet.getString(2));
-                friend.setIdAccount(resultSet.getInt(3));
-                friend.setIdFriendsAccount(resultSet.getInt(4));
-                friend.setId(resultSet.getInt(5));
-                friends.add(friend);
+        try (Connection connection = connectionPool.getConnection()) {
+            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+                preparedStatement.setInt(1, id);
+                try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                    while (resultSet.next()) {
+                        Friend friend = new Friend();
+                        friend.setUsername(resultSet.getString(1));
+                        friend.setName(resultSet.getString(2));
+                        friend.setIdAccount(resultSet.getInt(3));
+                        friend.setIdFriendsAccount(resultSet.getInt(4));
+                        friend.setId(resultSet.getInt(5));
+                        friends.add(friend);
+                    }
+                }
+            } catch (Exception ex) {
+                System.out.println("readFriendsName Exception - " + ex);
             }
         } catch (Exception ex) {
-            System.out.println("Connection failed...readFriendsName");
-            System.out.println(ex);
+            System.out.println("readFriendsName Exception - " + ex);
         }
-        System.out.println("readWallMassageUserId - finish");
         return friends;
     }
 

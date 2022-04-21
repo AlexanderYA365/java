@@ -22,8 +22,6 @@ public class AccountGroup extends HttpServlet {
             request.setAttribute("groups", groups);
         } catch (Exception e) {
             System.out.println(e);//send redirect
-        } finally {
-            service.closeService();
         }
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("jsp/AccountGroup.jsp");
         requestDispatcher.forward(request, response);

@@ -43,9 +43,6 @@ public class AddFriendAccount extends HttpServlet {
             }
         } catch (Exception e) {
             System.out.println(e);//send redirect
-        } finally {
-            friendService.closeService();
-            accountService.closeService();
         }
         doGet(request, response);
     }

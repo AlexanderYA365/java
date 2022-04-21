@@ -2,11 +2,9 @@ import java.util.List;
 
 public class MessageService {
     private final MessageDao messageDao;
-    private final Pool connectionPool;
 
     public MessageService(){
-        messageDao = MessageDao.getInstance();
-        connectionPool = ConnectionPool.getInstance();
+        messageDao = new MessageDao();
     }
 
     public List<Message> readWallMassageAccount(Account account) {
@@ -26,19 +24,12 @@ public class MessageService {
 
     public boolean createMassage(Message message) {
         System.out.println("createMassage message - " + message);
-        boolean result = false;
         try {
-            result = messageDao.create(message);
-            connectionPool.commit();
-        }catch (Exception e){
-            connectionPool.rollback();
-            e.printStackTrace();
+            return messageDao.create(message);
+        }catch (Exception ex){
+            System.out.println("createMassage exception - " + ex);
+            return false;
         }
-        return result;
-    }
-
-    public void closeService() {
-        connectionPool.returnConnection();
     }
 
 }

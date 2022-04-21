@@ -2,13 +2,11 @@ import java.util.List;
 
 public class FriendService {
     private AccountDao accountDAO;
-    private Pool connectionPool;
     private FriendDao friendDAO;
 
     public FriendService(){
-        accountDAO = AccountDao.getInstance();
-        connectionPool = ConnectionPool.getInstance();
-        friendDAO = FriendDao.getInstance();
+        accountDAO = new AccountDao();
+        friendDAO = new FriendDao();
     }
 
     public Account read(Friend friend) {
@@ -23,11 +21,9 @@ public class FriendService {
             friend1.setIdAccount(account.getId());
             friend1.setIdFriendsAccount(friend.getId());
             friendDAO.create(friend1);
-            connectionPool.commit();
             return true;
-        } catch (Exception e){
-            connectionPool.rollback();
-            e.printStackTrace();
+        } catch (Exception ex){
+            System.out.println("read Exception - " + ex);
         }
         return false;
     }
@@ -36,11 +32,9 @@ public class FriendService {
         System.out.println("deleteFriend, accountId - " + account.getId() + ", friendId - " + friend.getId());
         try {
             friendDAO.deleteFriendIdAccountIdFriendAccount(account.getId(), friend.getId());
-            connectionPool.commit();
             return true;
-        } catch (Exception e){
-            connectionPool.rollback();
-            e.printStackTrace();
+        } catch (Exception ex){
+            System.out.println("deleteFriend Exception - " + ex);
         }
         return false;
     }
@@ -58,10 +52,6 @@ public class FriendService {
     public Friend read(int id) {
         System.out.println("readAccountFriends id - " + id);
         return friendDAO.read(id);
-    }
-
-    public void closeService() {
-        connectionPool.returnConnection();
     }
 
 }

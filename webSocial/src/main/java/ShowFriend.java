@@ -32,10 +32,6 @@ public class ShowFriend extends HttpServlet {
             }
         } catch (Exception e) {
             System.out.println(e);//send redirect
-        } finally {
-            accountService.closeService();
-            applicationService.closeService();
-            friendService.closeService();
         }
         RequestDispatcher requestDispatcher = req.getRequestDispatcher("jsp/ShowFriend.jsp");
         requestDispatcher.forward(req, response);

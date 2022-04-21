@@ -17,7 +17,7 @@ public class AccountCreateGroup extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
         System.out.println("AccountCreateGroup doPost");
         HttpSession session = request.getSession();
         Account account = (Account) session.getAttribute("account");
@@ -37,8 +37,6 @@ public class AccountCreateGroup extends HttpServlet {
             }
         } catch (Exception e) {
             System.out.println("Error");//TODO redirect
-        } finally {
-            service.closeService();
         }
     }
 
