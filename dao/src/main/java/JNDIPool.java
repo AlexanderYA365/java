@@ -5,21 +5,21 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 public class JNDIPool implements Pool {
-    private DataSource source;
     private static final JNDIPool jndiPool = new JNDIPool();
-
-    public static JNDIPool  getInstance(){
-        return jndiPool;
-    }
+    private DataSource source;
 
     private JNDIPool() {
-        try{
+        try {
             Context initContext = new InitialContext();
             Context contextEnv = (Context) initContext.lookup("java:comp/env");
             this.source = (DataSource) contextEnv.lookup("jdbc/socnetwork");
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println("JNDIPool Exception - " + e);
         }
+    }
+
+    public static JNDIPool getInstance() {
+        return jndiPool;
     }
 
     @Override

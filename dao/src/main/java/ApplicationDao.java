@@ -72,7 +72,7 @@ public class ApplicationDao {
         List<Application> applications = new ArrayList<>();
         String sql = "SELECT * FROM application";
         try (PreparedStatement query = connectionPool.getConnection().prepareStatement(sql)) {
-            try(ResultSet resultSet = query.executeQuery()) {
+            try (ResultSet resultSet = query.executeQuery()) {
                 while (resultSet.next()) {
                     Application application = new Application();
                     application.setId(resultSet.getInt(1));
@@ -117,7 +117,7 @@ public class ApplicationDao {
     }
 
     private void fillFieldQuery(Application application, PreparedStatement query) {
-        try(ResultSet resultSet = query.executeQuery()) {
+        try (ResultSet resultSet = query.executeQuery()) {
             while (resultSet.next()) {
                 application.setId(resultSet.getInt(1));
                 application.setApplicationType(resultSet.getInt(2));
@@ -125,7 +125,7 @@ public class ApplicationDao {
                 application.setIdRecipient(resultSet.getInt(4));
                 application.setStatus(resultSet.getInt(5));
             }
-        }catch (SQLException ex){
+        } catch (SQLException ex) {
             System.out.println("fillFieldQuery exception - " + ex);
         }
     }

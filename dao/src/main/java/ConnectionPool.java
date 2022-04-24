@@ -1,4 +1,3 @@
-import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -37,7 +36,7 @@ public class ConnectionPool implements Pool {
             URL = prop.getProperty("url");
             USERNAME = prop.getProperty("username");
             PASSWORD = prop.getProperty("password");
-        }  catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -47,15 +46,6 @@ public class ConnectionPool implements Pool {
             instance = new ConnectionPool();
         }
         return instance;
-    }
-
-    private void create() throws SQLException, ClassNotFoundException {
-        getProperty();
-        freeConnections = new ConcurrentLinkedQueue<>();
-        semaphore = new Semaphore(POOL_SIZE);
-        for (int i = 0; i < POOL_SIZE; i++) {
-            freeConnections.add(createConnection());
-        }
     }
 
     private static Connection getConnectionToThread() {
@@ -73,6 +63,22 @@ public class ConnectionPool implements Pool {
             e.printStackTrace();
         }
         return connection;
+    }
+
+    private static Connection createConnection() throws SQLException, ClassNotFoundException {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+        connection.setAutoCommit(false);
+        return connection;
+    }
+
+    private void create() throws SQLException, ClassNotFoundException {
+        getProperty();
+        freeConnections = new ConcurrentLinkedQueue<>();
+        semaphore = new Semaphore(POOL_SIZE);
+        for (int i = 0; i < POOL_SIZE; i++) {
+            freeConnections.add(createConnection());
+        }
     }
 
     public void returnConnection() {
@@ -103,13 +109,6 @@ public class ConnectionPool implements Pool {
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-        return connection;
-    }
-
-    private static Connection createConnection() throws SQLException, ClassNotFoundException {
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-        connection.setAutoCommit(false);
         return connection;
     }
 

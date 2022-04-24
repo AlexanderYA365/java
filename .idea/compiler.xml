@@ -8,9 +8,9 @@
         <outputRelativeToContentRoot value="true" />
         <module name="webSocial" />
         <module name="common" />
-        <module name="dao" />
-        <module name="webapp" />
         <module name="service" />
+        <module name="webapp" />
+        <module name="dao" />
       </profile>
     </annotationProcessing>
   </component>

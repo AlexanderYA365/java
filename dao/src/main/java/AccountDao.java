@@ -65,8 +65,8 @@ public class AccountDao {
                 System.out.println("readAccount Exception - " + ex);
             }
         } catch (Exception ex) {
-        System.out.println("readAccount Exception - " + ex);
-    }
+            System.out.println("readAccount Exception - " + ex);
+        }
         return account;
     }
 
@@ -165,7 +165,7 @@ public class AccountDao {
         }
     }
 
-    private void fillAllFieldQuery(Account account, PreparedStatement preparedStatement){
+    private void fillAllFieldQuery(Account account, PreparedStatement preparedStatement) {
         try {
             fillAccountInfoQuery(account, preparedStatement);
             preparedStatement.setString(9, account.getUsername());
@@ -188,11 +188,11 @@ public class AccountDao {
     }
 
     private void fillFieldResult(Account account, PreparedStatement query) {
-        try(ResultSet resultSet = query.executeQuery()) {
+        try (ResultSet resultSet = query.executeQuery()) {
             while (resultSet.next()) {
                 fillAccountInfoResult(account, resultSet);
             }
-        }catch (Exception ex){
+        } catch (Exception ex) {
             System.out.println("fillFieldResult exception - " + ex);
         }
     }

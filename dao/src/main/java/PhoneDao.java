@@ -18,11 +18,11 @@ public class PhoneDao {
         System.out.println(sql);
         try (Connection connection = connectionPool.getConnection()) {
             try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setInt(1, phone.getIdAccount());
-            preparedStatement.setString(2, phone.getPhoneNumber());
-            preparedStatement.setInt(3, phone.getPhoneType());
-            int rows = preparedStatement.executeUpdate();
-            System.out.println("Added " + rows + " rows");
+                preparedStatement.setInt(1, phone.getIdAccount());
+                preparedStatement.setString(2, phone.getPhoneNumber());
+                preparedStatement.setInt(3, phone.getPhoneType());
+                int rows = preparedStatement.executeUpdate();
+                System.out.println("Added " + rows + " rows");
             } catch (Exception ex) {
                 System.out.println("create Exception - " + ex);
             }
@@ -37,20 +37,20 @@ public class PhoneDao {
         String sql = "SELECT * FROM phone WHERE idaccount = ?;";
         System.out.println(sql);
         try (Connection connection = connectionPool.getConnection()) {
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setInt(1, id);
-            try(ResultSet resultSet = preparedStatement.executeQuery()) {
-                while (resultSet.next()) {
-                    Phone phone = new Phone();
-                    phone.setIdAccount(resultSet.getInt(1));
-                    phone.setPhoneNumber(resultSet.getString(2));
-                    phone.setPhoneType(resultSet.getInt(3));
-                    phones.add(phone);
+            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+                preparedStatement.setInt(1, id);
+                try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                    while (resultSet.next()) {
+                        Phone phone = new Phone();
+                        phone.setIdAccount(resultSet.getInt(1));
+                        phone.setPhoneNumber(resultSet.getString(2));
+                        phone.setPhoneType(resultSet.getInt(3));
+                        phones.add(phone);
+                    }
                 }
+            } catch (Exception ex) {
+                System.out.println("read Exception - " + ex);
             }
-        } catch (Exception ex) {
-            System.out.println("read Exception - " + ex);
-        }
         } catch (Exception ex) {
             System.out.println("read Exception - " + ex);
         }
@@ -58,17 +58,18 @@ public class PhoneDao {
     }
 
     public boolean update(Phone phone) {
-        String sql ="UPDATE phone SET phonenumber = ?, phonetype = ? WHERE IdAccount = ?";
+        String sql = "UPDATE phone SET phonenumber = ?, phonetype = ? WHERE IdAccount = ?";
         try (Connection connection = connectionPool.getConnection()) {
-        try (PreparedStatement query = connection.prepareStatement(sql)) {
-            query.setString(1, phone.getPhoneNumber());
-            query.setString(2, phone.getPhoneNumber());
-            query.setInt(3, phone.getIdAccount());
-            int rows = query.executeUpdate();
-            System.out.println("Updated rows = " + rows);
+            try (PreparedStatement query = connection.prepareStatement(sql)) {
+                query.setString(1, phone.getPhoneNumber());
+                query.setString(2, phone.getPhoneNumber());
+                query.setInt(3, phone.getIdAccount());
+                int rows = query.executeUpdate();
+                System.out.println("Updated rows = " + rows);
+            } catch (Exception ex) {
+                System.out.println("update Exception - " + ex);
+            }
         } catch (Exception ex) {
-            System.out.println("update Exception - " + ex);
-        }        } catch (Exception ex) {
             System.out.println("update Exception - " + ex);
         }
         return true;
@@ -78,10 +79,10 @@ public class PhoneDao {
         String sql = "DELETE FROM phone WHERE IdAccount = ? AND phonenumber = ?";
         try (Connection connection = connectionPool.getConnection()) {
             try (PreparedStatement query = connection.prepareStatement(sql)) {
-            query.setInt(1, phone.getIdAccount());
-            query.setString(2, phone.getPhoneNumber());
-            int rows = query.executeUpdate();
-            System.out.println("Delete rows = " + rows);
+                query.setInt(1, phone.getIdAccount());
+                query.setString(2, phone.getPhoneNumber());
+                int rows = query.executeUpdate();
+                System.out.println("Delete rows = " + rows);
             } catch (SQLException ex) {
                 System.out.println("delete Exception - " + ex);
             }

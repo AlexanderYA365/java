@@ -18,14 +18,14 @@ public class MessageDao {
         System.out.println(sql);
         try (Connection connection = connectionPool.getConnection()) {
             try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setInt(1, message.getIdSender());
-            preparedStatement.setInt(2, message.getIdReceiving());
-            preparedStatement.setString(3, message.getMessage());
-            preparedStatement.setString(4, message.getPicture());
-            preparedStatement.setBoolean(5, message.isEdited());
-            preparedStatement.setInt(6, message.getMessageType());
-            int rows = preparedStatement.executeUpdate();
-            System.out.println("Added " + rows + " rows");
+                preparedStatement.setInt(1, message.getIdSender());
+                preparedStatement.setInt(2, message.getIdReceiving());
+                preparedStatement.setString(3, message.getMessage());
+                preparedStatement.setString(4, message.getPicture());
+                preparedStatement.setBoolean(5, message.isEdited());
+                preparedStatement.setInt(6, message.getMessageType());
+                int rows = preparedStatement.executeUpdate();
+                System.out.println("Added " + rows + " rows");
             } catch (Exception ex) {
                 System.out.println("create Exception - " + ex);
             }
@@ -42,21 +42,21 @@ public class MessageDao {
         System.out.println(sql);
         try (Connection connection = connectionPool.getConnection()) {
             try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setInt(1, id);
-            try(ResultSet resultSet = preparedStatement.executeQuery()) {
-                while (resultSet.next()) {
-                    Message message = new Message();
-                    message.setId(resultSet.getInt(1));
-                    message.setIdSender(resultSet.getInt(2));
-                    message.setIdReceiving(resultSet.getInt(3));
-                    message.setMessage(resultSet.getString(4));
-                    message.setPicture(resultSet.getString(5));
-                    message.setPublicationDate(resultSet.getDate(6));
-                    message.setEdited(resultSet.getBoolean(7));
-                    message.setMessageType(resultSet.getInt(8));
-                    massageList.add(message);
+                preparedStatement.setInt(1, id);
+                try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                    while (resultSet.next()) {
+                        Message message = new Message();
+                        message.setId(resultSet.getInt(1));
+                        message.setIdSender(resultSet.getInt(2));
+                        message.setIdReceiving(resultSet.getInt(3));
+                        message.setMessage(resultSet.getString(4));
+                        message.setPicture(resultSet.getString(5));
+                        message.setPublicationDate(resultSet.getDate(6));
+                        message.setEdited(resultSet.getBoolean(7));
+                        message.setMessageType(resultSet.getInt(8));
+                        massageList.add(message);
+                    }
                 }
-            }
             } catch (Exception ex) {
                 System.out.println("readMessageUserId Exception - " + ex);
             }
@@ -92,8 +92,8 @@ public class MessageDao {
                 System.out.println("readMessageUserIdNameSender Exception - " + ex);
             }
         } catch (Exception ex) {
-        System.out.println("readMessageUserIdNameSender Exception - " + ex);
-    }
+            System.out.println("readMessageUserIdNameSender Exception - " + ex);
+        }
         return messageList;
     }
 
@@ -143,7 +143,7 @@ public class MessageDao {
     }
 
     private void fillMessage(List<Message> massageList, PreparedStatement preparedStatement) {
-        try(ResultSet resultSet = preparedStatement.executeQuery()) {
+        try (ResultSet resultSet = preparedStatement.executeQuery()) {
             while (resultSet.next()) {
                 Message message = new Message();
                 message.setId(resultSet.getInt(1));
@@ -158,7 +158,7 @@ public class MessageDao {
                 message.setMessageType(resultSet.getInt(10));
                 massageList.add(message);
             }
-        } catch (SQLException ex){
+        } catch (SQLException ex) {
             System.out.println("fillMessage exception - " + ex);
         }
     }
