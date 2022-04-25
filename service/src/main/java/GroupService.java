@@ -3,7 +3,7 @@ import java.util.List;
 public class GroupService {
     private GroupDao groupDao;
 
-    public GroupService(){
+    public GroupService() {
         groupDao = new GroupDao();
     }
 
@@ -16,7 +16,7 @@ public class GroupService {
         System.out.println("createAccountGroups");
         try {
             groupDao.create(group);
-        } catch (Exception ex){
+        } catch (Exception ex) {
             System.out.println("createAccountGroups exception - " + ex);
         }
     }
@@ -40,7 +40,7 @@ public class GroupService {
         System.out.println("Group read idGroup - " + group + " , idAccount - " + idAccount);
         try {
             return groupDao.insertAccount(group, idAccount);
-        } catch (Exception ex){
+        } catch (Exception ex) {
             System.out.println("createAccountGroups exception - " + ex);
             return false;
         }

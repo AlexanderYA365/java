@@ -3,7 +3,7 @@ import java.util.List;
 public class MessageService {
     private final MessageDao messageDao;
 
-    public MessageService(){
+    public MessageService() {
         messageDao = new MessageDao();
     }
 
@@ -26,7 +26,7 @@ public class MessageService {
         System.out.println("createMassage message - " + message);
         try {
             return messageDao.create(message);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             System.out.println("createMassage exception - " + ex);
             return false;
         }

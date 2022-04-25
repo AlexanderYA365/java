@@ -1,11 +1,10 @@
-import java.sql.Connection;
 import java.util.List;
 
 public class AccountService {
     AccountDao accountDAO;
     PhoneDao phoneDao;
 
-    public AccountService(){
+    public AccountService() {
         phoneDao = new PhoneDao();
         accountDAO = new AccountDao();
     }
@@ -15,7 +14,7 @@ public class AccountService {
         try {
             accountDAO.createAccount(account);
             int id = accountDAO.readIdAccount(account);
-            for(Phone phone : account.getPhones()) {
+            for (Phone phone : account.getPhones()) {
                 phone.setIdAccount(id);
                 phoneDao.create(phone);
             }
@@ -31,7 +30,7 @@ public class AccountService {
         try {
             accountDAO.updateAccount(account);
             int id = accountDAO.readIdAccount(account);
-            for(Phone phone : account.getPhones()) {
+            for (Phone phone : account.getPhones()) {
                 phone.setIdAccount(id);
                 phoneDao.update(phone);
             }
@@ -47,7 +46,7 @@ public class AccountService {
         try {
             accountDAO.deleteAccount(account);
             int id = accountDAO.readIdAccount(account);
-            for(Phone phone : account.getPhones()) {
+            for (Phone phone : account.getPhones()) {
                 phone.setIdAccount(id);
                 phoneDao.delete(phone);
             }

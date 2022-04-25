@@ -18,16 +18,13 @@ public class AccountDao {
                 "addressjob, email, aboutme, username, password, role) " +
                 "VALUES (?,?,?,NOW(),?,?,?,?,?,?,?,?);";
         System.out.println(sql);
-        try (Connection connection = connectionPool.getConnection()) {
-            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-                fillAllFieldQuery(account, preparedStatement);
-                System.out.println(preparedStatement);
-                int rows = preparedStatement.executeUpdate();
-                System.out.println("Added " + rows + " rows");
-            } catch (Exception ex) {
-                System.out.println("createAccount Exception - " + ex);
-            }
-        } catch (SQLException ex) {
+        try (Connection connection = connectionPool.getConnection();//TODO
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            fillAllFieldQuery(account, preparedStatement);
+            System.out.println(preparedStatement);
+            int rows = preparedStatement.executeUpdate();
+            System.out.println("Added " + rows + " rows");
+        } catch (Exception ex) {
             System.out.println("createAccount Exception - " + ex);
         }
     }
@@ -35,16 +32,13 @@ public class AccountDao {
     public int readIdAccount(Account account) {
         System.out.println("readIdAccount - account = " + account);
         String sql = "SELECT idAccount FROM account WHERE username = ? AND password = ?";
-        try (Connection connection = connectionPool.getConnection()) {
-            try (PreparedStatement query = connection.prepareStatement(sql)) {
-                query.setString(1, account.getUsername());
-                query.setString(2, account.getPassword());
-                ResultSet resultSet = query.executeQuery();
-                while (resultSet.next()) {
-                    account.setId(resultSet.getInt(1));
-                }
-            } catch (Exception ex) {
-                System.out.println("readIdAccount Exception - " + ex);
+        try (Connection connection = connectionPool.getConnection();//TODO
+             PreparedStatement query = connection.prepareStatement(sql)) {
+            query.setString(1, account.getUsername());
+            query.setString(2, account.getPassword());
+            ResultSet resultSet = query.executeQuery();
+            while (resultSet.next()) {
+                account.setId(resultSet.getInt(1));
             }
         } catch (Exception ex) {
             System.out.println("readIdAccount Exception - " + ex);
@@ -56,14 +50,11 @@ public class AccountDao {
         System.out.println("readAccount - username = " + username + " ,password = " + password);
         Account account = new Account();
         String sql = "SELECT * FROM account WHERE username = ? AND password = ?";
-        try (Connection connection = connectionPool.getConnection()) {
-            try (PreparedStatement query = connection.prepareStatement(sql)) {
-                query.setString(1, username);
-                query.setString(2, password);
-                fillFieldResult(account, query);
-            } catch (Exception ex) {
-                System.out.println("readAccount Exception - " + ex);
-            }
+        try (Connection connection = connectionPool.getConnection();//TODO
+             PreparedStatement query = connection.prepareStatement(sql)) {
+            query.setString(1, username);
+            query.setString(2, password);
+            fillFieldResult(account, query);
         } catch (Exception ex) {
             System.out.println("readAccount Exception - " + ex);
         }
@@ -74,13 +65,10 @@ public class AccountDao {
         System.out.println("readAccount(int id)");
         Account account = new Account();
         String sql = "SELECT * FROM account WHERE idAccount = ?";
-        try (Connection connection = connectionPool.getConnection()) {
-            try (PreparedStatement query = connection.prepareStatement(sql)) {
-                query.setInt(1, id);
-                fillFieldResult(account, query);
-            } catch (Exception ex) {
-                System.out.println("readAccount Exception - " + ex);
-            }
+        try (Connection connection = connectionPool.getConnection();//TODO
+             PreparedStatement query = connection.prepareStatement(sql)) {
+            query.setInt(1, id);
+            fillFieldResult(account, query);
         } catch (Exception ex) {
             System.out.println("readAccount Exception - " + ex);
         }
@@ -92,18 +80,15 @@ public class AccountDao {
         List<Account> accounts = new ArrayList<>();
         String sql = "SELECT * FROM account WHERE name = ?";
         System.out.println(sql);
-        try (Connection connection = connectionPool.getConnection()) {
-            try (PreparedStatement query = connection.prepareStatement(sql)) {
-                query.setString(1, name);
-                try (ResultSet resultSet = query.executeQuery()) {
-                    while (resultSet.next()) {
-                        Account account = new Account();
-                        fillAccountInfoResult(account, resultSet);
-                        accounts.add(account);
-                    }
+        try (Connection connection = connectionPool.getConnection();//TODO
+             PreparedStatement query = connection.prepareStatement(sql)) {
+            query.setString(1, name);
+            try (ResultSet resultSet = query.executeQuery()) {
+                while (resultSet.next()) {
+                    Account account = new Account();
+                    fillAccountInfoResult(account, resultSet);
+                    accounts.add(account);
                 }
-            } catch (Exception ex) {
-                System.out.println("readAccountsName Exception - " + ex);
             }
         } catch (Exception ex) {
             System.out.println("readAccountsName Exception - " + ex);
@@ -111,7 +96,7 @@ public class AccountDao {
         return accounts;
     }
 
-    public List<Account> readAccounts() {
+    public List<Account> readAccounts() {//TODO
         System.out.println("readAccountsName");
         List<Account> accounts = new ArrayList<>();
         try (Connection connection = connectionPool.getConnection()) {

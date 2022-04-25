@@ -4,7 +4,7 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class JNDIPool implements Pool {
+public class JNDIPool implements Pool {//TODO hotkey
     private static final JNDIPool jndiPool = new JNDIPool();
     private DataSource source;
 

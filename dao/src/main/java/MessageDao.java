@@ -16,19 +16,16 @@ public class MessageDao {
         String sql = "INSERT INTO massage(idSender, idReceiving, massage, picture, publicationDate, edited, messageType) " +
                 "VALUES (?,?,?,?, NOW(), ?, ?);";
         System.out.println(sql);
-        try (Connection connection = connectionPool.getConnection()) {
-            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-                preparedStatement.setInt(1, message.getIdSender());
-                preparedStatement.setInt(2, message.getIdReceiving());
-                preparedStatement.setString(3, message.getMessage());
-                preparedStatement.setString(4, message.getPicture());
-                preparedStatement.setBoolean(5, message.isEdited());
-                preparedStatement.setInt(6, message.getMessageType());
-                int rows = preparedStatement.executeUpdate();
-                System.out.println("Added " + rows + " rows");
-            } catch (Exception ex) {
-                System.out.println("create Exception - " + ex);
-            }
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement query = connection.prepareStatement(sql)) {
+            query.setInt(1, message.getIdSender());
+            query.setInt(2, message.getIdReceiving());
+            query.setString(3, message.getMessage());
+            query.setString(4, message.getPicture());
+            query.setBoolean(5, message.isEdited());
+            query.setInt(6, message.getMessageType());
+            int rows = query.executeUpdate();
+            System.out.println("Added " + rows + " rows");
         } catch (Exception ex) {
             System.out.println("create Exception - " + ex);
         }
@@ -40,25 +37,22 @@ public class MessageDao {
         List<Message> massageList = new ArrayList<>();
         String sql = "SELECT * FROM massage WHERE idReceiving = ?";
         System.out.println(sql);
-        try (Connection connection = connectionPool.getConnection()) {
-            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-                preparedStatement.setInt(1, id);
-                try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                    while (resultSet.next()) {
-                        Message message = new Message();
-                        message.setId(resultSet.getInt(1));
-                        message.setIdSender(resultSet.getInt(2));
-                        message.setIdReceiving(resultSet.getInt(3));
-                        message.setMessage(resultSet.getString(4));
-                        message.setPicture(resultSet.getString(5));
-                        message.setPublicationDate(resultSet.getDate(6));
-                        message.setEdited(resultSet.getBoolean(7));
-                        message.setMessageType(resultSet.getInt(8));
-                        massageList.add(message);
-                    }
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement query = connection.prepareStatement(sql)) {
+            query.setInt(1, id);
+            try (ResultSet resultSet = query.executeQuery()) {
+                while (resultSet.next()) {
+                    Message message = new Message();
+                    message.setId(resultSet.getInt(1));
+                    message.setIdSender(resultSet.getInt(2));
+                    message.setIdReceiving(resultSet.getInt(3));
+                    message.setMessage(resultSet.getString(4));
+                    message.setPicture(resultSet.getString(5));
+                    message.setPublicationDate(resultSet.getDate(6));
+                    message.setEdited(resultSet.getBoolean(7));
+                    message.setMessageType(resultSet.getInt(8));
+                    massageList.add(message);
                 }
-            } catch (Exception ex) {
-                System.out.println("readMessageUserId Exception - " + ex);
             }
         } catch (Exception ex) {
             System.out.println("readMessageUserId Exception - " + ex);
@@ -72,24 +66,21 @@ public class MessageDao {
         String sql = "SELECT id, idSender, idReceiving, name, massage, picture, publicationDate FROM account JOIN massage " +
                 "ON idAccount = idSender WHERE idReceiving = ? AND messageType = 1";
         System.out.println(sql);
-        try (Connection connection = connectionPool.getConnection()) {
-            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-                preparedStatement.setInt(1, id);
-                try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                    while (resultSet.next()) {
-                        Message message = new Message();
-                        message.setId(resultSet.getInt(1));
-                        message.setIdSender(resultSet.getInt(2));
-                        message.setIdReceiving(resultSet.getInt(3));
-                        message.setUsernameSender(resultSet.getString(4));
-                        message.setMessage(resultSet.getString(5));
-                        message.setPicture(resultSet.getString(6));
-                        message.setPublicationDate(resultSet.getDate(7));
-                        messageList.add(message);
-                    }
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement query = connection.prepareStatement(sql)) {
+            query.setInt(1, id);
+            try (ResultSet resultSet = query.executeQuery()) {
+                while (resultSet.next()) {
+                    Message message = new Message();
+                    message.setId(resultSet.getInt(1));
+                    message.setIdSender(resultSet.getInt(2));
+                    message.setIdReceiving(resultSet.getInt(3));
+                    message.setUsernameSender(resultSet.getString(4));
+                    message.setMessage(resultSet.getString(5));
+                    message.setPicture(resultSet.getString(6));
+                    message.setPublicationDate(resultSet.getDate(7));
+                    messageList.add(message);
                 }
-            } catch (Exception ex) {
-                System.out.println("readMessageUserIdNameSender Exception - " + ex);
             }
         } catch (Exception ex) {
             System.out.println("readMessageUserIdNameSender Exception - " + ex);
@@ -105,16 +96,13 @@ public class MessageDao {
                 "INNER JOIN account b ON idSender = b.idAccount " +
                 "WHERE (idSender = ? AND idReceiving = ?) OR (idSender = ? AND idReceiving = ?) AND messageType = 1";
         System.out.println(sql);
-        try (Connection connection = connectionPool.getConnection()) {
-            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-                preparedStatement.setInt(1, idSender);
-                preparedStatement.setInt(2, idReceiving);
-                preparedStatement.setInt(3, idReceiving);
-                preparedStatement.setInt(4, idSender);
-                fillMessage(massageList, preparedStatement);
-            } catch (Exception ex) {
-                System.out.println("readsMessageAccounts Exception - " + ex);
-            }
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement query = connection.prepareStatement(sql)) {
+            query.setInt(1, idSender);
+            query.setInt(2, idReceiving);
+            query.setInt(3, idReceiving);
+            query.setInt(4, idSender);
+            fillMessage(massageList, query);
         } catch (Exception ex) {
             System.out.println("readsMessageAccounts Exception - " + ex);
         }
@@ -129,13 +117,10 @@ public class MessageDao {
                 "INNER JOIN account b ON idSender = b.idAccount " +
                 "WHERE idReceiving = ? AND messageType = 0";
         System.out.println(sql);
-        try (Connection connection = connectionPool.getConnection()) {
-            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-                preparedStatement.setInt(1, id);
-                fillMessage(massageList, preparedStatement);
-            } catch (Exception ex) {
-                System.out.println("readsMessageAccounts Exception - " + ex);
-            }
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement query = connection.prepareStatement(sql)) {
+            query.setInt(1, id);
+            fillMessage(massageList, query);
         } catch (Exception ex) {
             System.out.println("readsMessageAccounts Exception - " + ex);
         }

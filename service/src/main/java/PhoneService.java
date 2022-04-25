@@ -3,7 +3,7 @@ import java.util.List;
 public class PhoneService {
     private final PhoneDao phoneDao;
 
-    public PhoneService(){
+    public PhoneService() {
         phoneDao = new PhoneDao();
     }
 
@@ -12,7 +12,7 @@ public class PhoneService {
         boolean result = false;
         try {
             return phoneDao.create(phone);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             System.out.println("create exception - " + ex);
             return false;
         }

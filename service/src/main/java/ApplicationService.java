@@ -1,9 +1,9 @@
 import java.util.List;
 
 public class ApplicationService {
-    private  ApplicationDao applicationDao;
+    private ApplicationDao applicationDao;
 
-    public ApplicationService(){
+    public ApplicationService() {
         applicationDao = new ApplicationDao();
     }
 
@@ -12,7 +12,7 @@ public class ApplicationService {
         try {
             applicationDao.create(application);
             return true;
-        } catch (Exception ex){
+        } catch (Exception ex) {
             System.out.println("create Exception - " + ex);
         }
         return false;
@@ -23,7 +23,7 @@ public class ApplicationService {
         try {
             applicationDao.update(application);
             return true;
-        } catch (Exception ex){
+        } catch (Exception ex) {
             System.out.println("update Exception - " + ex);
         }
         return false;
@@ -34,7 +34,7 @@ public class ApplicationService {
         try {
             applicationDao.delete(application);
             return true;
-        } catch (Exception ex){
+        } catch (Exception ex) {
             System.out.println("delete Exception - " + ex);
         }
         return false;

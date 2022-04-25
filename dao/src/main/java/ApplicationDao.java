@@ -1,3 +1,4 @@
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,7 +15,8 @@ public class ApplicationDao {
     public boolean create(Application application) {
         String sql = "INSERT INTO application (applicationType, idApplicant,idRecipient, status)" +
                 " VALUES (?, ?, ?, ?);";
-        try (PreparedStatement query = connectionPool.getConnection().prepareStatement(sql)) {
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement query = connection.prepareStatement(sql)) {
             query.setInt(1, application.getApplicationType());
             query.setInt(2, application.getIdApplicant());
             query.setInt(3, application.getIdRecipient());
@@ -30,7 +32,8 @@ public class ApplicationDao {
     public Application read(int id) {
         Application application = new Application();
         String sql = "SELECT * FROM application WHERE id = ?";
-        try (PreparedStatement query = connectionPool.getConnection().prepareStatement(sql)) {
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement query = connection.prepareStatement(sql)) {
             query.setInt(1, id);
             fillFieldQuery(application, query);
         } catch (Exception ex) {
@@ -44,7 +47,8 @@ public class ApplicationDao {
         Application application = new Application();
         String sql = "SELECT * FROM application WHERE idApplicant = ? AND idRecipient = ? AND applicationType = 0";
         System.out.println(sql);
-        try (PreparedStatement query = connectionPool.getConnection().prepareStatement(sql)) {
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement query = connection.prepareStatement(sql)) {
             query.setInt(1, group.getIdGroup());
             query.setInt(2, idRecipient);
             fillFieldQuery(application, query);
@@ -58,7 +62,8 @@ public class ApplicationDao {
         Application application = new Application();
         String sql = "SELECT * FROM application WHERE idApplicant = ? AND idRecipient = ? AND applicationType = 1";
         System.out.println(sql);
-        try (PreparedStatement query = connectionPool.getConnection().prepareStatement(sql)) {
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement query = connection.prepareStatement(sql)) {
             query.setInt(1, friend.getIdAccount());
             query.setInt(2, friend.getIdFriendsAccount());
             fillFieldQuery(application, query);
@@ -71,7 +76,8 @@ public class ApplicationDao {
     public List<Application> readApplications() {
         List<Application> applications = new ArrayList<>();
         String sql = "SELECT * FROM application";
-        try (PreparedStatement query = connectionPool.getConnection().prepareStatement(sql)) {
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement query = connection.prepareStatement(sql)) {
             try (ResultSet resultSet = query.executeQuery()) {
                 while (resultSet.next()) {
                     Application application = new Application();
@@ -92,7 +98,8 @@ public class ApplicationDao {
     public boolean update(Application application) {
         String sql = "UPDATE application SET id = ?, applicationType = ?, idAdministrator = ?, " +
                 "idAdministrator = ?;";
-        try (PreparedStatement query = connectionPool.getConnection().prepareStatement(sql)) {
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement query = connection.prepareStatement(sql)) {
             query.setInt(1, application.getId());
             query.setInt(2, application.getApplicationType());
             query.setInt(3, application.getIdApplicant());
@@ -108,7 +115,8 @@ public class ApplicationDao {
 
     public void delete(Application application) {
         String sql = "DELETE FROM application WHERE id = " + application.getId();
-        try (PreparedStatement query = connectionPool.getConnection().prepareStatement(sql)) {
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement query = connection.prepareStatement(sql)) {
             int rows = query.executeUpdate();
             System.out.println("Added " + rows + " rows");
         } catch (SQLException ex) {

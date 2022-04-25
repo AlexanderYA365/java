@@ -4,7 +4,7 @@ public class FriendService {
     private AccountDao accountDAO;
     private FriendDao friendDAO;
 
-    public FriendService(){
+    public FriendService() {
         accountDAO = new AccountDao();
         friendDAO = new FriendDao();
     }
@@ -22,7 +22,7 @@ public class FriendService {
             friend1.setIdFriendsAccount(friend.getId());
             friendDAO.create(friend1);
             return true;
-        } catch (Exception ex){
+        } catch (Exception ex) {
             System.out.println("read Exception - " + ex);
         }
         return false;
@@ -33,7 +33,7 @@ public class FriendService {
         try {
             friendDAO.deleteFriendIdAccountIdFriendAccount(account.getId(), friend.getId());
             return true;
-        } catch (Exception ex){
+        } catch (Exception ex) {
             System.out.println("deleteFriend Exception - " + ex);
         }
         return false;
