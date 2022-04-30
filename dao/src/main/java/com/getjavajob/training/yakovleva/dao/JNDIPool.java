@@ -18,6 +18,11 @@ public class JNDIPool implements Pool {//TODO hotkey
         }
     }
 
+    public JNDIPool(DataSource dataSource) {
+        System.out.println("used spring");
+        this.source = dataSource;
+    }
+
     public static JNDIPool getInstance() {
         return jndiPool;
     }

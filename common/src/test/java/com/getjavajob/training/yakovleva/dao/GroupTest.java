@@ -1,3 +1,4 @@
+import com.getjavajob.training.yakovleva.dao.Group;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
@@ -77,6 +78,6 @@ class GroupTest {
     void testToString() {
         Group group = new Group();
         group.setLogo("test");
-        Assert.assertEquals("Group{idGroup=0, idAccount=0, groupName='null', logo='test', idAdministrator=0}", group.toString());
+        Assert.assertEquals("com.getjavajob.training.yakovleva.dao.Group{idGroup=0, idAccount=0, groupName='null', logo='test', idAdministrator=0}", group.toString());
     }
 }

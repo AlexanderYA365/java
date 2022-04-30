@@ -1,3 +1,4 @@
+import com.getjavajob.training.yakovleva.dao.Friend;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 

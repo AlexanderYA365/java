@@ -1,3 +1,4 @@
+import com.getjavajob.training.yakovleva.dao.Phone;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 

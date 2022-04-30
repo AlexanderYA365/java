@@ -1,3 +1,4 @@
+import com.getjavajob.training.yakovleva.dao.Account;
 import org.junit.Assert;
 import org.junit.Test;
 
