@@ -1,3 +1,6 @@
+import com.getjavajob.training.yakovleva.dao.Account;
+import com.getjavajob.training.yakovleva.service.AccountService;
+import com.getjavajob.training.yakovleva.service.FriendService;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

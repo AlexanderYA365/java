@@ -8,10 +8,11 @@
         <outputRelativeToContentRoot value="true" />
         <module name="webSocial" />
         <module name="common" />
-        <module name="service" />
-        <module name="webapp" />
         <module name="dao" />
+        <module name="webapp" />
+        <module name="service" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel target="8" />
   </component>
 </project>
