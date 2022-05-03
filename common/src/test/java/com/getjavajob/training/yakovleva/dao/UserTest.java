@@ -1,4 +1,5 @@
-import com.getjavajob.training.yakovleva.dao.User;
+package com.getjavajob.training.yakovleva.dao;
+
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 

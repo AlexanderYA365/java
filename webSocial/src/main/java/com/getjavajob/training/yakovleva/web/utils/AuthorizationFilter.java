@@ -1,4 +1,4 @@
-package utils;
+package com.getjavajob.training.yakovleva.web.utils;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -35,17 +35,24 @@ public class AuthorizationFilter implements Filter {
                 cookieMap.put(item.getName(), item);
             }
         }
-        boolean isLogged = session != null && session.getAttribute("username") != null;
+        String uri = request.getRequestURI();
+        boolean isLogged = session == null || session.getAttribute("username") == null;
         boolean isCookieExists = cookieMap.get("username") != null;
-        System.out.println("0");
-        System.out.println("session - " + session);
-        System.out.println("isLogged - " + isLogged + " isCookieExists - " + isCookieExists);
-        if (request.getServletPath().equals("/index.jsp") || request.getServletPath().equals("/RegistrationAccount.jsp")) {
+        System.out.println("isLogged - " + isLogged);
+        System.out.println("isCookieExists - " + isCookieExists);
+        if (uri.endsWith("/main.jsp") || uri.endsWith("login") || uri.endsWith("RegistrationAccount")) {
+            System.out.println("1");
             filterChain.doFilter(request, response);
-        } else if (!isLogged && !isCookieExists) {
-            RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp?cookie=true");
+        } else if (isLogged && isCookieExists) {
+            System.out.println("2");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/login?cookie=true");
             dispatcher.forward(request, response);
+//        } else if (isLogged || uri.endsWith("/index.jsp")) {
+//            System.out.println("3");
+//            RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
+//            dispatcher.forward(request, response);
         } else {
+            System.out.println("4");
             filterChain.doFilter(request, response);
         }
     }

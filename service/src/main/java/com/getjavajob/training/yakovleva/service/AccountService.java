@@ -1,3 +1,10 @@
+package com.getjavajob.training.yakovleva.service;
+
+import com.getjavajob.training.yakovleva.dao.Account;
+import com.getjavajob.training.yakovleva.dao.AccountDao;
+import com.getjavajob.training.yakovleva.dao.Phone;
+import com.getjavajob.training.yakovleva.dao.PhoneDao;
+
 import java.util.List;
 
 public class AccountService {
@@ -20,7 +27,7 @@ public class AccountService {
             }
             return true;
         } catch (Exception e) {
-            System.out.println("AccountService.create Exception - " + e);
+            System.out.println("create Exception - " + e);
             return false;
         }
     }
@@ -36,7 +43,7 @@ public class AccountService {
             }
             return true;
         } catch (Exception e) {
-            System.out.println("AccountService.create Exception - " + e);
+            System.out.println("create Exception - " + e);
             return false;
         }
     }
@@ -52,7 +59,7 @@ public class AccountService {
             }
             return true;
         } catch (Exception e) {
-            System.out.println("AccountService.create Exception - " + e);
+            System.out.println("create Exception - " + e);
             return false;
         }
     }
@@ -74,7 +81,12 @@ public class AccountService {
 
     public Account getAccount(String username, String password) {
         System.out.println("getAccount(String username, String password)");
-        return accountDAO.readAccount(username, password);
+        Account account = accountDAO.readAccount(username, password);
+        List<Phone> phones = phoneDao.read(account.getId());
+        System.out.println("phones - " + phones);
+        account.setPhones(phones);
+        System.out.println("account - " + account);
+        return account;
     }
 
 }

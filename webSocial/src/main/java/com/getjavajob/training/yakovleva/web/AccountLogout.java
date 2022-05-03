@@ -1,5 +1,8 @@
+package com.getjavajob.training.yakovleva.web;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -7,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-
+@WebServlet("/AccountLogout")
 public class AccountLogout extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
@@ -26,8 +29,8 @@ public class AccountLogout extends HttpServlet {
         response.addCookie(cookieUsername);
         response.addCookie(cookiePassword);
         response.addCookie(cookieId);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("jsp/index.jsp");
-        dispatcher.forward(request, response);
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher("index.jsp");
+        requestDispatcher.forward(request, response);
     }
 
 }

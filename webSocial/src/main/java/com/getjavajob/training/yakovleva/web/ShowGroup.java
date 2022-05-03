@@ -1,11 +1,21 @@
+package com.getjavajob.training.yakovleva.web;
+
+import com.getjavajob.training.yakovleva.dao.Account;
+import com.getjavajob.training.yakovleva.dao.Application;
+import com.getjavajob.training.yakovleva.dao.Group;
+import com.getjavajob.training.yakovleva.service.ApplicationService;
+import com.getjavajob.training.yakovleva.service.GroupService;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
+@WebServlet("/ShowGroup")
 public class ShowGroup extends HttpServlet {
 
     @Override
@@ -18,7 +28,7 @@ public class ShowGroup extends HttpServlet {
             HttpSession session = req.getSession();
             Account account = (Account) session.getAttribute("account");
             Application application = applicationService.readGroupAccount(group, account.getId());
-            System.out.println("Application - " + application);
+            System.out.println("com.getjavajob.training.yakovleva.dao.Application - " + application);
             if (application != null) {
                 req.setAttribute("application", application);
                 int newUserGroup = application.getStatus();

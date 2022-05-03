@@ -1,3 +1,5 @@
+package com.getjavajob.training.yakovleva.dao;
+
 import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;

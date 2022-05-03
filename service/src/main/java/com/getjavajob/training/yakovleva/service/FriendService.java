@@ -1,3 +1,10 @@
+package com.getjavajob.training.yakovleva.service;
+
+import com.getjavajob.training.yakovleva.dao.Account;
+import com.getjavajob.training.yakovleva.dao.AccountDao;
+import com.getjavajob.training.yakovleva.dao.Friend;
+import com.getjavajob.training.yakovleva.dao.FriendDao;
+
 import java.util.List;
 
 public class FriendService {

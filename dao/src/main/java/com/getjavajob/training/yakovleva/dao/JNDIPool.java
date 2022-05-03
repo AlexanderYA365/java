@@ -1,3 +1,5 @@
+package com.getjavajob.training.yakovleva.dao;
+
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
@@ -14,7 +16,7 @@ public class JNDIPool implements Pool {//TODO hotkey
             Context contextEnv = (Context) initContext.lookup("java:comp/env");
             this.source = (DataSource) contextEnv.lookup("jdbc/socnetwork");
         } catch (Exception e) {
-            System.out.println("JNDIPool Exception - " + e);
+            System.out.println("com.getjavajob.training.yakovleva.dao.JNDIPool Exception - " + e);
         }
     }
 

@@ -1,17 +1,23 @@
-import javax.servlet.RequestDispatcher;
+package com.getjavajob.training.yakovleva.web;
+
+import com.getjavajob.training.yakovleva.dao.Account;
+import com.getjavajob.training.yakovleva.service.AccountService;
+
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 
-@WebServlet("/")
+@WebServlet(name = "login", urlPatterns = {"/login"})
 public class AccountLogin extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
-        System.out.println("AccountLogin doGet");
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("AccountLogin doPost");
         String username = null;
         String password = null;
         boolean useCookies = Boolean.parseBoolean(request.getParameter("cookie"));
@@ -25,33 +31,49 @@ public class AccountLogin extends HttpServlet {
                     password = cookie.getValue();
                 }
             }
+            System.out.println("Cookie = username - " + username + " password - " + password);
         } else {
             username = request.getParameter("username");
             password = request.getParameter("password");
             System.out.println("username - " + username + " password - " + password);
         }
-        AccountService service = new AccountService();
-        try {
-            Account registeredAccount = service.getAccount(username, password);
-            if (registeredAccount.getId() != 0) {
-                HttpSession session = request.getSession();
-                session.setAttribute("account", registeredAccount);
-                session.setAttribute("username", registeredAccount.getUsername());
-                Cookie cookieUsername = new Cookie("username", username);
-                Cookie cookiePassword = new Cookie("password", password);
-                response.addCookie(cookieUsername);
-                response.addCookie(cookiePassword);
-                getServletContext().getRequestDispatcher("/main.jsp").forward(request, response);
-            } else {
-                System.out.println("AccountLogin.doGet -> else");
-                RequestDispatcher requestDispatcher = request.getRequestDispatcher("jsp/index.jsp");
-                int errorLogin = 1;
-                request.setAttribute("errorLogin", errorLogin);
-                requestDispatcher.forward(request, response);
+        if (username == null && password == null) {
+            response.sendRedirect("index.jsp");
+        } else {
+            AccountService service = new AccountService();
+            try {
+                Account registeredAccount = service.getAccount(username, password);
+                System.out.println("registeredAccount - " + registeredAccount);
+                if (registeredAccount.getId() != 0) {
+                    HttpSession session = request.getSession();
+                    session.setAttribute("account", registeredAccount);
+                    session.setAttribute("username", registeredAccount.getUsername());
+                    String rememberMeActive = request.getParameter("rememberMe");
+                    if ("active".equals(rememberMeActive)) {
+                        Cookie cookieUsername = new Cookie("username", username);
+                        Cookie cookiePassword = new Cookie("password", password);
+                        Cookie cookieId = new Cookie("id", String.valueOf(registeredAccount.getId()));
+                        response.addCookie(cookieUsername);
+                        response.addCookie(cookiePassword);
+                        response.addCookie(cookieId);
+                    }
+                    request.getRequestDispatcher("main").forward(request, response);
+                } else {
+                    System.out.println("AccountLogin.doGet -> else");
+                    int errorLogin = 1;
+                    request.setAttribute("errorLogin", errorLogin);
+                    request.getRequestDispatcher("index.jsp").forward(request, response);
+                }
+            } catch (Exception e) {
+                System.out.println(e);//send redirect
             }
-        } catch (Exception e) {
-            System.out.println(e);//send redirect
         }
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        System.out.println("AccountLogin doGet");
+        doPost(request, response);
     }
 
 }

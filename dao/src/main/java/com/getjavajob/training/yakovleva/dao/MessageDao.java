@@ -1,3 +1,5 @@
+package com.getjavajob.training.yakovleva.dao;
+
 import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
@@ -67,7 +69,7 @@ public class MessageDao {
         System.out.println("readMessageUserIdNameSender - start");
         List<Message> messageList = new ArrayList<>();
         String sql = "SELECT id, idSender, idReceiving, name, massage, picture, publicationDate FROM account JOIN massage " +
-                "ON idAccount = idSender WHERE idReceiving = ? AND messageType = 1";
+                "ON idAccount = idSender WHERE idReceiving = ? AND messageType = 1;";
         System.out.println(sql);
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement query = connection.prepareStatement(sql)) {
@@ -87,6 +89,34 @@ public class MessageDao {
             }
         } catch (Exception ex) {
             System.out.println("readMessageUserIdNameSender Exception - " + ex);
+        }
+        return messageList;
+    }
+
+    public List<Message> readUniqueMessagesForUser(int id) {
+        System.out.println("readMessage - start");
+        List<Message> messageList = new ArrayList<>();
+        String sql = "SELECT id, idSender, idReceiving, name, massage, picture, publicationDate FROM account JOIN massage " +
+                "ON idAccount = idSender WHERE idReceiving = ? AND messageType = 1 GROUP BY idSender;";
+        System.out.println(sql);
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement query = connection.prepareStatement(sql)) {
+            query.setInt(1, id);
+            try (ResultSet resultSet = query.executeQuery()) {
+                while (resultSet.next()) {
+                    Message message = new Message();
+                    message.setId(resultSet.getInt(1));
+                    message.setIdSender(resultSet.getInt(2));
+                    message.setIdReceiving(resultSet.getInt(3));
+                    message.setUsernameSender(resultSet.getString(4));
+                    message.setMessage(resultSet.getString(5));
+                    message.setPicture(resultSet.getString(6));
+                    message.setPublicationDate(resultSet.getDate(7));
+                    messageList.add(message);
+                }
+            }
+        } catch (Exception ex) {
+            System.out.println("readMessage Exception - " + ex);
         }
         return messageList;
     }
@@ -150,4 +180,5 @@ public class MessageDao {
             System.out.println("fillMessage exception - " + ex);
         }
     }
+
 }

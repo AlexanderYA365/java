@@ -1,4 +1,4 @@
-package utils;
+package com.getjavajob.training.yakovleva.web.utils;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;

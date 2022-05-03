@@ -1,3 +1,5 @@
+package com.getjavajob.training.yakovleva.dao;
+
 public class Application {
     private int id;
     private ApplicationType applicationType;

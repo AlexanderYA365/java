@@ -1,5 +1,7 @@
-package dao;
+package com.getjavajob.training.yakovleva.dao;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jndi.JndiTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
@@ -13,10 +15,11 @@ import java.util.List;
 
 @Repository
 public class AccountDao {
-    private final JNDIPool connectionPool;
+    private JndiTemplate jndiTemplate;
 
-    public AccountDao() {
-        connectionPool = JNDIPool.getInstance();
+    @Autowired
+    public AccountDao(JndiTemplate jndiTemplate){
+        this.jndiTemplate = jndiTemplate;
     }
 
     public void createAccount(Account account) {

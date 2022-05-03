@@ -1,3 +1,5 @@
+package com.getjavajob.training.yakovleva.dao;
+
 public enum ApplicationStatusType {
     ACCEPTED(0),
     CONFIRMATION(1),

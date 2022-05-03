@@ -1,3 +1,5 @@
+package com.getjavajob.training.yakovleva.dao;
+
 public class User {
     private String userName;
     private String password;

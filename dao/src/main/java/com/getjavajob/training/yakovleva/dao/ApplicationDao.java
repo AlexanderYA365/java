@@ -1,3 +1,5 @@
+package com.getjavajob.training.yakovleva.dao;
+
 import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
@@ -12,7 +14,6 @@ public class ApplicationDao {
     private final JNDIPool connectionPool;
 
     public ApplicationDao() {
-       // connectionPool = JNDIPool.getInstance();
         connectionPool = JNDIPool.getInstance();
     }
 

@@ -1,18 +1,23 @@
-import javax.servlet.RequestDispatcher;
+package com.getjavajob.training.yakovleva.web;
+
+import com.getjavajob.training.yakovleva.dao.Account;
+import com.getjavajob.training.yakovleva.service.AccountService;
+
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
+@WebServlet("/AccountEditSettings")
 public class AccountEditSettings extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         System.out.println("AccountEditSettings doGet");
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("jsp/EditAccountSettings.jsp");
-        requestDispatcher.forward(request, response);
+        request.getRequestDispatcher("jsp/EditAccountSettings.jsp").forward(request, response);
     }
 
     @Override
@@ -41,8 +46,7 @@ public class AccountEditSettings extends HttpServlet {
             System.out.println(e);//send redirect
         }
         session.setAttribute("account", account);
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("jsp/myAccount.jsp");
-        requestDispatcher.forward(request, response);
+        request.getRequestDispatcher("jsp/myAccount.jsp").forward(request, response);
     }
 
 }

@@ -1,3 +1,5 @@
+package com.getjavajob.training.yakovleva.dao;
+
 public class Friend {
     private int id;
     private int idAccount;

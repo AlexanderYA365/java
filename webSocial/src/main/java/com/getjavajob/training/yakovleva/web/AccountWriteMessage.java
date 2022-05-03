@@ -1,3 +1,9 @@
+package com.getjavajob.training.yakovleva.web;
+
+import com.getjavajob.training.yakovleva.dao.Account;
+import com.getjavajob.training.yakovleva.dao.Message;
+import com.getjavajob.training.yakovleva.service.MessageService;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -8,7 +14,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("AccountWriteMessage.jsp")
+@WebServlet("/AccountWriteMessage")
 public class AccountWriteMessage extends HttpServlet {
 
     @Override

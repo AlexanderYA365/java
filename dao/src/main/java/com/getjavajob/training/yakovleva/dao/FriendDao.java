@@ -1,3 +1,5 @@
+package com.getjavajob.training.yakovleva.dao;
+
 import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
@@ -16,7 +18,7 @@ public class FriendDao {
     }
 
     public boolean create(Friend friend) {
-        System.out.println("FriendDao.create - start");
+        System.out.println("create - start");
         String sql = "INSERT INTO friends(idAccount, idFriendsAccount) VALUES (?, ?)";
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement query = connection.prepareStatement(sql)) {

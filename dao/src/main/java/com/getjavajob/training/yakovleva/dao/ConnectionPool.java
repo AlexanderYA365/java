@@ -1,3 +1,5 @@
+package com.getjavajob.training.yakovleva.dao;
+
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;

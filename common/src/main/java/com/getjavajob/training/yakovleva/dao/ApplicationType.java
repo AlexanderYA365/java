@@ -1,3 +1,5 @@
+package com.getjavajob.training.yakovleva.dao;
+
 public enum ApplicationType {
     GROUP(0),
     USER(1);

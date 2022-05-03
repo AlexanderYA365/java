@@ -1,3 +1,5 @@
+package com.getjavajob.training.yakovleva.dao;
+
 import java.util.Date;
 
 public class Group {

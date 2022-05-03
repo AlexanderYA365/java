@@ -1,3 +1,5 @@
+package com.getjavajob.training.yakovleva.dao;
+
 public class Phone {
     private int idAccount;
     private String phoneNumber;

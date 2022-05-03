@@ -1,3 +1,5 @@
+package com.getjavajob.training.yakovleva.dao;
+
 public enum MessageType {
     WALL(0),
     PRIVATE(1),

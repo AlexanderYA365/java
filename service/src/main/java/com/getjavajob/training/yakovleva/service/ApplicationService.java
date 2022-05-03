@@ -1,3 +1,10 @@
+package com.getjavajob.training.yakovleva.service;
+
+import com.getjavajob.training.yakovleva.dao.Application;
+import com.getjavajob.training.yakovleva.dao.ApplicationDao;
+import com.getjavajob.training.yakovleva.dao.Friend;
+import com.getjavajob.training.yakovleva.dao.Group;
+
 import java.util.List;
 
 public class ApplicationService {

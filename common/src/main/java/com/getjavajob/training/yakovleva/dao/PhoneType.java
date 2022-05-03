@@ -1,3 +1,5 @@
+package com.getjavajob.training.yakovleva.dao;
+
 public enum PhoneType {
     HOME(0),
     WORK(1),
