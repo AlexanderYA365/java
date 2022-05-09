@@ -2,12 +2,10 @@ package com.getjavajob.training.yakovleva.web;
 
 import com.getjavajob.training.yakovleva.dao.Account;
 import com.getjavajob.training.yakovleva.dao.Group;
-import com.getjavajob.training.yakovleva.service.GroupService;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -15,7 +13,7 @@ import java.io.IOException;
 import java.util.List;
 
 @WebServlet("/CreateGroup")
-public class AccountCreateGroup extends HttpServlet {
+public class AccountCreateGroup extends ApplicationContextServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
@@ -29,8 +27,7 @@ public class AccountCreateGroup extends HttpServlet {
         System.out.println("AccountCreateGroup doPost");
         HttpSession session = request.getSession();
         Account account = (Account) session.getAttribute("account");
-        GroupService service = new GroupService();
-        List<Group> groups = service.readGroups();
+        List<Group> groups = groupService.readGroups();
         try {
             if (createGroup(groups, request.getParameter("name"))) {
                 Group group = new Group();
@@ -39,7 +36,7 @@ public class AccountCreateGroup extends HttpServlet {
                 group.setGroupName(request.getParameter("name"));
                 group.setLogo(request.getParameter("logo"));
                 System.out.println("AccountCreateGroup doPost - " + group);
-                service.createAccountGroups(group);
+                groupService.createAccountGroups(group);
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher("jsp/AccountGroup.jsp");
                 requestDispatcher.forward(request, response);
             }

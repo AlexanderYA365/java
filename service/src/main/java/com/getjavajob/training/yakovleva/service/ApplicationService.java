@@ -4,14 +4,18 @@ import com.getjavajob.training.yakovleva.dao.Application;
 import com.getjavajob.training.yakovleva.dao.ApplicationDao;
 import com.getjavajob.training.yakovleva.dao.Friend;
 import com.getjavajob.training.yakovleva.dao.Group;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class ApplicationService {
     private ApplicationDao applicationDao;
 
-    public ApplicationService() {
-        applicationDao = new ApplicationDao();
+    @Autowired
+    public ApplicationService(ApplicationDao applicationDao) {
+        this.applicationDao = applicationDao;
     }
 
     public boolean create(Application application) {

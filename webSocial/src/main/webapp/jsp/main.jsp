@@ -20,30 +20,35 @@
 <br>
 <br>
 <br>
-<main role="main">
-    <form method="post">
+<main role="main" class="modal">
+    <form method="post" class="modal">
         Сообщение
         <textarea name="NewWallMessage" cols="40" rows="3"></textarea>
         <input type="submit" value="отправить"/>
     </form>
 
     <div>
-        <table>
-            <tr>
-                <th>Имя пользователя</th>
-                <th>дата сообщения</th>
-                <th>сообщение</th>
-                <th>ответить</th>
-            </tr>
-            <c:forEach var="message" items="${messages}">
+        <form method="post" class="modal">
+            <table>
                 <tr>
-                    <td><c:out value="${message.usernameSender}"/></td>
-                    <td><c:out value="${message.publicationDate}"/></td>
-                    <td><c:out value="${message.message}"/></td>
-                    <td><input type="submit" name="button1" value="ответить"/></td>
+                    <th>Имя пользователя</th>
+                    <th>дата сообщения</th>
+                    <th>сообщение</th>
+                    <th>ответить</th>
+                    <th>удалить</th>
                 </tr>
-            </c:forEach>
-        </table>
+                <c:forEach var="message" items="${messages}">
+                    <input type="hidden" name="messageId" value="${message.id}"/>
+                    <tr>
+                        <td><c:out value="${message.usernameSender}"/></td>
+                        <td><c:out value="${message.publicationDate}"/></td>
+                        <td><c:out value="${message.message}"/></td>
+                        <td><input type="submit" name="replyAccount" value="replyAccount"/>ответить</td>
+                        <td><input type="submit" name="deleteText" value="deleteText"/>удалить</td>
+                    </tr>
+                </c:forEach>
+            </table>
+        </form>
     </div>
 </main>
 </body>

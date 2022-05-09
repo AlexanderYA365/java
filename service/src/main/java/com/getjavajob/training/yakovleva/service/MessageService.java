@@ -3,14 +3,18 @@ package com.getjavajob.training.yakovleva.service;
 import com.getjavajob.training.yakovleva.dao.Account;
 import com.getjavajob.training.yakovleva.dao.Message;
 import com.getjavajob.training.yakovleva.dao.MessageDao;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class MessageService {
     private final MessageDao messageDao;
 
-    public MessageService() {
-        messageDao = new MessageDao();
+    @Autowired
+    public MessageService(MessageDao messageDao) {
+        this.messageDao = messageDao;
     }
 
     public List<Message> readWallMassageAccount(Account account) {

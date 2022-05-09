@@ -1,13 +1,10 @@
 package com.getjavajob.training.yakovleva.web;
 
 import com.getjavajob.training.yakovleva.dao.Account;
-import com.getjavajob.training.yakovleva.service.AccountService;
-import com.getjavajob.training.yakovleva.service.FriendService;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -15,7 +12,7 @@ import java.io.IOException;
 import java.util.List;
 
 @WebServlet("/AddFriendAccount")
-public class AddFriendAccount extends HttpServlet {
+public class AddFriendAccount extends ApplicationContextServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -29,8 +26,6 @@ public class AddFriendAccount extends HttpServlet {
         String[] accountId = request.getParameterValues("accountId");
         System.out.println("AddFriendAccount doPost");
         String name = request.getParameter("name");
-        FriendService friendService = new FriendService();
-        AccountService accountService = new AccountService();
         try {
             if (accountId == null) {
                 try {

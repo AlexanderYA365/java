@@ -1,19 +1,17 @@
 package com.getjavajob.training.yakovleva.web;
 
 import com.getjavajob.training.yakovleva.dao.Account;
-import com.getjavajob.training.yakovleva.service.AccountService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @WebServlet(name = "login", urlPatterns = {"/login"})
-public class AccountLogin extends HttpServlet {
+public class AccountLogin extends ApplicationContextServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -40,9 +38,8 @@ public class AccountLogin extends HttpServlet {
         if (username == null && password == null) {
             response.sendRedirect("index.jsp");
         } else {
-            AccountService service = new AccountService();
             try {
-                Account registeredAccount = service.getAccount(username, password);
+                Account registeredAccount = accountService.getAccount(username, password);
                 System.out.println("registeredAccount - " + registeredAccount);
                 if (registeredAccount.getId() != 0) {
                     HttpSession session = request.getSession();

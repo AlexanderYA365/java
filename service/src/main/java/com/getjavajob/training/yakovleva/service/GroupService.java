@@ -3,14 +3,18 @@ package com.getjavajob.training.yakovleva.service;
 import com.getjavajob.training.yakovleva.dao.Account;
 import com.getjavajob.training.yakovleva.dao.Group;
 import com.getjavajob.training.yakovleva.dao.GroupDao;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class GroupService {
     private GroupDao groupDao;
 
-    public GroupService() {
-        groupDao = new GroupDao();
+    @Autowired
+    public GroupService(GroupDao groupDao) {
+        this.groupDao = groupDao;
     }
 
     public List<Group> readAccountGroups(Account account) {

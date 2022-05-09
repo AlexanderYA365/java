@@ -1,22 +1,19 @@
 package com.getjavajob.training.yakovleva.web;
 
 import com.getjavajob.training.yakovleva.dao.Account;
-import com.getjavajob.training.yakovleva.service.AccountService;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
-public class FriendsList extends HttpServlet {
+public class FriendsList extends ApplicationContextServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws IOException, ServletException {
-        AccountService accountService = new AccountService();
         System.out.println("FriendsList");
         List<Account> accounts = accountService.getAllAccounts();
         PrintWriter out = resp.getWriter();

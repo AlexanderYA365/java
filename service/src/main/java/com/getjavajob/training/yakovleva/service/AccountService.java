@@ -4,16 +4,20 @@ import com.getjavajob.training.yakovleva.dao.Account;
 import com.getjavajob.training.yakovleva.dao.AccountDao;
 import com.getjavajob.training.yakovleva.dao.Phone;
 import com.getjavajob.training.yakovleva.dao.PhoneDao;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class AccountService {
-    AccountDao accountDAO;
-    PhoneDao phoneDao;
+    private AccountDao accountDAO;
+    private PhoneDao phoneDao;
 
-    public AccountService() {
-        phoneDao = new PhoneDao();
-        accountDAO = new AccountDao();
+    @Autowired
+    public AccountService(AccountDao accountDao, PhoneDao phoneDao) {
+        this.accountDAO = accountDao;
+        this.phoneDao = phoneDao;
     }
 
     public boolean create(Account account) {
@@ -83,9 +87,7 @@ public class AccountService {
         System.out.println("getAccount(String username, String password)");
         Account account = accountDAO.readAccount(username, password);
         List<Phone> phones = phoneDao.read(account.getId());
-        System.out.println("phones - " + phones);
         account.setPhones(phones);
-        System.out.println("account - " + account);
         return account;
     }
 

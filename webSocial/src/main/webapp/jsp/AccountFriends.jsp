@@ -31,7 +31,7 @@
                 <c:forEach var="friend" items="${friends}">
                     <tr>
                         <td><a href='<c:url value = "/ShowFriend?id=${friend.id}" />'> ${friend.username}</a></td>
-                        <td><c:out value="${friend.id}"/></td>
+                        <td><c:out value="${friend.name}"/></td>
                     </tr>
                 </c:forEach>
             </table>

@@ -20,20 +20,23 @@
 <br>
 <br>
 <main role="main">
-    <div>
-        <table>
-            <tr>
-                <th>Имя группы</th>
-                <th>картинка</th>
-            </tr>
-            <c:forEach var="group" items="${groups}">
+    <form class="modal">
+        группы аккаунта ${account.name}
+        <div>
+            <table>
                 <tr>
-                    <td><a href='<c:url value = "/ShowGroup?id=${group.idGroup}" />'>${group.groupName}</a></td>
-                    <td><c:out value="${group.logo}"/></td>
+                    <th>Имя группы</th>
+                    <th>картинка</th>
                 </tr>
-            </c:forEach>
-        </table>
-    </div>
+                <c:forEach var="group" items="${groups}">
+                    <tr>
+                        <td><a href='<c:url value = "/ShowGroup?id=${group.idGroup}" />'>${group.groupName}</a></td>
+                        <td><c:out value="${group.logo}"/></td>
+                    </tr>
+                </c:forEach>
+            </table>
+        </div>
+    </form>
     <br>
     <button onclick="location.href='CreateGroup'">Создать группу</button>
     <br>

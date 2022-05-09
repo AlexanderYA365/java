@@ -1,9 +1,18 @@
 package com.getjavajob.training.yakovleva.dao;
 
 public class Phone {
-    private int idAccount;
+    private int id;
+    private int idAccount;//TODO
     private String phoneNumber;
     private PhoneType phoneType;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public int getPhoneType() {
         return phoneType.getStatus();
@@ -32,7 +41,8 @@ public class Phone {
     @Override
     public String toString() {
         return "Phone{" +
-                "idAccount=" + idAccount +
+                " id=" + id +
+                ", idAccount=" + idAccount +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", phoneType=" + phoneType +
                 '}';

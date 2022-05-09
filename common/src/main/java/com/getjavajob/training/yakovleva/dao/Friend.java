@@ -50,9 +50,11 @@ public class Friend {
     @Override
     public String toString() {
         return "Friend{" +
-                "idFriends=" + id +
-                ", idAccount=" + idAccount +
-                ", idFriendsAccount=" + idFriendsAccount +
+                "idFriends = " + id +
+                ", idAccount = " + idAccount +
+                ", idFriendsAccount = " + idFriendsAccount +
+                ", name = " + name +
+                ", username = " + username +
                 '}';
     }
 

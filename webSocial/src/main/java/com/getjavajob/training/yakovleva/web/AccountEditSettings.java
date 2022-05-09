@@ -1,18 +1,16 @@
 package com.getjavajob.training.yakovleva.web;
 
 import com.getjavajob.training.yakovleva.dao.Account;
-import com.getjavajob.training.yakovleva.service.AccountService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @WebServlet("/AccountEditSettings")
-public class AccountEditSettings extends HttpServlet {
+public class AccountEditSettings extends ApplicationContextServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
@@ -39,9 +37,8 @@ public class AccountEditSettings extends HttpServlet {
         account.setEmail(request.getParameter("email"));
         account.setAboutMe(request.getParameter("aboutMe"));
         System.out.println(account);
-        AccountService service = new AccountService();
         try {
-            service.update(account);
+            accountService.update(account);
         } catch (Exception e) {
             System.out.println(e);//send redirect
         }
