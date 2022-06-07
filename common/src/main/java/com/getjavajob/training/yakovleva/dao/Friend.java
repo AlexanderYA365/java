@@ -1,9 +1,11 @@
 package com.getjavajob.training.yakovleva.dao;
 
-public class Friend {
+import java.util.Objects;
+
+public class Friend {//TODO поправить таблицу, удалить имя, переделать на многим ко многим
     private int id;
-    private int idAccount;
-    private int idFriendsAccount;
+    private int accountId;
+    private int friendId;
     private String name;
     private String username;
 
@@ -23,20 +25,20 @@ public class Friend {
         this.username = username;
     }
 
-    public int getIdAccount() {
-        return idAccount;
+    public int getAccountId() {
+        return accountId;
     }
 
-    public void setIdAccount(int idAccount) {
-        this.idAccount = idAccount;
+    public void setAccountId(int accountId) {
+        this.accountId = accountId;
     }
 
-    public int getIdFriendsAccount() {
-        return idFriendsAccount;
+    public int getFriendId() {
+        return friendId;
     }
 
-    public void setIdFriendsAccount(int idFriendsAccount) {
-        this.idFriendsAccount = idFriendsAccount;
+    public void setFriendId(int friendId) {
+        this.friendId = friendId;
     }
 
     public int getId() {
@@ -51,11 +53,28 @@ public class Friend {
     public String toString() {
         return "Friend{" +
                 "idFriends = " + id +
-                ", idAccount = " + idAccount +
-                ", idFriendsAccount = " + idFriendsAccount +
+                ", accountId = " + accountId +
+                ", idFriendsAccount = " + friendId +
                 ", name = " + name +
                 ", username = " + username +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Friend friend = (Friend) o;
+        return id == friend.id &&
+                accountId == friend.accountId &&
+                friendId == friend.friendId &&
+                Objects.equals(name, friend.name) &&
+                Objects.equals(username, friend.username);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, accountId, friendId, name, username);
     }
 
 }

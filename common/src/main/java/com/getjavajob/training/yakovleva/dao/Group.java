@@ -1,25 +1,27 @@
 package com.getjavajob.training.yakovleva.dao;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class Group {
-    private int idGroup;
-    private int idAccount;
+    private int groupId;
+    private int accountId;
     private String nameAccount;
     private String groupName;
     private String logo;
     private Date dateCreateGroup;
-    private int idAdministrator;
+    private int administratorId;
 
-    public Group() {
-    }
-
-    public Group(String groupName, String logo, int idAdministrator, int idAccount, Date dateCreateGroup) {
+    public Group(String groupName, String logo, int administratorId, int accountId, Date dateCreateGroup) {
         this.groupName = groupName;
         this.logo = logo;
-        this.idAdministrator = idAdministrator;
-        this.idAccount = idAccount;
+        this.administratorId = administratorId;
+        this.accountId = accountId;
         this.dateCreateGroup = dateCreateGroup;
+    }
+
+    public Group() {
+
     }
 
     public String getNameAccount() {
@@ -38,12 +40,12 @@ public class Group {
         this.dateCreateGroup = dateCreateGroup;
     }
 
-    public int getIdAccount() {
-        return idAccount;
+    public int getAccountId() {
+        return accountId;
     }
 
-    public void setIdAccount(int idAccount) {
-        this.idAccount = idAccount;
+    public void setAccountId(int accountId) {
+        this.accountId = accountId;
     }
 
     public String getGroupName() {
@@ -62,33 +64,52 @@ public class Group {
         this.logo = logo;
     }
 
-    public int getIdAdministrator() {
-        return idAdministrator;
+    public int getAdministratorId() {
+        return administratorId;
     }
 
-    public void setIdAdministrator(int idAdministrator) {
-        this.idAdministrator = idAdministrator;
+    public void setAdministratorId(int administratorId) {
+        this.administratorId = administratorId;
     }
 
-    public int getIdGroup() {
-        return idGroup;
+    public int getGroupId() {
+        return groupId;
     }
 
-    public void setIdGroup(int idGroup) {
-        this.idGroup = idGroup;
+    public void setGroupId(int groupId) {
+        this.groupId = groupId;
     }
 
     @Override
     public String toString() {
         return "Group{" +
-                "idGroup=" + idGroup +
-                ", idAccount=" + idAccount +
+                "groupId=" + groupId +
+                ", accountId=" + accountId +
                 ", nameAccount='" + nameAccount + '\'' +
                 ", groupName='" + groupName + '\'' +
                 ", logo='" + logo + '\'' +
                 ", dateCreateGroup=" + dateCreateGroup +
-                ", idAdministrator=" + idAdministrator +
+                ", administratorId=" + administratorId +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Group group = (Group) o;
+        return groupId == group.groupId &&
+                accountId == group.accountId &&
+                administratorId == group.administratorId &&
+                Objects.equals(nameAccount, group.nameAccount) &&
+                Objects.equals(groupName, group.groupName) &&
+                Objects.equals(logo, group.logo) &&
+                Objects.equals(dateCreateGroup, group.dateCreateGroup);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(groupId, accountId, nameAccount, groupName, logo, dateCreateGroup, administratorId);
     }
 
 }

@@ -1,6 +1,7 @@
 package com.getjavajob.training.yakovleva.web;
 
 import com.getjavajob.training.yakovleva.dao.Account;
+import com.getjavajob.training.yakovleva.dao.Relations;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -11,20 +12,20 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/AddFriendAccount")
+@WebServlet("/add-friend-account")
 public class AddFriendAccount extends ApplicationContextServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("AddFriendAccount doGet");
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("jsp/AddFriendAccount.jsp");
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher("jsp/friend/add-friend-account.jsp");
         requestDispatcher.forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String[] accountId = request.getParameterValues("accountId");
-        System.out.println("AddFriendAccount doPost");
+        System.out.println("add-friend-account doPost");
         String name = request.getParameter("name");
         try {
             if (accountId == null) {
@@ -39,10 +40,13 @@ public class AddFriendAccount extends ApplicationContextServlet {
             if (accountId != null) {
                 HttpSession session = request.getSession();
                 Account account = (Account) session.getAttribute("account");
-                Account accountFriend = accountService.read(Integer.parseInt(accountId[0]));//TODO
+                Account accountFriend = accountService.get(Integer.parseInt(accountId[0]));
                 System.out.println("account - " + account);
                 System.out.println("friend - " + accountFriend);
-                friendService.addFriend(account, accountFriend);
+                Relations relations = new Relations();
+                relations.setAccountId(account.getId());
+                relations.setFriendId(accountFriend.getId());
+                relationsService.create(relations);
             }
         } catch (Exception e) {
             System.out.println(e);//send redirect

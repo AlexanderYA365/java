@@ -8,8 +8,8 @@ class GroupTest {
     @Test
     void getIdAccount() {
         Group group = new Group();
-        group.setIdAccount(1);
-        Assert.assertEquals(1, group.getIdAccount());
+        group.setAccountId(1);
+        Assert.assertEquals(1, group.getAccountId());
     }
 
     @Test
@@ -29,29 +29,29 @@ class GroupTest {
     @Test
     void getIdAdministrator() {
         Group group = new Group();
-        group.setIdAdministrator(1);
-        Assert.assertEquals(1, group.getIdAdministrator());
+        group.setAdministratorId(1);
+        Assert.assertEquals(1, group.getAdministratorId());
     }
 
     @Test
     void getIdGroup() {
         Group group = new Group();
-        group.setIdGroup(1);
-        Assert.assertEquals(1, group.getIdGroup());
+        group.setGroupId(1);
+        Assert.assertEquals(1, group.getGroupId());
     }
 
     @Test
     void setIdGroup() {
         Group group = new Group();
-        group.setIdGroup(1);
-        Assert.assertEquals(1, group.getIdGroup());
+        group.setGroupId(1);
+        Assert.assertEquals(1, group.getGroupId());
     }
 
     @Test
     void setIdAccount() {
         Group group = new Group();
-        group.setIdAccount(1);
-        Assert.assertEquals(1, group.getIdAccount());
+        group.setAccountId(1);
+        Assert.assertEquals(1, group.getAccountId());
     }
 
     @Test
@@ -71,14 +71,14 @@ class GroupTest {
     @Test
     void setIdAdministrator() {
         Group group = new Group();
-        group.setIdAdministrator(1);
-        Assert.assertEquals(1, group.getIdAdministrator());
+        group.setAdministratorId(1);
+        Assert.assertEquals(1, group.getAdministratorId());
     }
 
     @Test
     void testToString() {
         Group group = new Group();
         group.setLogo("test");
-        Assert.assertEquals("com.getjavajob.training.yakovleva.dao.Group{idGroup=0, idAccount=0, groupName='null', logo='test', idAdministrator=0}", group.toString());
+        Assert.assertEquals("Group{idGroup=0, accountId=0, groupName='null', logo='test', administrator_id=0}", group.toString());
     }
 }

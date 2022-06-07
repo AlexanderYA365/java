@@ -1,5 +1,6 @@
 package com.getjavajob.training.yakovleva.dao;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -10,21 +11,20 @@ public class Account {
     private String surname;
     private String lastName;
     private Date date;
-    private List<Phone> phones;//TODO
+    private List<Phone> phones;
     private int icq;
+    private String photoFile;
+    private byte[] photo;
     private String addressHome;
     private String addressJob;
     private String email;
     private String aboutMe;
     private String username;
     private String password;
-    private Role role;//TODO
-
-    public Account() {
-    }
+    private Role role;
 
     public Account(String name, String surname, String lastName, Date date, List<Phone> phones,
-                   int icq, String addressHome, String addressJob, String email, String aboutMe, String username,
+                   int icq, String photoFile, byte[] photo, String addressHome, String addressJob, String email, String aboutMe, String username,
                    String password, Role role) {
         this.name = name;
         this.surname = surname;
@@ -32,6 +32,8 @@ public class Account {
         this.date = date;
         this.phones = phones;
         this.icq = icq;
+        this.photoFile = photoFile;
+        this.photo = photo;
         this.addressHome = addressHome;
         this.addressJob = addressJob;
         this.email = email;
@@ -40,6 +42,10 @@ public class Account {
         this.password = password;
         this.phones = phones;
         this.role = role;
+    }
+
+    public Account() {
+
     }
 
     public int getRole() {
@@ -154,6 +160,22 @@ public class Account {
         this.aboutMe = aboutMe;
     }
 
+    public String getPhotoFile() {
+        return photoFile;
+    }
+
+    public void setPhotoFile(String photoFile) {
+        this.photoFile = photoFile;
+    }
+
+    public byte[] getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(byte[] photo) {
+        this.photo = photo;
+    }
+
     @Override
     public String toString() {
         return "Account{" +
@@ -162,16 +184,48 @@ public class Account {
                 ", surname='" + surname + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", date=" + date +
-                ", phones ='" + phones + '\'' +
+                ", phones=" + phones +
                 ", icq=" + icq +
+                ", photoFile='" + photoFile + '\'' +
+                ", photo=" + Arrays.toString(photo) +
                 ", addressHome='" + addressHome + '\'' +
                 ", addressJob='" + addressJob + '\'' +
                 ", email='" + email + '\'' +
                 ", aboutMe='" + aboutMe + '\'' +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
-                ", role=" + role.getStatus() +
+                ", role=" + role +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Account account = (Account) o;
+        return id == account.id &&
+                icq == account.icq &&
+                Objects.equals(name, account.name) &&
+                Objects.equals(surname, account.surname) &&
+                Objects.equals(lastName, account.lastName) &&
+                Objects.equals(date, account.date) &&
+                Objects.equals(phones, account.phones) &&
+                Objects.equals(photoFile, account.photoFile) &&
+                Arrays.equals(photo, account.photo) &&
+                Objects.equals(addressHome, account.addressHome) &&
+                Objects.equals(addressJob, account.addressJob) &&
+                Objects.equals(email, account.email) &&
+                Objects.equals(aboutMe, account.aboutMe) &&
+                Objects.equals(username, account.username) &&
+                Objects.equals(password, account.password) &&
+                role == account.role;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(id, name, surname, lastName, date, phones, icq, photoFile, addressHome, addressJob, email, aboutMe, username, password, role);
+        result = 31 * result + Arrays.hashCode(photo);
+        return result;
     }
 
 }

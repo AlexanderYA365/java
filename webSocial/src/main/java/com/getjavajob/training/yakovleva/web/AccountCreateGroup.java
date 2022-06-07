@@ -12,13 +12,13 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/CreateGroup")
+@WebServlet("/create-group")
 public class AccountCreateGroup extends ApplicationContextServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         System.out.println("AccountCreateGroup doGet");
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("jsp/CreateGroup.jsp");
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher("jsp/group/create-group.jsp");
         requestDispatcher.forward(request, response);
     }
 
@@ -27,21 +27,21 @@ public class AccountCreateGroup extends ApplicationContextServlet {
         System.out.println("AccountCreateGroup doPost");
         HttpSession session = request.getSession();
         Account account = (Account) session.getAttribute("account");
-        List<Group> groups = groupService.readGroups();
+        List<Group> groups = groupService.getGroups();
         try {
             if (createGroup(groups, request.getParameter("name"))) {
                 Group group = new Group();
-                group.setIdAdministrator(account.getId());
-                group.setIdAccount(account.getId());
+                group.setAdministratorId(account.getId());
+                group.setAccountId(account.getId());
                 group.setGroupName(request.getParameter("name"));
                 group.setLogo(request.getParameter("logo"));
                 System.out.println("AccountCreateGroup doPost - " + group);
                 groupService.createAccountGroups(group);
-                RequestDispatcher requestDispatcher = request.getRequestDispatcher("jsp/AccountGroup.jsp");
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher("jsp/group/account-group.jsp");
                 requestDispatcher.forward(request, response);
             }
         } catch (Exception e) {
-            System.out.println("Error");//TODO redirect
+            System.out.println("Error");
         }
     }
 

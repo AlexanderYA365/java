@@ -1,0 +1,25 @@
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+               http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+
+    <bean id="accountDao" class="com.getjavajob.training.yakovleva.dao.AccountDao">
+        <constructor-arg ref="jdbcTemplate"/>
+    </bean>
+    <bean id="phoneDao" class="com.getjavajob.training.yakovleva.dao.PhoneDao">
+        <constructor-arg ref="jdbcTemplate"/>
+    </bean>
+    <bean id="applicationDao" class="com.getjavajob.training.yakovleva.dao.ApplicationDao">
+        <constructor-arg ref="jdbcTemplate"/>
+    </bean>
+    <bean id="messageDao" class="com.getjavajob.training.yakovleva.dao.MessageDao">
+        <constructor-arg ref="jdbcTemplate"/>
+    </bean>
+    <bean id="relationsDao" class="com.getjavajob.training.yakovleva.dao.RelationsDao">
+        <constructor-arg ref="jdbcTemplate"/>
+    </bean>
+    <bean id="groupDao" class="com.getjavajob.training.yakovleva.dao.GroupDao">
+        <constructor-arg ref="jdbcTemplate"/>
+    </bean>
+
+</beans>

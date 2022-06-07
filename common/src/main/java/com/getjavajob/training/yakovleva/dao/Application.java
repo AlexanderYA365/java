@@ -1,29 +1,32 @@
 package com.getjavajob.training.yakovleva.dao;
 
+import java.util.Objects;
+
 public class Application {
     private int id;
     private ApplicationType applicationType;
-    private int idApplicant;
-    private int idRecipient;
+    private int applicantId;
+    private int recipientId;
     private ApplicationStatusType status;
 
-    public Application() {
-    }
-
-    public Application(int id, ApplicationType applicationType, int idApplicant, int idRecipient, ApplicationStatusType status) {
+    public Application(int id, ApplicationType applicationType, int applicantId, int recipientId, ApplicationStatusType status) {
         this.id = id;
         this.applicationType = applicationType;
-        this.idApplicant = idApplicant;
-        this.idRecipient = idRecipient;
+        this.applicantId = applicantId;
+        this.recipientId = recipientId;
         this.status = status;
     }
 
-    public int getIdRecipient() {
-        return idRecipient;
+    public Application() {
+
     }
 
-    public void setIdRecipient(int idRecipient) {
-        this.idRecipient = idRecipient;
+    public int getRecipientId() {
+        return recipientId;
+    }
+
+    public void setRecipientId(int recipientId) {
+        this.recipientId = recipientId;
     }
 
     public int getId() {
@@ -42,12 +45,12 @@ public class Application {
         this.applicationType = ApplicationType.values()[status];
     }
 
-    public int getIdApplicant() {
-        return idApplicant;
+    public int getApplicantId() {
+        return applicantId;
     }
 
-    public void setIdApplicant(int idApplicant) {
-        this.idApplicant = idApplicant;
+    public void setApplicantId(int applicantId) {
+        this.applicantId = applicantId;
     }
 
     public int getStatus() {
@@ -63,9 +66,27 @@ public class Application {
         return "Application{" +
                 "id=" + id +
                 ", applicationType=" + applicationType.getStatus() +
-                ", idApplicant=" + idApplicant +
-                ", idRecipient=" + idRecipient +
+                ", applicantId=" + applicantId +
+                ", recipientId=" + recipientId +
                 ", status=" + status.getStatus() +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Application that = (Application) o;
+        return id == that.id &&
+                applicantId == that.applicantId &&
+                recipientId == that.recipientId &&
+                applicationType == that.applicationType &&
+                status == that.status;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, applicationType, applicantId, recipientId, status);
+    }
+
 }

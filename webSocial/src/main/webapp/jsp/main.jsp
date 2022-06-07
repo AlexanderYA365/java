@@ -11,9 +11,7 @@
 <html>
 <head>
     <title>Ваша страница</title>
-    <style>
-        <%@include file='css/style.css' %>
-    </style>
+    <link href="${pageContext.request.contextPath}/resources/css/style.css" rel="stylesheet">
 </head>
 <body>
 <%@ include file="navbar.jsp" %>
@@ -38,13 +36,12 @@
                     <th>удалить</th>
                 </tr>
                 <c:forEach var="message" items="${messages}">
-                    <input type="hidden" name="messageId" value="${message.id}"/>
                     <tr>
                         <td><c:out value="${message.usernameSender}"/></td>
                         <td><c:out value="${message.publicationDate}"/></td>
                         <td><c:out value="${message.message}"/></td>
-                        <td><input type="submit" name="replyAccount" value="replyAccount"/>ответить</td>
-                        <td><input type="submit" name="deleteText" value="deleteText"/>удалить</td>
+                        <td><button type="submit" name="replyAccount" value="${message.id}"/>ответить</td>
+                        <td><button type="submit" name="deleteText" value="${message.id}"/>удалить</td>
                     </tr>
                 </c:forEach>
             </table>

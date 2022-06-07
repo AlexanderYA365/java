@@ -1,2 +1,2 @@
 ALTER TABLE application
-    ADD COLUMN idRecipient INT AFTER idApplicant;
+    ADD COLUMN recipient_id INT AFTER applicant_id;

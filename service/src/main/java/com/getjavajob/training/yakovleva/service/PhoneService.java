@@ -2,16 +2,14 @@ package com.getjavajob.training.yakovleva.service;
 
 import com.getjavajob.training.yakovleva.dao.Phone;
 import com.getjavajob.training.yakovleva.dao.PhoneDao;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
+//@Service
 public class PhoneService {
     private final PhoneDao phoneDao;
 
-    @Autowired
+    //@Autowired
     public PhoneService(PhoneDao phoneDao) {
         this.phoneDao = phoneDao;
     }
@@ -27,9 +25,9 @@ public class PhoneService {
         }
     }
 
-    public List<Phone> read(int idPhone) {
+    public List<Phone> get(int idPhone) {
         System.out.println("Read Phone from PhoneService.read");
-        return phoneDao.read(idPhone);
+        return phoneDao.get(idPhone);
     }
 
     public boolean update(Phone phone) {

@@ -9,18 +9,16 @@
 <html>
 <head>
     <title>Title</title>
-    <style>
-        <%@include file='css/navbar.css' %>
-    </style>
+    <link href="${pageContext.request.contextPath}/resources/css/navbar.css" rel="stylesheet">
 </head>
 <body>
 <ul class="nav">
-    <li><a href="AccountFriends">Мои друзья</a></li>
-    <li><a href="AccountGroup">Мои группы</a></li>
-    <li><a href="main">Моя страница</a></li>
-    <li><a href="AccountMessage">Мои сообщения</a></li>
-    <li><a href="myAccount">Редактирование</a></li>
-    <li><a href="AccountLogout">Выйти</a></li>
+    <li><a href="${pageContext.request.contextPath}/account-friends">Мои друзья</a></li>
+    <li><a href="${pageContext.request.contextPath}/account-group">Мои группы</a></li>
+    <li><a href="${pageContext.request.contextPath}/main">Моя страница</a></li>
+    <li><a href="${pageContext.request.contextPath}/account-message">Мои сообщения</a></li>
+    <li><a href="${pageContext.request.contextPath}/my-account">Редактирование</a></li>
+    <li><a href="${pageContext.request.contextPath}/account-logout">Выйти</a></li>
 </ul>
 </body>
 </html>

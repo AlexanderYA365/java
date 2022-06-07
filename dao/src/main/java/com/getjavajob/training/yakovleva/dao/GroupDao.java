@@ -1,94 +1,85 @@
 package com.getjavajob.training.yakovleva.dao;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
-@Repository
 public class GroupDao {
     private final JdbcTemplate jdbcTemplate;
 
-    @Autowired
     public GroupDao(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    @Transactional
     public boolean create(Group group) {
-        String sql = "INSERT INTO heroku_dc02d468f96562c.`group`(groupname, logo, idAdministrator, account)" +
+        String sql = "INSERT INTO heroku_dc02d468f96562c.`group`(group_name, logo, administrator_id, account_id)" +
                 " VALUES ('?', '?', ?, ?);";
         System.out.println(sql);
-        jdbcTemplate.update(sql, group.getGroupName(), group.getLogo(), group.getIdAdministrator(),
-                group.getIdAccount());
-        return true;
+        int result = jdbcTemplate.update(sql, group.getGroupName(), group.getLogo(), group.getAdministratorId(),
+                group.getAccountId());
+        return result > 0;
     }
 
-    public Group read(int id) {
-        String sql = "SELECT * FROM heroku_dc02d468f96562c.`group` WHERE idgroup = ?";
+    public Group getGroup(int id) {
+        String sql = "SELECT * FROM heroku_dc02d468f96562c.`group` WHERE group_id = ?";
         System.out.println(sql);
         return jdbcTemplate.queryForObject(sql, new Object[]{id}, (resultSet, i) -> fillGroup(resultSet));
     }
 
-    public List<Group> read(String groupName) {
+    public List<Group> getGroups(String groupName) {
         System.out.println("Group read(String groupName)");
-        String sql = "SELECT * FROM heroku_dc02d468f96562c.`group` WHERE groupname = ?";
+        String sql = "SELECT * FROM heroku_dc02d468f96562c.`group` WHERE group_name = ?";
         System.out.println(sql);
         return jdbcTemplate.query(sql, new Object[]{groupName}, (resultSet, i) -> fillGroup(resultSet));
     }
 
-    public List<Group> readGroups() {
+    public List<Group> getGroups() {
         String sql = "SELECT * FROM heroku_dc02d468f96562c.`group`";
         System.out.println(sql);
         return jdbcTemplate.query(sql, (resultSet, i) -> fillGroup(resultSet));
     }
 
-    public List<Group> readGroupsAccount(int id) {
-        String sql = "SELECT * FROM heroku_dc02d468f96562c.`group` WHERE Account = ?";
+    public List<Group> getGroupsAccount(int id) {
+        String sql = "SELECT * FROM heroku_dc02d468f96562c.`group` WHERE account_id = ?";
         System.out.println(sql);
         return jdbcTemplate.query(sql, new Object[]{id}, (resultSet, i) -> fillGroup(resultSet));
     }
 
-    @Transactional
     public boolean update(Group group) {
         String sql = "UPDATE heroku_dc02d468f96562c.`group`" +
-                " SET groupName = '?', logo = '?', idAdministrator = ?, Account = ? WHERE idgroup = ?";
+                " SET group_name = '?', logo = '?', administrator_id = ?, account_id = ? WHERE group_id = ?";
         System.out.println(sql);
-        jdbcTemplate.update(sql, group.getGroupName(), group.getLogo(), group.getIdAdministrator(),
-                group.getIdAccount(), group.getIdGroup());
-        return true;
+        int result = jdbcTemplate.update(sql, group.getGroupName(), group.getLogo(), group.getAdministratorId(),
+                group.getAccountId(), group.getGroupId());
+        return result > 0;
     }
 
-    @Transactional
     public boolean delete(Group group) {
-        String sql = "DELETE FROM heroku_dc02d468f96562c.`group` WHERE idgroup = ?";
+        String sql = "DELETE FROM heroku_dc02d468f96562c.`group` WHERE group_id = ?";
         System.out.println(sql);
-        jdbcTemplate.update(sql, group.getIdGroup());
-        return true;
+        int result = jdbcTemplate.update(sql, group.getGroupId());
+        return result > 0;
     }
 
-    public boolean insertAccount(Group group, int idAccount) {
-        System.out.println("insertAccount, group - " + group + " ,idAccount - " + idAccount);
-        String sql = "INSERT INTO heroku_dc02d468f96562c.`group`(groupname, logo, idAdministrator, account) " +
+    public boolean insertAccount(Group group, int accountId) {
+        System.out.println("insertAccount, group - " + group + " ,accountId - " + accountId);
+        String sql = "INSERT INTO heroku_dc02d468f96562c.`group`(group_name, logo, administrator_id, account_id) " +
                 "VALUES (?, ?, ?, ?)";
         System.out.println(sql);
-        jdbcTemplate.update(sql, group.getDateCreateGroup(), group.getLogo(),
-                group.getIdAdministrator(), group.getIdAccount());
-        return true;
+        int result = jdbcTemplate.update(sql, group.getDateCreateGroup(), group.getLogo(),
+                group.getAdministratorId(), group.getAccountId());
+        return result > 0;
     }
 
     private Group fillGroup(ResultSet resultSet) throws SQLException {
         Group group = new Group();
-        group.setIdGroup(resultSet.getInt(1));
+        group.setGroupId(resultSet.getInt(1));
         group.setGroupName(resultSet.getString(2));
         group.setLogo(resultSet.getString(3));
-        group.setIdAdministrator(resultSet.getInt(4));
-        group.setIdAccount(resultSet.getInt(5));
+        group.setAdministratorId(resultSet.getInt(4));
+        group.setAccountId(resultSet.getInt(5));
         return group;
     }
 

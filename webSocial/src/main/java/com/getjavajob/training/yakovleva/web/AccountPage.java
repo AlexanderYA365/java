@@ -29,7 +29,7 @@ public class AccountPage extends ApplicationContextServlet {
 
     private List<Message> printMessage(Account account) {
         System.out.println("printMassage");
-        List<Message> messageList = messageService.readWallMassageAccount(account);
+        List<Message> messageList = messageService.getWallMassageAccount(account);
         return messageList;
     }
 
@@ -40,19 +40,28 @@ public class AccountPage extends ApplicationContextServlet {
         String newMessage = request.getParameter("NewWallMessage");
         String replyAccount = request.getParameter("replyAccount");
         String deleteText = request.getParameter("deleteText");
-
-        System.out.println(request.getParameter("messageId"));
         System.out.println("NewWallMessage - " + newMessage);
         System.out.println("replyAccount - " + replyAccount);
         System.out.println("deleteText - " + deleteText);
         try {
-            Message message = new Message();
-            message.setIdReceiving(account.getId());
-            message.setIdSender(account.getId());
-            message.setMessage(newMessage);
-            message.setMessageType(0);
-            System.out.println("message - " + message);
-            messageService.createMassage(message);
+            if (newMessage != null) {
+                System.out.println("create new message");
+                Message message = new Message();
+                message.setReceiverId(account.getId());
+                message.setSenderId(account.getId());
+                message.setMessage(newMessage);
+                message.setMessageType(0);
+                System.out.println("message - " + message);
+                messageService.createMassage(message);
+            } else if (replyAccount != null) {
+                System.out.println("select replyAccount");
+                System.out.println(Integer.parseInt(replyAccount));
+            } else if (deleteText != null) {
+                System.out.println("select deleteAccount");
+                int messageId = Integer.parseInt(deleteText);
+                System.out.println("messageId - " + messageId);
+                messageService.delete(messageId);
+            }
         } catch (Exception e) {
             System.out.println(e);//send redirect
         }

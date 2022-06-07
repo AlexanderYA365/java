@@ -1,2 +1,2 @@
-INSERT INTO heroku_dc02d468f96562c.`group`(groupname, logo, idAdministrator, account, dateCreateGroup) +
+INSERT INTO heroku_dc02d468f96562c.`group`(group_name, logo, administrator_id, account, dateCreateGroup) +
 VALUES ('?, '?', ?, ?, ?);

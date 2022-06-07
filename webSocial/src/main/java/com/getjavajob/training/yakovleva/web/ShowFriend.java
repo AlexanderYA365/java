@@ -1,43 +1,42 @@
 package com.getjavajob.training.yakovleva.web;
 
-import com.getjavajob.training.yakovleva.dao.Account;
-import com.getjavajob.training.yakovleva.dao.Application;
-import com.getjavajob.training.yakovleva.dao.Friend;
-import com.getjavajob.training.yakovleva.dao.Message;
+import com.getjavajob.training.yakovleva.dao.*;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/ShowFriend")
+@WebServlet("/show-friend")
 public class ShowFriend extends ApplicationContextServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("ShowFriend doGet");
-        System.out.println(req.getParameter("id"));
+        HttpSession session = req.getSession();
+        Account account = (Account) session.getAttribute("account");
         try {
-            Friend friend = friendService.read(Integer.parseInt(req.getParameter("id")));
-            System.out.println(friend);
-            Account friendAccount = accountService.read(friend.getIdFriendsAccount());
+            int friendId = Integer.parseInt(req.getParameter("id"));
+            System.out.println("friendId - " + friendId);
+            Account friendAccount = accountService.get(friendId);
             System.out.println("ShowFriend friendAccount - " + friendAccount);
-            Application application = applicationService.readAccount(friend);
-            if (application != null) {
-                int friendFlag = application.getStatus();
-                req.setAttribute("friendFlag", friendFlag);
-                req.setAttribute("friendAccount", friendAccount);
-                List<Message> messages = messageService.readWallMassageAccount(friendAccount);
-                System.out.println("messages - " + messages);
-                req.setAttribute("messages", messages);
-            }
+            Relations relations = new Relations(account.getId(), friendId);
+            Application application = applicationService.getAccount(relations);
+            System.out.println("application - " + application);
+            int friendFlag = application.getId() != 0 ? application.getStatus() : 1;
+            System.out.println("friendFlag - " + friendFlag);
+            List<Message> messages = messageService.getWallMassageAccount(friendAccount);
+            req.setAttribute("friendFlag", friendFlag);
+            req.setAttribute("friendAccount", friendAccount);
+            req.setAttribute("messages", messages);
         } catch (Exception e) {
             System.out.println(e);//send redirect
         }
-        RequestDispatcher requestDispatcher = req.getRequestDispatcher("jsp/ShowFriend.jsp");
+        RequestDispatcher requestDispatcher = req.getRequestDispatcher("jsp/friend/show-friend.jsp");
         requestDispatcher.forward(req, response);
     }
 

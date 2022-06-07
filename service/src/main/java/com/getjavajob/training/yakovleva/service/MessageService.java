@@ -3,38 +3,36 @@ package com.getjavajob.training.yakovleva.service;
 import com.getjavajob.training.yakovleva.dao.Account;
 import com.getjavajob.training.yakovleva.dao.Message;
 import com.getjavajob.training.yakovleva.dao.MessageDao;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
+//@Service
 public class MessageService {
     private final MessageDao messageDao;
 
-    @Autowired
+    //@Autowired
     public MessageService(MessageDao messageDao) {
         this.messageDao = messageDao;
     }
 
-    public List<Message> readWallMassageAccount(Account account) {
+    public List<Message> getWallMassageAccount(Account account) {
         System.out.println("readWallMessage, account.getId() - " + account.getId());
-        return messageDao.readWallMassage(account.getId());
+        return messageDao.getWallMessage(account.getId());
     }
 
-    public List<Message> readMessage(Account account) {
+    public List<Message> getMessages(Account account) {
         System.out.println("read message account - " + account);
-        return messageDao.readMessageUserIdNameSender(account.getId());
+        return messageDao.getMessageUserIdNameSender(account.getId());
     }
 
-    public List<Message> readUniqueMessages(Account account) {
+    public List<Message> getUniqueMessages(Account account) {
         System.out.println("read message account - " + account);
-        return messageDao.readUniqueMessagesForUser(account.getId());
+        return messageDao.getUniqueMessagesForUser(account.getId());
     }
 
-    public List<Message> accountMessage(int idSender, int idReceiving) {
-        System.out.println("insertAccountFriends idSender - " + idSender + " ,idReceiving - " + idReceiving);
-        return messageDao.readsMessageAccounts(idSender, idReceiving);
+    public List<Message> getAccountMessages(int senderId, int receiverId) {
+        System.out.println("insertAccountFriends senderId - " + senderId + " ,receiverId - " + receiverId);
+        return messageDao.getMessageAccounts(senderId, receiverId);
     }
 
     public boolean createMassage(Message message) {
@@ -45,6 +43,11 @@ public class MessageService {
             System.out.println("createMessage exception - " + ex);
             return false;
         }
+    }
+
+    public boolean delete(int id) {
+        System.out.println("delete message, id - " + id);
+        return messageDao.delete(id);
     }
 
 }

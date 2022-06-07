@@ -8,15 +8,15 @@ class FriendTest {
     @Test
     void getIdAccount() {
         Friend friend = new Friend();
-        friend.setIdAccount(1);
-        Assert.assertEquals(1, friend.getIdAccount());
+        friend.setAccountId(1);
+        Assert.assertEquals(1, friend.getAccountId());
     }
 
     @Test
     void getIdFriendsAccount() {
         Friend friend = new Friend();
-        friend.setIdFriendsAccount(1);
-        Assert.assertEquals(1, friend.getIdFriendsAccount());
+        friend.setFriendId(1);
+        Assert.assertEquals(1, friend.getFriendId());
     }
 
     @Test
@@ -36,14 +36,14 @@ class FriendTest {
     @Test
     void setIdAccount() {
         Friend friend = new Friend();
-        friend.setIdAccount(1);
-        Assert.assertEquals(1, friend.getIdAccount());
+        friend.setAccountId(1);
+        Assert.assertEquals(1, friend.getAccountId());
     }
 
     @Test
     void setIdFriendsAccount() {
         Friend friend = new Friend();
-        friend.setIdFriendsAccount(1);
-        Assert.assertEquals(1, friend.getIdFriendsAccount());
+        friend.setFriendId(1);
+        Assert.assertEquals(1, friend.getFriendId());
     }
 }

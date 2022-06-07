@@ -1,20 +1,13 @@
 package com.getjavajob.training.yakovleva.service;
 
-import com.getjavajob.training.yakovleva.dao.Account;
-import com.getjavajob.training.yakovleva.dao.AccountDao;
-import com.getjavajob.training.yakovleva.dao.Phone;
-import com.getjavajob.training.yakovleva.dao.PhoneDao;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.getjavajob.training.yakovleva.dao.*;
 
 import java.util.List;
 
-@Service
 public class AccountService {
     private AccountDao accountDAO;
     private PhoneDao phoneDao;
 
-    @Autowired
     public AccountService(AccountDao accountDao, PhoneDao phoneDao) {
         this.accountDAO = accountDao;
         this.phoneDao = phoneDao;
@@ -23,13 +16,14 @@ public class AccountService {
     public boolean create(Account account) {
         System.out.println("Creat new Account from AccountService.create");
         try {
-            accountDAO.createAccount(account);
-            int id = accountDAO.readIdAccount(account);
+            accountDAO.create(account);
+            int id = accountDAO.getIdAccount(account);
+            boolean result = false;
             for (Phone phone : account.getPhones()) {
-                phone.setIdAccount(id);
+                phone.setAccountId(id);
                 phoneDao.create(phone);
             }
-            return true;
+            return id > 0 || result;
         } catch (Exception e) {
             System.out.println("create Exception - " + e);
             return false;
@@ -37,15 +31,15 @@ public class AccountService {
     }
 
     public boolean update(Account account) {
-        System.out.println("Account update idAccount - " + account.getId());
+        System.out.println("Account update accountId - " + account.getId());
         try {
-            accountDAO.updateAccount(account);
-            int id = accountDAO.readIdAccount(account);
+            int id = accountDAO.getIdAccount(account);
+            boolean result = false;
             for (Phone phone : account.getPhones()) {
-                phone.setIdAccount(id);
-                phoneDao.update(phone);
+                phone.setAccountId(id);
+                result = phoneDao.update(phone);
             }
-            return true;
+            return accountDAO.updateAccount(account) || result;
         } catch (Exception e) {
             System.out.println("create Exception - " + e);
             return false;
@@ -53,42 +47,50 @@ public class AccountService {
     }
 
     public boolean delete(Account account) {
-        System.out.println("Account delete idAccount - " + account);
+        System.out.println("Account delete accountId - " + account);
         try {
-            accountDAO.deleteAccount(account);
-            int id = accountDAO.readIdAccount(account);
+            int id = accountDAO.getIdAccount(account);
+            boolean result = false;
             for (Phone phone : account.getPhones()) {
-                phone.setIdAccount(id);
-                phoneDao.delete(phone);
+                phone.setAccountId(id);
+                result = phoneDao.delete(phone);
             }
-            return true;
+            return accountDAO.deleteAccount(account) || result;
         } catch (Exception e) {
             System.out.println("create Exception - " + e);
             return false;
         }
     }
 
-    public Account read(int idAccount) {
-        System.out.println("Account read idAccount - " + idAccount);
-        return accountDAO.readAccount(idAccount);
-    }
-
-    public List<Account> getAllAccounts() {
-        System.out.println("read all account dao");
-        return accountDAO.readAccounts();
-    }
-
-    public List<Account> getAccountName(String name) {
-        System.out.println("getAccountName, name - " + name);
-        return accountDAO.readAccountsName(name);
-    }
-
-    public Account getAccount(String username, String password) {
-        System.out.println("getAccount(String username, String password)");
-        Account account = accountDAO.readAccount(username, password);
-        List<Phone> phones = phoneDao.read(account.getId());
+    public Account get(int accountId) {
+        System.out.println("Account read accountId - " + accountId);
+        Account account = accountDAO.getAccount(accountId);
+        List<Phone> phones = phoneDao.get(accountId);
+        System.out.println(phones);
         account.setPhones(phones);
         return account;
     }
 
+    public List<Account> getAllAccounts() {
+        System.out.println("read all account dao");
+        return accountDAO.getAccounts();
+    }
+
+    public List<Account> getAccountName(String name) {
+        System.out.println("getAccountName, name - " + name);
+        return accountDAO.getAccountsName(name);
+    }
+
+    public Account getAccount(String username, String password) {
+        System.out.println("getAccount(String username, String password)");
+        Account account = accountDAO.getAccount(username, password);
+        List<Phone> phones = phoneDao.get(account.getId());
+        account.setPhones(phones);
+        return account;
+    }
+
+    public List<Account> getFriendsAccount(int accountId) {
+        System.out.println("List<Account> getFriendAccount");
+        return accountDAO.getFriendsAccount(accountId);
+    }
 }

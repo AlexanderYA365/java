@@ -12,7 +12,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/AccountMessage")
+@WebServlet("/account-message")
 public class AccountMessage extends ApplicationContextServlet {
 
     @Override
@@ -22,8 +22,8 @@ public class AccountMessage extends ApplicationContextServlet {
         Account account = (Account) session.getAttribute("account");
         request.setAttribute("account", account);
         try {
-            List<Message> uniqueMessages = messageService.readUniqueMessages(account);
-            List<Message> messageList = messageService.readMessage(account);
+            List<Message> uniqueMessages = messageService.getUniqueMessages(account);
+            List<Message> messageList = messageService.getMessages(account);
             if (messageList.size() != 0) {
                 int haveMessage = 0;
                 request.setAttribute("haveMessage", haveMessage);
@@ -36,7 +36,7 @@ public class AccountMessage extends ApplicationContextServlet {
         } catch (Exception e) {
             System.out.println(e);//send redirect
         }
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("jsp/AccountMessage.jsp");
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher("jsp/account/account-message.jsp");
         requestDispatcher.forward(request, response);
     }
 

@@ -12,13 +12,13 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/AccountFindGroup")
+@WebServlet("/account-find-group")
 public class AccountFindGroup extends ApplicationContextServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("AccountFindGroup doGet");
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("jsp/AccountFindGroup.jsp");
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher("jsp/group/account-find-group.jsp");
         requestDispatcher.forward(request, response);
     }
 
@@ -41,7 +41,7 @@ public class AccountFindGroup extends ApplicationContextServlet {
             if (groupId != null) {
                 HttpSession session = request.getSession();
                 Account account = (Account) session.getAttribute("account");
-                Group addGroup = groupService.readGroupID(Integer.parseInt(groupId));//TODO
+                Group addGroup = groupService.getGroupID(Integer.parseInt(groupId));
                 System.out.println("Account - " + account);
                 System.out.println("addGroup - " + addGroup);
                 groupService.insertAccountGroup(addGroup, account.getId());

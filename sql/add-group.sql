@@ -1,3 +1,3 @@
-INSERT INTO heroku_dc02d468f96562c.`group`(groupname, logo, idAdministrator,
-                                           com.getjavajob.training.yakovleva.dao.Account)
+INSERT INTO heroku_dc02d468f96562c.`group`(group_name, logo, administrator_id,
+                                           account_id)
 VALUES ('first group', 'none', 1, 1);

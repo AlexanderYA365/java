@@ -1,3 +1,3 @@
 UPDATE account
 SET name = 'Ivan'
-WHERE idAccount = 21
+WHERE account_id = 21

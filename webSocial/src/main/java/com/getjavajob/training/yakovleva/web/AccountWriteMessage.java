@@ -12,7 +12,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/AccountWriteMessage")
+@WebServlet("/account-write-message")
 public class AccountWriteMessage extends ApplicationContextServlet {
 
     @Override
@@ -24,10 +24,10 @@ public class AccountWriteMessage extends ApplicationContextServlet {
         System.out.println("selectUser - " + selectUser);
         int idSender = Integer.parseInt(selectUser);
         request.setAttribute("account", account);
-        List<Message> personalMail = messageService.accountMessage(idSender, account.getId());
+        List<Message> personalMail = messageService.getAccountMessages(idSender, account.getId());
         System.out.println("AccountWriteMessage.personalMail" + personalMail);
         request.setAttribute("personalMail", personalMail);
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("jsp/AccountWriteMessage.jsp");
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher("jsp/account/account-write-message.jsp");
         requestDispatcher.forward(request, response);
     }
 
@@ -44,8 +44,8 @@ public class AccountWriteMessage extends ApplicationContextServlet {
         System.out.println("IdReceiving - " + IdReceiving);
         try {
             Message message = new Message();
-            message.setIdReceiving(IdReceiving);
-            message.setIdSender(account.getId());
+            message.setReceiverId(IdReceiving);
+            message.setSenderId(account.getId());
             message.setMessage(newMessage);
             message.setMessageType(1);
             messageService.createMassage(message);

@@ -2,12 +2,12 @@ package com.getjavajob.training.yakovleva.dao;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 
 public class Message implements Serializable {
-    private static final long serialVersionUID = 2041275512219239992L;
     private int id;
-    private int idSender;
-    private int idReceiving;
+    private int senderId;
+    private int receiverId;
     private String message;
     private String picture;
     private Date publicationDate;
@@ -48,20 +48,20 @@ public class Message implements Serializable {
         this.id = id;
     }
 
-    public int getIdSender() {
-        return idSender;
+    public int getSenderId() {
+        return senderId;
     }
 
-    public void setIdSender(int idSender) {
-        this.idSender = idSender;
+    public void setSenderId(int senderId) {
+        this.senderId = senderId;
     }
 
-    public int getIdReceiving() {
-        return idReceiving;
+    public int getReceiverId() {
+        return receiverId;
     }
 
-    public void setIdReceiving(int idReceiving) {
-        this.idReceiving = idReceiving;
+    public void setReceiverId(int receiverId) {
+        this.receiverId = receiverId;
     }
 
     public String getMessage() {
@@ -97,11 +97,11 @@ public class Message implements Serializable {
     }
 
     @Override
-    public String toString() {//TODO как нормально выводить тип сообщений?
+    public String toString() {
         return "Message{" +
                 "id=" + id +
-                ", idSender=" + idSender +
-                ", idReceiving=" + idReceiving +
+                ", senderId=" + senderId +
+                ", receiverId=" + receiverId +
                 ", messageType=" + messageType.getStatus() +
                 ", message='" + message + '\'' +
                 ", picture='" + picture + '\'' +
@@ -109,4 +109,27 @@ public class Message implements Serializable {
                 ", edited=" + edited +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Message message1 = (Message) o;
+        return id == message1.id &&
+                senderId == message1.senderId &&
+                receiverId == message1.receiverId &&
+                edited == message1.edited &&
+                Objects.equals(message, message1.message) &&
+                Objects.equals(picture, message1.picture) &&
+                Objects.equals(publicationDate, message1.publicationDate) &&
+                Objects.equals(usernameSender, message1.usernameSender) &&
+                Objects.equals(usernameReceiving, message1.usernameReceiving) &&
+                messageType == message1.messageType;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, senderId, receiverId, message, picture, publicationDate, edited, usernameSender, usernameReceiving, messageType);
+    }
+
 }

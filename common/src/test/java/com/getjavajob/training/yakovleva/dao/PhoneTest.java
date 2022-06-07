@@ -8,8 +8,8 @@ class PhoneTest {
     @Test
     void getIdPhone() {
         Phone phone = new Phone();
-        phone.setIdAccount(1);
-        Assert.assertEquals(1, phone.getIdAccount());
+        phone.setAccountId(1);
+        Assert.assertEquals(1, phone.getAccountId());
     }
 
     @Test

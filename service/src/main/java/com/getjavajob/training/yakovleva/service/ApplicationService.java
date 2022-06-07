@@ -1,19 +1,14 @@
 package com.getjavajob.training.yakovleva.service;
 
-import com.getjavajob.training.yakovleva.dao.Application;
-import com.getjavajob.training.yakovleva.dao.ApplicationDao;
-import com.getjavajob.training.yakovleva.dao.Friend;
-import com.getjavajob.training.yakovleva.dao.Group;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.getjavajob.training.yakovleva.dao.*;
 
 import java.util.List;
 
-@Service
+//@Service
 public class ApplicationService {
     private ApplicationDao applicationDao;
 
-    @Autowired
+    //@Autowired
     public ApplicationService(ApplicationDao applicationDao) {
         this.applicationDao = applicationDao;
     }
@@ -21,8 +16,7 @@ public class ApplicationService {
     public boolean create(Application application) {
         System.out.println("Creat new Application from ApplicationService.create");
         try {
-            applicationDao.create(application);
-            return true;
+            return applicationDao.create(application);
         } catch (Exception ex) {
             System.out.println("create Exception - " + ex);
         }
@@ -43,32 +37,31 @@ public class ApplicationService {
     public boolean delete(Application application) {
         System.out.println("delete new Application from ApplicationService.update");
         try {
-            applicationDao.delete(application);
-            return true;
+            return applicationDao.delete(application);
         } catch (Exception ex) {
             System.out.println("delete Exception - " + ex);
         }
         return false;
     }
 
-    public Application read(int idApplication) {
+    public Application get(int idApplication) {
         System.out.println("Application read idApplication - " + idApplication);
-        return applicationDao.read(idApplication);
+        return applicationDao.get(idApplication);
     }
 
-    public Application readGroupAccount(Group group, int idRecipient) {
-        System.out.println("Application read idGroup - " + group + " ,idRecipient - " + idRecipient);
-        return applicationDao.read(group, idRecipient);
+    public Application getGroupAccount(Group group, int recipientId) {
+        System.out.println("Application read idGroup - " + group + " ,recipientId - " + recipientId);
+        return applicationDao.get(group, recipientId);
     }
 
-    public Application readAccount(Friend friend) {
-        System.out.println("Application read friend - " + friend);
-        return applicationDao.read(friend);
+    public Application getAccount(Relations relations) {
+        System.out.println("Application get relations - " + relations);
+        return applicationDao.get(relations);
     }
 
-    public List<Application> readAllApplication() {
+    public List<Application> getAllApplication() {
         System.out.println("readAllApplication");
-        return applicationDao.readApplications();
+        return applicationDao.getApplications();
     }
 
 }

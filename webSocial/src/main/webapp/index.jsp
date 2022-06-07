@@ -12,7 +12,7 @@
 <head>
     <title>Добро пожаловать</title>
     <style>
-        <%@include file='jsp/css/style.css' %>
+        <%@include file='resources/css/style.css' %>
     </style>
 </head>
 <body>

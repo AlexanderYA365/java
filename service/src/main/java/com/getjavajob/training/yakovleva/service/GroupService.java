@@ -3,53 +3,52 @@ package com.getjavajob.training.yakovleva.service;
 import com.getjavajob.training.yakovleva.dao.Account;
 import com.getjavajob.training.yakovleva.dao.Group;
 import com.getjavajob.training.yakovleva.dao.GroupDao;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
+//@Service
 public class GroupService {
     private GroupDao groupDao;
 
-    @Autowired
+    //@Autowired
     public GroupService(GroupDao groupDao) {
         this.groupDao = groupDao;
     }
 
-    public List<Group> readAccountGroups(Account account) {
+    public List<Group> getAccountGroups(Account account) {
         System.out.println("readGroup, account.getId() - " + account.getId());
-        return groupDao.readGroupsAccount(account.getId());
+        return groupDao.getGroupsAccount(account.getId());
     }
 
-    public void createAccountGroups(Group group) {
+    public boolean createAccountGroups(Group group) {
         System.out.println("createAccountGroups");
         try {
-            groupDao.create(group);
+            return groupDao.create(group);
         } catch (Exception ex) {
             System.out.println("createAccountGroups exception - " + ex);
         }
+        return false;
     }
 
-    public List<Group> readGroups() {
+    public List<Group> getGroups() {
         System.out.println("readGroups");
-        return groupDao.readGroups();
+        return groupDao.getGroups();
     }
 
     public List<Group> getGroupName(String groupName) {
         System.out.println("getGroupName groupName - " + groupName);
-        return groupDao.read(groupName);
+        return groupDao.getGroups(groupName);
     }
 
-    public Group readGroupID(int idGroup) {
+    public Group getGroupID(int idGroup) {
         System.out.println("getGroupID idGroup - " + idGroup);
-        return groupDao.read(idGroup);
+        return groupDao.getGroup(idGroup);
     }
 
-    public boolean insertAccountGroup(Group group, int idAccount) {
-        System.out.println("Group read idGroup - " + group + " , idAccount - " + idAccount);
+    public boolean insertAccountGroup(Group group, int accountId) {
+        System.out.println("Group read idGroup - " + group + " , accountId - " + accountId);
         try {
-            return groupDao.insertAccount(group, idAccount);
+            return groupDao.insertAccount(group, accountId);
         } catch (Exception ex) {
             System.out.println("createAccountGroups exception - " + ex);
             return false;

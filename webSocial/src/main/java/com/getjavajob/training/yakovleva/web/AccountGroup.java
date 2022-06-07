@@ -12,7 +12,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/AccountGroup")
+@WebServlet("/account-group")
 public class AccountGroup extends ApplicationContextServlet {
 
     @Override
@@ -21,14 +21,14 @@ public class AccountGroup extends ApplicationContextServlet {
         HttpSession session = request.getSession();
         Account account = (Account) session.getAttribute("account");
         try {
-            List<Group> groups = groupService.readAccountGroups(account);
+            List<Group> groups = groupService.getAccountGroups(account);
             System.out.println(groups);
             session.setAttribute("groups", groups);
             request.setAttribute("groups", groups);
         } catch (Exception e) {
             System.out.println(e);//send redirect
         }
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("jsp/AccountGroup.jsp");
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher("jsp/group/account-group.jsp");
         requestDispatcher.forward(request, response);
     }
 

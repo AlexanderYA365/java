@@ -10,13 +10,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebServlet("/RegistrationAccount")
+@WebServlet("/registration-account")
 public class RegisterAccount extends ApplicationContextServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("Register Account doGet");
-        request.getRequestDispatcher("jsp/RegistrationAccount.jsp").forward(request, response);
+        request.getRequestDispatcher("jsp/account/registration-account.jsp").forward(request, response);
     }
 
     @Override
@@ -27,7 +27,8 @@ public class RegisterAccount extends ApplicationContextServlet {
         account.setPassword(request.getParameter("password"));
         account.setName(request.getParameter("name"));
         account.setSurname(request.getParameter("surname"));
-        account.setLastName(request.getParameter("lastName"));//TODO phone
+        account.setLastName(request.getParameter("lastName"));
+        account.setLastName(request.getParameter("phone"));
         account.setIcq(Integer.parseInt(request.getParameter("icq")));
         account.setAddressHome(request.getParameter("addressHome"));
         account.setAddressJob(request.getParameter("addressJob"));

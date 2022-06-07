@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebServlet("/myAccount")
+@WebServlet("/my-account")
 public class AccountSettings extends ApplicationContextServlet {
 
     @Override
@@ -18,10 +18,11 @@ public class AccountSettings extends ApplicationContextServlet {
         System.out.println("AccountSettings doGet");
         HttpSession session = request.getSession();
         Account account = (Account) session.getAttribute("account");
-        request.setAttribute("account", account);
-        System.out.println("account - " + account);
-        System.out.println("phones - " + account.getPhones());
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("jsp/myAccount.jsp");
+        Account readAccount = accountService.get(account.getId());
+        request.setAttribute("account", readAccount);
+        System.out.println("account - " + readAccount);
+        System.out.println("phones - " + readAccount.getPhones());
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher("jsp/account/my-account.jsp");
         requestDispatcher.forward(request, response);
     }
 

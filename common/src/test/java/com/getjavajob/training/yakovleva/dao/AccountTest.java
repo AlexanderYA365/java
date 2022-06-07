@@ -6,184 +6,185 @@ import org.junit.Test;
 class AccountTest {
     private String expectedString = "test";
 
-    @org.junit.jupiter.api.Test
-    void getUsername() {
+    @Test
+    public void getUsername() {
         Account account = new Account();
         account.setUsername("test");
         Assert.assertEquals(expectedString, account.getUsername());
     }
 
-    @org.junit.jupiter.api.Test
-    void getPassword() {
+    @Test
+    public void getPassword() {
         Account account = new Account();
         account.setPassword("test");
         Assert.assertEquals(expectedString, account.getPassword());
     }
 
-    @org.junit.jupiter.api.Test
-    void getId() {
-        Account account = new Account();
-        account.setId(1);
-        Assert.assertEquals(1, account.getId());
-    }
-
-    @org.junit.jupiter.api.Test
-    void getName() {
-        Account account = new Account();
-        account.setName("test");
-        Assert.assertEquals(expectedString, account.getName());
-    }
-
-    @org.junit.jupiter.api.Test
-    void getSurname() {
-        Account account = new Account();
-        account.setSurname("test");
-        Assert.assertEquals(expectedString, account.getSurname());
-    }
-
-    @org.junit.jupiter.api.Test
-    void getLastName() {
-        Account account = new Account();
-        account.setLastName("test");
-        Assert.assertEquals(expectedString, account.getLastName());
-    }
-
-    @org.junit.jupiter.api.Test
-    void getDate() {
-        //TODO
-    }
-
-    @org.junit.jupiter.api.Test
-    void getPhone() {
-        Account account = new Account();
-    }
-
-    @org.junit.jupiter.api.Test
-    void getIcq() {
-        Account account = new Account();
-        account.setIcq(1);
-        Assert.assertEquals(1, account.getIcq());
-    }
-
-    @org.junit.jupiter.api.Test
-    void getAddressHome() {
-        Account account = new Account();
-        account.setAddressHome("test");
-        Assert.assertEquals(expectedString, account.getAddressHome());
-    }
-
-    @org.junit.jupiter.api.Test
-    void getAddressJob() {
-        Account account = new Account();
-        account.setAddressJob("test");
-        Assert.assertEquals(expectedString, account.getAddressJob());
-    }
-
-    @org.junit.jupiter.api.Test
-    void getEmail() {
-        Account account = new Account();
-        account.setEmail("test");
-        Assert.assertEquals(expectedString, account.getEmail());
-    }
-
-    @org.junit.jupiter.api.Test
-    void getAboutMe() {
-        Account account = new Account();
-        account.setAboutMe("test");
-        Assert.assertEquals(expectedString, account.getAboutMe());
-    }
-
-    @org.junit.jupiter.api.Test
-    void setUsername() {
-        Account account = new Account();
-        account.setUsername("test");
-        Assert.assertEquals(expectedString, account.getUsername());
-    }
-
-    @org.junit.jupiter.api.Test
-    void setPassword() {
-        Account account = new Account();
-        account.setPassword("test");
-        Assert.assertEquals(expectedString, account.getPassword());
-    }
-
-    @org.junit.jupiter.api.Test
-    void setRole() {
-        Account account = new Account();
-        account.setRole(1);
-        Assert.assertEquals(1, account.getRole());
-    }
-
-    @org.junit.jupiter.api.Test
-    void setId() {
+    @Test
+    public void getId() {
         Account account = new Account();
         account.setId(1);
         Assert.assertEquals(1, account.getId());
     }
 
     @Test
-    void setName() {
+    public void getName() {
         Account account = new Account();
         account.setName("test");
         Assert.assertEquals(expectedString, account.getName());
     }
 
-    @org.junit.jupiter.api.Test
-    void setSurname() {
+    @Test
+    public void getSurname() {
         Account account = new Account();
         account.setSurname("test");
         Assert.assertEquals(expectedString, account.getSurname());
     }
 
-    @org.junit.jupiter.api.Test
-    void setLastName() {
+    @Test
+    public void getLastName() {
         Account account = new Account();
         account.setLastName("test");
         Assert.assertEquals(expectedString, account.getLastName());
     }
 
-    @org.junit.jupiter.api.Test
-    void setDate() {
-        //TODO
+    @Test
+
+    public void getDate() {
+
     }
 
-    @org.junit.jupiter.api.Test
-    void setIcq() {
+    @Test
+    public void getPhone() {
+        Account account = new Account();
+    }
+
+    @Test
+    public void getIcq() {
         Account account = new Account();
         account.setIcq(1);
         Assert.assertEquals(1, account.getIcq());
     }
 
-    @org.junit.jupiter.api.Test
-    void setAddressHome() {
+    @Test
+    public void getAddressHome() {
         Account account = new Account();
         account.setAddressHome("test");
         Assert.assertEquals(expectedString, account.getAddressHome());
     }
 
-    @org.junit.jupiter.api.Test
-    void setAddressJob() {
+    @Test
+    public void getAddressJob() {
         Account account = new Account();
         account.setAddressJob("test");
         Assert.assertEquals(expectedString, account.getAddressJob());
     }
 
-    @org.junit.jupiter.api.Test
-    void setEmail() {
+    @Test
+    void getEmail() {
         Account account = new Account();
         account.setEmail("test");
         Assert.assertEquals(expectedString, account.getEmail());
     }
 
-    @org.junit.jupiter.api.Test
-    void setAboutMe() {
+    @Test
+    public void getAboutMe() {
         Account account = new Account();
         account.setAboutMe("test");
         Assert.assertEquals(expectedString, account.getAboutMe());
     }
 
-    @org.junit.jupiter.api.Test
-    void testToString() {
+    @Test
+    public void setUsername() {
+        Account account = new Account();
+        account.setUsername("test");
+        Assert.assertEquals(expectedString, account.getUsername());
+    }
+
+    @Test
+    public void setPassword() {
+        Account account = new Account();
+        account.setPassword("test");
+        Assert.assertEquals(expectedString, account.getPassword());
+    }
+
+    @Test
+    public void setRole() {
+        Account account = new Account();
+        account.setRole(1);
+        Assert.assertEquals(1, account.getRole());
+    }
+
+    @Test
+    public void setId() {
+        Account account = new Account();
+        account.setId(1);
+        Assert.assertEquals(1, account.getId());
+    }
+
+    @Test
+    public void setName() {
+        Account account = new Account();
+        account.setName("test");
+        Assert.assertEquals(expectedString, account.getName());
+    }
+
+    @Test
+    public void setSurname() {
+        Account account = new Account();
+        account.setSurname("test");
+        Assert.assertEquals(expectedString, account.getSurname());
+    }
+
+    @Test
+    public void setLastName() {
+        Account account = new Account();
+        account.setLastName("test");
+        Assert.assertEquals(expectedString, account.getLastName());
+    }
+
+    @Test
+    public void setDate() {
+
+    }
+
+    @Test
+    public void setIcq() {
+        Account account = new Account();
+        account.setIcq(1);
+        Assert.assertEquals(1, account.getIcq());
+    }
+
+    @Test
+    public void setAddressHome() {
+        Account account = new Account();
+        account.setAddressHome("test");
+        Assert.assertEquals(expectedString, account.getAddressHome());
+    }
+
+    @Test
+    public void setAddressJob() {
+        Account account = new Account();
+        account.setAddressJob("test");
+        Assert.assertEquals(expectedString, account.getAddressJob());
+    }
+
+    @Test
+    public void setEmail() {
+        Account account = new Account();
+        account.setEmail("test");
+        Assert.assertEquals(expectedString, account.getEmail());
+    }
+
+    @Test
+    public void setAboutMe() {
+        Account account = new Account();
+        account.setAboutMe("test");
+        Assert.assertEquals(expectedString, account.getAboutMe());
+    }
+
+    @Test
+    public void testToString() {
         Account account = new Account();
         account.setUsername("test");
         Assert.assertEquals(expectedString, account.getUsername());

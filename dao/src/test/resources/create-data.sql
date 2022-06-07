@@ -1,6 +1,6 @@
 CREATE TABLE `account`
 (
-    `idAccount`   int         NOT NULL AUTO_INCREMENT,
+    `account_id`   int         NOT NULL AUTO_INCREMENT,
     `name`        varchar(45) NOT NULL,
     `surname`     varchar(45) NOT NULL,
     `lastname`    varchar(45) NOT NULL,
@@ -11,7 +11,7 @@ CREATE TABLE `account`
     `addressJob`  varchar(100) DEFAULT NULL,
     `email`       varchar(45)  DEFAULT NULL,
     `aboutMe`     varchar(300) DEFAULT NULL,
-    PRIMARY KEY (`idAccount`)
+    PRIMARY KEY (`account_id`)
 );
 
 CREATE TABLE `friends`
@@ -31,16 +31,16 @@ CREATE TABLE `group`
     `Account`         int         NOT NULL,
     PRIMARY KEY (`idgroup`),
     KEY `idAccount_idx` (`Account`),
-    CONSTRAINT `Account` FOREIGN KEY (`Account`) REFERENCES `account` (`idAccount`)
+    CONSTRAINT `Account` FOREIGN KEY (`Account`) REFERENCES `account` (`account_id`)
 );
 
 CREATE TABLE `phone`
 (
-    `idaccount`   int         DEFAULT NULL,
+    `account_id`   int         DEFAULT NULL,
     `phonenumber` varchar(45) DEFAULT NULL,
     `sign`        binary(1)   DEFAULT NULL,
     `idphone`     int NOT NULL AUTO_INCREMENT,
     PRIMARY KEY (`idphone`),
-    KEY `idAccount_idx` (`idaccount`),
-    CONSTRAINT `idAccount` FOREIGN KEY (`idaccount`) REFERENCES `account` (`idAccount`)
+    KEY `idAccount_idx` (`account_id`),
+    CONSTRAINT `idAccount` FOREIGN KEY (`account_id`) REFERENCES `account` (`account_id`)
 );

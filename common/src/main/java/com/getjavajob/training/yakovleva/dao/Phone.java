@@ -1,8 +1,10 @@
 package com.getjavajob.training.yakovleva.dao;
 
+import java.util.Objects;
+
 public class Phone {
     private int id;
-    private int idAccount;//TODO
+    private int accountId;
     private String phoneNumber;
     private PhoneType phoneType;
 
@@ -22,12 +24,12 @@ public class Phone {
         this.phoneType = PhoneType.values()[status];
     }
 
-    public int getIdAccount() {
-        return idAccount;
+    public int getAccountId() {
+        return accountId;
     }
 
-    public void setIdAccount(int idAccount) {
-        this.idAccount = idAccount;
+    public void setAccountId(int accountId) {
+        this.accountId = accountId;
     }
 
     public String getPhoneNumber() {
@@ -42,9 +44,23 @@ public class Phone {
     public String toString() {
         return "Phone{" +
                 " id=" + id +
-                ", idAccount=" + idAccount +
+                ", accountId=" + accountId +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", phoneType=" + phoneType +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Phone phone = (Phone) o;
+        return id == phone.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, accountId, phoneNumber, phoneType);
+    }
+
 }

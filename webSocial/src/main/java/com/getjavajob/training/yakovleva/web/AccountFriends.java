@@ -12,7 +12,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/AccountFriends")
+@WebServlet("/account-friends")
 public class AccountFriends extends ApplicationContextServlet {
 
     @Override
@@ -21,13 +21,13 @@ public class AccountFriends extends ApplicationContextServlet {
         HttpSession session = request.getSession();
         Account account = (Account) session.getAttribute("account");
         try {
-            List<Friend> friends = friendService.readAccountFriends(account.getId());
+            List<Account> friends = accountService.getFriendsAccount(account.getId());
             System.out.println("friends - " + friends);
             request.setAttribute("friends", friends);
         } catch (Exception e) {
             System.out.println(e);//send redirect
         }
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("jsp/AccountFriends.jsp");
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher("jsp/friend/account-friends.jsp");
         requestDispatcher.forward(request, response);
     }
 

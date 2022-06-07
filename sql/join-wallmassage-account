@@ -1,4 +1,4 @@
-SELECT username, massage, picture, publicationDate
+SELECT username, massage, picture, publication_date
 FROM account
-         JOIN wallmassage ON idAccount = idSender
-WHERE idReceiving = 1
+         JOIN wallmassage ON account_id = sender_id
+WHERE receiver_id = 1
