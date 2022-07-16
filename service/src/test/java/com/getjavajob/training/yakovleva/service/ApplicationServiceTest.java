@@ -1,7 +1,6 @@
 package com.getjavajob.training.yakovleva.service;
 
 import com.getjavajob.training.yakovleva.dao.Application;
-import com.getjavajob.training.yakovleva.dao.Friend;
 import com.getjavajob.training.yakovleva.dao.Group;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
@@ -79,7 +78,7 @@ class ApplicationServiceTest {
     @Test
     void readAccount() {
         Application application = Mockito.mock(Application.class);
-        Friend friend = Mockito.mock(Friend.class);
+//        Friend friend = Mockito.mock(Friend.class);
         ApplicationService applicationService = Mockito.mock(ApplicationService.class);
         //Mockito.when(applicationService.getAccount(friend)).thenReturn(application);
         //Assert.assertEquals(application, applicationService.getAccount(friend));

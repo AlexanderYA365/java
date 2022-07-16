@@ -1,6 +1,9 @@
 package com.getjavajob.training.yakovleva.service;
 
-import com.getjavajob.training.yakovleva.dao.*;
+import com.getjavajob.training.yakovleva.dao.Account;
+import com.getjavajob.training.yakovleva.dao.AccountDao;
+import com.getjavajob.training.yakovleva.dao.Phone;
+import com.getjavajob.training.yakovleva.dao.PhoneDao;
 
 import java.util.List;
 
@@ -35,9 +38,11 @@ public class AccountService {
         try {
             int id = accountDAO.getIdAccount(account);
             boolean result = false;
-            for (Phone phone : account.getPhones()) {
-                phone.setAccountId(id);
-                result = phoneDao.update(phone);
+            if (account.getPhones().size() != 0) {
+                for (Phone phone : account.getPhones()) {
+                    phone.setAccountId(id);
+                    result = phoneDao.update(phone);
+                }
             }
             return accountDAO.updateAccount(account) || result;
         } catch (Exception e) {

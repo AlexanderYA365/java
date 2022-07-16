@@ -5,7 +5,6 @@
   Time: 20:04
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
@@ -14,6 +13,9 @@
 </head>
 <body>
 <%@ include file="../navbar.jsp" %>
+<br>
+<br>
+<br>
 <main role="main">
     <div id="main" class="modal">
         <div class="article1">
@@ -25,7 +27,8 @@
                 </tr>
                 <c:forEach var="message" items="${personalMail}">
                     <tr>
-                        <td><c:out value="${message.usernameSender}"/></td>
+                        <td><a href='<c:url value = "/show-friend?id=${message.senderId}" />'>
+                            <c:out value="${message.usernameSender}"/></a></td>
                         <td><c:out value="${message.publicationDate}"/></td>
                         <td><c:out value="${message.message}"/></td>
                     </tr>

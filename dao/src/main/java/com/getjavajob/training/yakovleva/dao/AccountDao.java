@@ -17,12 +17,13 @@ public class AccountDao {
     public void create(Account account) {
         String sql = "INSERT INTO account(name, surname, lastname, date, icq, address_home, " +
                 "address_job, email, about_me, username, password, role) " +
-                "VALUES (?,?,?,NOW(),?,?,?,?,?,?,?,?);";
+                "VALUES (?,?,?,NOW(),?,?,?,?,?,?,?,?,?,?);";
         System.out.println(sql);
         jdbcTemplate.update(sql,
                 account.getName(), account.getSurname(), account.getLastName(), account.getIcq(),
                 account.getAddressHome(), account.getAddressJob(), account.getEmail(), account.getAboutMe(),
-                account.getUsername(), account.getPassword(), account.getRole());
+                account.getUsername(), account.getPassword(), account.getRole(),
+                account.getPhoto(), account.getPhotoFileName());
     }
 
     public int getIdAccount(Account account) {
@@ -74,9 +75,13 @@ public class AccountDao {
                 " lastname = ?, date = ?, icq = ?, " +
                 "address_home = ?, address_job = ?," +
                 " email = ?, about_me = ?," +
-                " role = ?" +
+                " role = ?," +
+                " photo = ?," +
+                "photo_file_name = ?" +
                 " WHERE account_id = ?";
         boolean result = false;
+        System.out.println("photo - " + account.getPhoto());
+        System.out.println("photoFileName - " + account.getPhotoFileName());
         try {
             result = jdbcTemplate.update(sql, account.getName(),
                     account.getSurname(),
@@ -84,6 +89,8 @@ public class AccountDao {
                     account.getAddressHome(), account.getAddressJob(),
                     account.getEmail(), account.getAboutMe(),
                     account.getRole(),
+                    account.getPhoto(),
+                    account.getPhotoFileName(),
                     account.getId()) > 0;
         }catch (Exception ex){
             System.out.println("updateAccount exception - " + ex);
@@ -107,6 +114,8 @@ public class AccountDao {
             account.setUsername(resultSet.getString(11));
             account.setPassword(resultSet.getString(12));
             account.setRole(resultSet.getInt(13));
+            account.setPhoto(resultSet.getBytes(14));
+            account.setPhotoFileName(resultSet.getString(15));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -117,7 +126,7 @@ public class AccountDao {
         System.out.println("List<Account> getFriendsAccount");
         String sql = "SELECT a.account_id, a.name, a.surname, a.lastname, " +
                 "a.date, a.icq, a.address_home, a.address_job, a.email, " +
-                "a.about_me, a.username, a.password, a.role FROM account a, " +
+                "a.about_me, a.username, a.password, a.role, a.photo, a.photo_file_name FROM account a, " +
                 "relations r WHERE a.account_id = r.friend_id and r.account_id = ?";
         return jdbcTemplate.query(sql,
                 new Object[]{accountId},

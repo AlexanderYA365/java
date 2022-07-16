@@ -5,7 +5,6 @@
   Time: 19:51
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <html>
@@ -17,10 +16,10 @@
 <%@ include file="../navbar.jsp" %>
 <main role="main">
     <form class="modal">
-        <br>name: ${account.name}
-        <br>surname: ${account.surname}
-        <br>lastName: ${account.lastName}
-        <br>Date: ${account.date}
+        <br>Имя: ${account.name}
+        <br>Фамилия: ${account.surname}
+        <br>Отчество: ${account.lastName}
+        <br>Дата: ${account.date}
         <br>icq: ${account.icq}
 
         <c:forEach var="phone" items="${account.phones}">
@@ -35,11 +34,10 @@
             </c:if>
             ${phone.phoneNumber}
         </c:forEach>
-
-        <br>addressHome: ${account.addressHome}
-        <br>addressJob: ${account.addressJob}
+        <br>Домашний адрес: ${account.addressHome}
+        <br>Рабочий адрес: ${account.addressJob}
         <br>email: ${account.email}
-        <br>aboutMe: ${account.aboutMe}
+        <br>Обо мне: ${account.aboutMe}
     </form>
     <button onclick="location.href='edit-account-settings'">Изменить данные пользователя</button>
 </main>

@@ -5,14 +5,13 @@ import com.getjavajob.training.yakovleva.dao.Relations;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/add-friend-account")
+//@WebServlet("/add-friend-account")
 public class AddFriendAccount extends ApplicationContextServlet {
 
     @Override
@@ -24,8 +23,8 @@ public class AddFriendAccount extends ApplicationContextServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String[] accountId = request.getParameterValues("accountId");
         System.out.println("add-friend-account doPost");
+        String accountId = request.getParameter("friendId");
         String name = request.getParameter("name");
         try {
             if (accountId == null) {
@@ -40,7 +39,7 @@ public class AddFriendAccount extends ApplicationContextServlet {
             if (accountId != null) {
                 HttpSession session = request.getSession();
                 Account account = (Account) session.getAttribute("account");
-                Account accountFriend = accountService.get(Integer.parseInt(accountId[0]));
+                Account accountFriend = accountService.get(Integer.parseInt(accountId));
                 System.out.println("account - " + account);
                 System.out.println("friend - " + accountFriend);
                 Relations relations = new Relations();

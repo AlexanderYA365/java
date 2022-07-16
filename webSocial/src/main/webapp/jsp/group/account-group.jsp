@@ -28,7 +28,7 @@
                 </tr>
                 <c:forEach var="group" items="${groups}">
                     <tr>
-                        <td><a href='<c:url value = "/show-group?id=${group.groupId}" />'>${group.groupName}</a></td>
+                        <td><a href='<c:url value = "show-group?id=${group.groupId}" />'>${group.groupName}</a></td>
                         <td><c:out value="${group.logo}"/></td>
                     </tr>
                 </c:forEach>
@@ -36,9 +36,9 @@
         </div>
     </form>
     <br>
-    <button onclick="location.href='CreateGroup'">Создать группу</button>
+    <button onclick="location.href='create-group'">Создать группу</button>
     <br>
-    <button onclick="location.href='AccountFindGroup'">поиск группы</button>
+    <button onclick="location.href='account-find-group'">поиск группы</button>
 </main>
 </body>
 </html>

@@ -5,14 +5,13 @@ import com.getjavajob.training.yakovleva.dao.Message;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/account-write-message")
+//@WebServlet("/account-write-message")
 public class AccountWriteMessage extends ApplicationContextServlet {
 
     @Override

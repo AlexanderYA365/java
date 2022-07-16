@@ -5,7 +5,6 @@
   Time: 18:52
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <html>
@@ -17,6 +16,11 @@
 <%@ include file="navbar.jsp" %>
 <br>
 <br>
+<br>
+<div align="center">
+    <img src="data:image/jpg;base64, ${encodedPhoto}"
+         alt="Responsive image" style="width:120px;height:140px;">
+</div>
 <br>
 <main role="main" class="modal">
     <form method="post" class="modal">

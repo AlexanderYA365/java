@@ -16,7 +16,7 @@ public class MessageDao {
     }
 
     public boolean create(Message message) {
-        String sql = "INSERT INTO massage(sender_id, receiver_id, massage, picture, publication_date," +
+        String sql = "INSERT INTO message(sender_id, receiver_id, message, picture, publication_date," +
                 " edited, message_type) " +
                 "VALUES (?,?,?,?, NOW(), ?, ?);";
         System.out.println(sql);
@@ -28,14 +28,14 @@ public class MessageDao {
 
     public List<Message> getMessageUserId(int id) {
         System.out.println("readMessageDaoId - start");
-        String sql = "SELECT * FROM massage WHERE receiver_id = ?";
+        String sql = "SELECT * FROM message WHERE receiver_id = ?";
         System.out.println(sql);
         return jdbcTemplate.queryForObject(sql, new Object[]{id}, (resultSet, i) -> fillMessages(resultSet));
     }
 
     public List<Message> getMessageUserIdNameSender(int receiverId) {
         System.out.println("readMessageUserIdNameSender - start");
-        String sql = "SELECT id, sender_id, receiver_id, name, massage, picture, publication_date FROM account JOIN massage " +
+        String sql = "SELECT id, sender_id, receiver_id, name, message, picture, publication_date FROM account JOIN message " +
                 "ON account_id = sender_id WHERE receiver_id = ? AND message_type = 1;";
         System.out.println(sql);
         return jdbcTemplate.queryForObject(sql, new Object[]{receiverId}, (resultSet, i) -> fillMessagesAccount(resultSet));
@@ -43,7 +43,7 @@ public class MessageDao {
 
     public List<Message> getUniqueMessagesForUser(int receiverId) {
         System.out.println("readMessage - start");
-        String sql = "SELECT id, sender_id, receiver_id, name, massage, picture, publication_date FROM account JOIN massage " +
+        String sql = "SELECT id, sender_id, receiver_id, name, message, picture, publication_date FROM account JOIN message " +
                 "ON account_id = sender_id WHERE receiver_id = ? AND message_type = 1 GROUP BY sender_id;";
         System.out.println(sql);
         return jdbcTemplate.queryForObject(sql, new Object[]{receiverId}, (resultSet, i) -> fillMessagesAccount(resultSet));
@@ -51,8 +51,8 @@ public class MessageDao {
 
     public List<Message> getMessageAccounts(int senderId, int receiverId) {
         System.out.println("readsMessageAccounts - start");
-        String sql = "SELECT id, sender_id, receiver_id, a.name, b.name, massage, picture, publication_date, " +
-                "edited, message_type FROM massage " +
+        String sql = "SELECT id, sender_id, receiver_id, a.name, b.name, message, picture, publication_date, " +
+                "edited, message_type FROM message " +
                 "INNER JOIN account a ON receiver_id = a.account_id " +
                 "INNER JOIN account b ON sender_id = b.account_id " +
                 "WHERE (sender_id = ? AND receiver_id = ?) OR (sender_id = ? AND receiver_id = ?) AND message_type = 1";
@@ -63,8 +63,8 @@ public class MessageDao {
 
     public List<Message> getWallMessage(int receivingId) {
         System.out.println("readWallMessage - start");
-        String sql = "SELECT id, sender_id, receiver_id, a.name, b.name, massage, picture, publication_date, edited, " +
-                "message_type FROM massage " +
+        String sql = "SELECT id, sender_id, receiver_id, a.name, b.name, message, picture, publication_date, edited, " +
+                "message_type FROM message " +
                 "INNER JOIN account a ON receiver_id = a.account_id " +
                 "INNER JOIN account b ON sender_id = b.account_id " +
                 "WHERE receiver_id = ? AND message_type = 0";
@@ -117,7 +117,7 @@ public class MessageDao {
 
     public boolean delete(int id) {
         System.out.println("messageDao, delete(id) - " + id);
-        String sql = "DELETE FROM massage WHERE id = ?";
+        String sql = "DELETE FROM message WHERE id = ?";
         return jdbcTemplate.update(sql, id) > 0;
     }
 

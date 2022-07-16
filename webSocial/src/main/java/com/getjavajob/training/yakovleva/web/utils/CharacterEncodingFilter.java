@@ -4,25 +4,21 @@ import javax.servlet.*;
 import java.io.IOException;
 
 public class CharacterEncodingFilter implements Filter {
-    private String encoding;
 
-    @Override
-    public void init(FilterConfig filterConfig) {
-        encoding = filterConfig.getInitParameter("encoding");
+    public void init(FilterConfig config) throws ServletException {
     }
 
     @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        if (encoding != null) {
-            servletResponse.setContentType("text/html;charset=utf-8");
-            servletRequest.setCharacterEncoding(encoding);
-            servletResponse.setCharacterEncoding(encoding);
-        }
-        filterChain.doFilter(servletRequest, servletResponse);
+    public void doFilter(ServletRequest request,
+                         ServletResponse response,
+                         FilterChain chain) throws ServletException, IOException {
+//        request.setCharacterEncoding("UTF-8");
+//        response.setContentType("text/html; charset=UTF-8");
+//        response.setCharacterEncoding("UTF-8");
+        chain.doFilter(request, response);
     }
 
-    @Override
     public void destroy() {
-
     }
+
 }

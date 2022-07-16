@@ -13,7 +13,7 @@ public class Account {
     private Date date;
     private List<Phone> phones;
     private int icq;
-    private String photoFile;
+    private String photoFileName;
     private byte[] photo;
     private String addressHome;
     private String addressJob;
@@ -24,7 +24,7 @@ public class Account {
     private Role role;
 
     public Account(String name, String surname, String lastName, Date date, List<Phone> phones,
-                   int icq, String photoFile, byte[] photo, String addressHome, String addressJob, String email, String aboutMe, String username,
+                   int icq, String photoFileName, byte[] photo, String addressHome, String addressJob, String email, String aboutMe, String username,
                    String password, Role role) {
         this.name = name;
         this.surname = surname;
@@ -32,7 +32,7 @@ public class Account {
         this.date = date;
         this.phones = phones;
         this.icq = icq;
-        this.photoFile = photoFile;
+        this.photoFileName = photoFileName;
         this.photo = photo;
         this.addressHome = addressHome;
         this.addressJob = addressJob;
@@ -160,12 +160,12 @@ public class Account {
         this.aboutMe = aboutMe;
     }
 
-    public String getPhotoFile() {
-        return photoFile;
+    public String getPhotoFileName() {
+        return photoFileName;
     }
 
-    public void setPhotoFile(String photoFile) {
-        this.photoFile = photoFile;
+    public void setPhotoFileName(String photoFileName) {
+        this.photoFileName = photoFileName;
     }
 
     public byte[] getPhoto() {
@@ -186,8 +186,8 @@ public class Account {
                 ", date=" + date +
                 ", phones=" + phones +
                 ", icq=" + icq +
-                ", photoFile='" + photoFile + '\'' +
-                ", photo=" + Arrays.toString(photo) +
+                ", photoFileName='" + photoFileName + '\'' +
+//                ", photo=" + photo.length +
                 ", addressHome='" + addressHome + '\'' +
                 ", addressJob='" + addressJob + '\'' +
                 ", email='" + email + '\'' +
@@ -210,7 +210,7 @@ public class Account {
                 Objects.equals(lastName, account.lastName) &&
                 Objects.equals(date, account.date) &&
                 Objects.equals(phones, account.phones) &&
-                Objects.equals(photoFile, account.photoFile) &&
+                Objects.equals(photoFileName, account.photoFileName) &&
                 Arrays.equals(photo, account.photo) &&
                 Objects.equals(addressHome, account.addressHome) &&
                 Objects.equals(addressJob, account.addressJob) &&
@@ -223,7 +223,7 @@ public class Account {
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(id, name, surname, lastName, date, phones, icq, photoFile, addressHome, addressJob, email, aboutMe, username, password, role);
+        int result = Objects.hash(id, name, surname, lastName, date, phones, icq, photoFileName, addressHome, addressJob, email, aboutMe, username, password, role);
         result = 31 * result + Arrays.hashCode(photo);
         return result;
     }

@@ -6,7 +6,6 @@ import com.getjavajob.training.yakovleva.dao.PhoneType;
 import com.getjavajob.training.yakovleva.dao.Role;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -17,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@WebServlet("/edit-account-settings")
+//@WebServlet("/edit-account-settings")
 public class AccountEditSettings extends ApplicationContextServlet {
 
     @Override
@@ -33,11 +32,10 @@ public class AccountEditSettings extends ApplicationContextServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("AccountEditSettings doPost");
-        Account account = new Account();
         HttpSession session = request.getSession();
         Account editAccount = (Account) session.getAttribute("account");
         System.out.println("editAccount - " + editAccount);
-        account = setDataForm(request, editAccount);
+        Account account = setDataForm(request, editAccount);
         try {
             accountService.update(account);
         } catch (Exception e) {
@@ -96,31 +94,39 @@ public class AccountEditSettings extends ApplicationContextServlet {
     private List<Phone> getPhonesFromForm(HttpServletRequest request, Account account) {
         System.out.println("setPhone");
         List<Phone> phones = new ArrayList<>();
-        String[] requestPhone = request.getParameterValues("phone");
-        String[] requestPhoneType = request.getParameterValues("typePhone");
-        String[] requestPhoneId = request.getParameterValues("phoneId");
-        for (int i = 0; i < requestPhone.length; i++) {
-            Phone phone = new Phone();
-            phone.setPhoneNumber(requestPhone[i]);
-            phone.setPhoneType(PhoneType.valueOf(requestPhoneType[i]).getStatus());
-            phone.setAccountId(account.getId());
-            phone.setId(Integer.parseInt(requestPhoneId[i]));
-            System.out.println("update phone - " + phone);
-            phones.add(phone);
+        if (account.getPhones().size() != 0) {
+            String[] requestPhone = request.getParameterValues("phone");
+            String[] requestPhoneType = request.getParameterValues("typePhone");
+            String[] requestPhoneId = request.getParameterValues("phoneId");
+            for (int i = 0; i < requestPhone.length; i++) {
+                Phone phone = new Phone();
+                phone.setPhoneNumber(requestPhone[i]);
+                phone.setPhoneType(PhoneType.valueOf(requestPhoneType[i]).getStatus());
+                phone.setAccountId(account.getId());
+                phone.setId(Integer.parseInt(requestPhoneId[i]));
+                System.out.println("update phone - " + phone);
+                phones.add(phone);
+            }
+            if (account.getPhones().size() != phones.size()) {
+                removePhone(phones, account);
+            }
         }
-        removePhone(phones, account);
-        String newPhone = request.getParameter("newPhone");
-        String typeNewPhone = request.getParameter("typeNewPhone");
-        System.out.println("newPhone - " + newPhone);
-        System.out.println("typeNewPhone - " + typeNewPhone);
-        if (newPhone != null) {
-            System.out.println("create new phone from - accountEditSettings");
-            Phone phone = new Phone();
-            phone.setPhoneNumber(newPhone);
-            phone.setPhoneType(PhoneType.valueOf(typeNewPhone).getStatus());
-            phone.setAccountId(account.getId());
-            phoneService.create(phone);
-            phones.add(phone);
+        try {
+            String newPhone = request.getParameter("newPhone");
+            String typeNewPhone = request.getParameter("typeNewPhone");
+            System.out.println("newPhone - " + newPhone);
+            System.out.println("typeNewPhone - " + typeNewPhone);
+            if (newPhone != null) {
+                System.out.println("create new phone from - accountEditSettings");
+                Phone phone = new Phone();
+                phone.setPhoneNumber(newPhone);
+                phone.setPhoneType(PhoneType.valueOf(typeNewPhone).getStatus());
+                phone.setAccountId(account.getId());
+                phoneService.create(phone);
+                phones.add(phone);
+            }
+        } catch (Exception ex) {
+            System.out.println("no new phone");
         }
         System.out.println("phones - " + phones);
         return phones;

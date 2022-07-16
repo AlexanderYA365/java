@@ -1,5 +1,6 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+
 <html>
 <head>
     <title>Title</title>
@@ -33,16 +34,26 @@
     </div>
     <br>
 
+
     <c:if test="${friendFlag == 1}">
-    Вы можете подать заявку в друзья
     <!------аватарка, информация пользователя, подать заявку-->
+    <form method="post">
+        <button type="submit" name="add"> Подать заявку на добавление в друзья</button>
+    </form>
     </c:if>
     <c:if test="${friendFlag == 2}">
     Вам отказано в просмотре страницы, пользователь отклонил Вашу заявку
     <!------аватарка, информация пользователя, повторно подать заявку-->
+    <br>
+    <form modelAttribute="friend" method="post">
+        <button type="submit" name="add-account"> Подать заявку на добавление в друзья</button>
+    </form>
     </c:if>
     <c:if test="${friendFlag == 0}">
-    Вы можете просматривать страницу, оставлять сообщения на стене
+        <%--    Вы можете просматривать страницу, оставлять сообщения на стене--%>
+    <form method="post">
+        <button type="submit" name="delete">удалить из друзей</button>
+    </form>
     <!------страница видна пользователю-->
     <br>
     <div>

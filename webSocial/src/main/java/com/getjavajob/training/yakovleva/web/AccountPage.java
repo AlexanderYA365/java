@@ -2,17 +2,17 @@ package com.getjavajob.training.yakovleva.web;
 
 import com.getjavajob.training.yakovleva.dao.Account;
 import com.getjavajob.training.yakovleva.dao.Message;
+import com.getjavajob.training.yakovleva.service.MessageService;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/main")
+//@WebServlet("/main")
 public class AccountPage extends ApplicationContextServlet {
 
     @Override
@@ -43,6 +43,15 @@ public class AccountPage extends ApplicationContextServlet {
         System.out.println("NewWallMessage - " + newMessage);
         System.out.println("replyAccount - " + replyAccount);
         System.out.println("deleteText - " + deleteText);
+        createMessage(account, newMessage, replyAccount, deleteText, messageService);
+        doGet(request, response);
+    }
+
+    public static void createMessage(Account account,
+                                     String newMessage,
+                                     String replyAccount,
+                                     String deleteText,
+                                     MessageService messageService) {
         try {
             if (newMessage != null) {
                 System.out.println("create new message");
@@ -63,9 +72,8 @@ public class AccountPage extends ApplicationContextServlet {
                 messageService.delete(messageId);
             }
         } catch (Exception e) {
-            System.out.println(e);//send redirect
+            System.out.println(e);
         }
-        doGet(request, response);
     }
 
 }

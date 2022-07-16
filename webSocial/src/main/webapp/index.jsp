@@ -5,8 +5,8 @@
   Time: 18:28
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <html>
 <head>
@@ -20,7 +20,7 @@
     Добро пожаловать
 </p>
 <div class="form">
-    <form class="modal" action="${pageContext.request.contextPath}/login" method="get">
+    <form class="modal" modelAttribute="account" action="${pageContext.request.contextPath}/index" method="GET">
         <fieldset>
             <legend>Введите данные:</legend>
             <c:if test="${errorLogin == 1}">
@@ -36,7 +36,7 @@
             </div>
             <div class="checkbox">
                 <label>
-                    <input type="checkbox" name="rememberMe" value="active"> Запомнить меня
+                    <input id="checkbox" type="checkbox" name="checkbox"> Запомнить меня
                 </label>
             </div>
             <div class="field">
@@ -44,7 +44,7 @@
             </div>
         </fieldset>
     </form>
-    <button class="reg" onclick="location.href='RegistrationAccount'">Зарегистрировать новый аккаунт</button>
+    <button class="reg" onclick="location.href='registration-account'">Зарегистрировать новый аккаунт</button>
 </div>
 
 </body>
