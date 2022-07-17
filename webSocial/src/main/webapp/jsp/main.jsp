@@ -19,7 +19,9 @@
 <br>
 <div align="center">
     <img src="data:image/jpg;base64, ${encodedPhoto}"
-         alt="Responsive image" style="width:120px;height:140px;">
+         alt="Responsive image" style="width:120px;height:140px;"
+         onerror="${pageContext.request.contextPath}/resources/img/noPhotoAvailable.jpg" class="img-fluid"
+         alt="Responsive image">
 </div>
 <br>
 <main role="main" class="modal">

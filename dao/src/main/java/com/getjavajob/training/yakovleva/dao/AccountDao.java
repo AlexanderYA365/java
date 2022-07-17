@@ -1,7 +1,9 @@
 package com.getjavajob.training.yakovleva.dao;
 
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -16,7 +18,7 @@ public class AccountDao {
 
     public void create(Account account) {
         String sql = "INSERT INTO account(name, surname, lastname, date, icq, address_home, " +
-                "address_job, email, about_me, username, password, role) " +
+                "address_job, email, about_me, username, password, role, photo, photo_file_name) " +
                 "VALUES (?,?,?,NOW(),?,?,?,?,?,?,?,?,?,?);";
         System.out.println(sql);
         jdbcTemplate.update(sql,
@@ -92,7 +94,7 @@ public class AccountDao {
                     account.getPhoto(),
                     account.getPhotoFileName(),
                     account.getId()) > 0;
-        }catch (Exception ex){
+        } catch (Exception ex) {
             System.out.println("updateAccount exception - " + ex);
         }
         return result;
@@ -131,5 +133,38 @@ public class AccountDao {
         return jdbcTemplate.query(sql,
                 new Object[]{accountId},
                 (resultSet, i) -> fillAccount(resultSet));
+    }
+
+    public void createAccounts(List<Account> accounts) {
+        String sql = "INSERT INTO account(name, surname, lastname, date, icq, address_home, " +
+                "address_job, email, about_me, " +
+                "username, password, role, photo, photo_file_name) " +
+                "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
+        System.out.println(sql);
+        jdbcTemplate.batchUpdate(sql,
+                new BatchPreparedStatementSetter() {
+                    @Override
+                    public void setValues(PreparedStatement ps, int i) throws SQLException {
+                        ps.setString(1, accounts.get(i).getName());
+                        ps.setString(2, accounts.get(i).getSurname());
+                        ps.setString(3, accounts.get(i).getLastName());
+                        ps.setDate(4, new java.sql.Date(accounts.get(i).getDate().getTime()));
+                        ps.setInt(5, accounts.get(i).getIcq());
+                        ps.setString(6, accounts.get(i).getAddressHome());
+                        ps.setString(7, accounts.get(i).getAddressJob());
+                        ps.setString(8, accounts.get(i).getEmail());
+                        ps.setString(9, accounts.get(i).getAboutMe());
+                        ps.setString(10, accounts.get(i).getUsername());
+                        ps.setString(11, accounts.get(i).getPassword());
+                        ps.setInt(12, accounts.get(i).getRole());
+                        ps.setBytes(13, accounts.get(i).getPhoto());
+                        ps.setString(14, accounts.get(i).getPhotoFileName());
+                    }
+
+                    @Override
+                    public int getBatchSize() {
+                        return accounts.size();
+                    }
+                });
     }
 }

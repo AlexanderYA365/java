@@ -33,6 +33,15 @@ public class AccountService {
         }
     }
 
+    public void createAccounts(List<Account> accounts) {
+        System.out.println("create accounts");
+        try {
+            accountDAO.createAccounts(accounts);
+        } catch (Exception ex) {
+            System.out.println("create accounts exception - " + ex);
+        }
+    }
+
     public boolean update(Account account) {
         System.out.println("Account update accountId - " + account.getId());
         try {

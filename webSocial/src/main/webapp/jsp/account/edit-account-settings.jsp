@@ -92,8 +92,6 @@
         <br>
         Выберите аватар для загрузки: <input type="file" name="file"><br/>
         Name: <input type="text" name="file-name">
-
-        <%--        <input type="file" id="uploadPhoto" name="uploadPhoto" class="form-control">--%>
         <br><input type="submit" value="сохранить"/>
     </form>
 </main>

@@ -8,6 +8,7 @@ import com.getjavajob.training.yakovleva.service.AccountService;
 import com.getjavajob.training.yakovleva.service.ApplicationService;
 import com.getjavajob.training.yakovleva.service.MessageService;
 import com.getjavajob.training.yakovleva.service.RelationsService;
+import com.getjavajob.training.yakovleva.web.controllers.utils.SocialNetworkUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
+@ControllerAdvice
 @SessionAttributes({"account", "friend"})
 public class FriendController {
     private RelationsService relationsService;
@@ -54,6 +56,9 @@ public class FriendController {
             int friendFlag = application.getId() != 0 ? application.getStatus() : 1;
             System.out.println("friendFlag - " + friendFlag);
             List<Message> messages = messageService.getWallMassageAccount(friendAccount);
+            SocialNetworkUtils socialNetworkUtils = new SocialNetworkUtils();
+            String encodedPhoto = socialNetworkUtils.loadPhoto(friendAccount);
+            modelAndView.addObject("encodedPhoto", encodedPhoto);
             modelAndView.addObject("friendFlag", friendFlag);
             modelAndView.addObject("friendAccount", friendAccount);
             session.setAttribute("friend", friendAccount);
@@ -69,15 +74,9 @@ public class FriendController {
     public ModelAndView addApplication(@RequestParam("id") int id,
                                        @SessionAttribute("friend") Account friend,
                                        @SessionAttribute("account") Account account,
+                                       @RequestParam(value = "write-message", required = false) String writeMessage,
                                        @RequestParam(value = "delete", required = false) String delete,
                                        @RequestParam(value = "add", required = false) String add) {
-        System.out.println("addApplication");
-        System.out.println(id);
-        System.out.println(friend);
-        System.out.println(account);
-        System.out.println("delete - " + delete);
-        System.out.println("add - " + add);
-        System.out.println("add - " + (add != null));
         Relations relations = new Relations(account.getId(), friend.getId());
         Application application = applicationService.getAccount(relations);
         if (add != null) {
@@ -86,6 +85,13 @@ public class FriendController {
         if (delete != null) {
             applicationService.delete(application);
             relationsService.deleteByAccountId(relations);
+        }
+        if (writeMessage != null) {
+            System.out.println("write message");
+            ModelAndView modelAndView = new ModelAndView("redirect:/account-write-message");
+            modelAndView.addObject("idFriend", friend.getId());
+            modelAndView.addObject("account", account);
+            return modelAndView;
         }
         ModelAndView modelAndView = new ModelAndView("/friend/show-friend");
         int friendFlag = application.getId() != 0 ? application.getStatus() : 1;
@@ -105,10 +111,21 @@ public class FriendController {
         return modelAndView;
     }
 
+    @RequestMapping(value = "/friend-wall-message", method = RequestMethod.POST)
+    public void addFriendWallMassage(@ModelAttribute("account") Account account,
+                                     @ModelAttribute("friend") Account friend,
+                                     @RequestParam("NewWallMessage") String message) {
+        System.out.println("account - " + account);
+        System.out.println("friend - " + friend);
+        System.out.println("message - " + message);
+        System.out.println("addFriendWallMassage");
+//        ModelAndView modelAndView = new ModelAndView("redirect:/show-friend");
+//        return modelAndView;
+    }
+
     @RequestMapping(value = "/account-friends", method = RequestMethod.GET)
     public ModelAndView friends(@ModelAttribute("account") Account account) {
         System.out.println("friends");
-        System.out.println("account" + account);
         ModelAndView modelAndView = new ModelAndView("/friend/account-friends");
         List<Account> friends = accountService.getFriendsAccount(account.getId());
         System.out.println("friends - " + friends);
@@ -120,15 +137,8 @@ public class FriendController {
     public ModelAndView friendsRedirect(@ModelAttribute("account") Account account,
                                         @ModelAttribute Account friend) {
         System.out.println("friendsRedirect");
-        System.out.println("account" + account);
-        System.out.println("friend" + friend);
         ModelAndView modelAndView = new ModelAndView("/friend/account-friends");
         return modelAndView;
-    }
-
-    @ModelAttribute("account")
-    public Account shoppingCart() {
-        return new Account();
     }
 
     @RequestMapping(value = "/add-friend-account", method = RequestMethod.POST)

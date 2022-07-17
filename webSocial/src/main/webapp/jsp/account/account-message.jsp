@@ -15,7 +15,7 @@
 <body>
 <%@ include file="../navbar.jsp" %>
 <main role="main">
-    <form action="account-write-message" class="modal">
+    <form action="account-message" class="modal" method="POST">
         <c:if test="${haveMessage == 0}">
             <table>
                 <tr>

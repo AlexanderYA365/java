@@ -34,31 +34,46 @@ public class MessageDao {
     }
 
     public List<Message> getMessageUserIdNameSender(int receiverId) {
-        System.out.println("readMessageUserIdNameSender - start");
-        String sql = "SELECT id, sender_id, receiver_id, name, message, picture, publication_date FROM account JOIN message " +
-                "ON account_id = sender_id WHERE receiver_id = ? AND message_type = 1;";
+        System.out.println("readMessageUserIdNameSender");
+        String sql = "SELECT id, sender_id, receiver_id, name, message, picture, publication_date, edited, message_type FROM account JOIN message " +
+                "ON account_id = sender_id WHERE receiver_id =? OR sender_id =? AND message_type = 1;";
         System.out.println(sql);
-        return jdbcTemplate.queryForObject(sql, new Object[]{receiverId}, (resultSet, i) -> fillMessagesAccount(resultSet));
+        return jdbcTemplate.queryForObject(sql, new Object[]{receiverId, receiverId}, (resultSet, i) -> fillMessagesAccount(resultSet));
     }
 
     public List<Message> getUniqueMessagesForUser(int receiverId) {
-        System.out.println("readMessage - start");
-        String sql = "SELECT id, sender_id, receiver_id, name, message, picture, publication_date FROM account JOIN message " +
-                "ON account_id = sender_id WHERE receiver_id = ? AND message_type = 1 GROUP BY sender_id;";
+        System.out.println("getUniqueMessagesForUser");
+        System.out.println("receiverId - " + receiverId);
+        String sql = "SELECT id, sender_id, receiver_id, name, message, picture, publication_date, edited, message_type FROM account JOIN message " +
+                "ON account_id = sender_id WHERE sender_id = ? OR receiver_id = ? AND message_type = 1 GROUP BY sender_id;";
         System.out.println(sql);
-        return jdbcTemplate.queryForObject(sql, new Object[]{receiverId}, (resultSet, i) -> fillMessagesAccount(resultSet));
+        List<Message> messages = new ArrayList<>();
+        try {
+            messages = jdbcTemplate.queryForObject(sql, new Object[]{receiverId, receiverId},
+                    (resultSet, i) -> fillMessagesAccount(resultSet));
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+        System.out.println("mes - " + messages);
+        return messages;
     }
 
     public List<Message> getMessageAccounts(int senderId, int receiverId) {
-        System.out.println("readsMessageAccounts - start");
+        System.out.println("getMessageAccounts");
         String sql = "SELECT id, sender_id, receiver_id, a.name, b.name, message, picture, publication_date, " +
                 "edited, message_type FROM message " +
                 "INNER JOIN account a ON receiver_id = a.account_id " +
                 "INNER JOIN account b ON sender_id = b.account_id " +
                 "WHERE (sender_id = ? AND receiver_id = ?) OR (sender_id = ? AND receiver_id = ?) AND message_type = 1";
         System.out.println(sql);
-        return jdbcTemplate.queryForObject(sql, new Object[]{senderId, receiverId, receiverId, senderId},
-                (resultSet, i) -> fillMessages(resultSet));
+        List<Message> messages = new ArrayList<>();
+        try {
+            messages = jdbcTemplate.queryForObject(sql, new Object[]{senderId, receiverId, receiverId, senderId},
+                    (resultSet, i) -> fillMessages(resultSet));
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+        return messages;
     }
 
     public List<Message> getWallMessage(int receivingId) {
@@ -73,18 +88,18 @@ public class MessageDao {
         return messages;
     }
 
-    private List<Message> getUniqueMessages(int receivingId, String sql) {
-        System.out.println("getUniqueMessages - start");
-        List<Message> messages = new ArrayList<>();
-        try {
-            messages = jdbcTemplate.queryForObject(sql,
-                    new Object[]{receivingId}, (resultSet, i) -> fillMessagesAccount(resultSet));
-            System.out.println("UniqueMessages - " + messages);
-        } catch (Exception ex) {
-            System.out.println(ex);
-        }
-        return getMessages(messages);
-    }
+//    private List<Message> getUniqueMessages(int receivingId, String sql) {
+//        System.out.println("getUniqueMessages - start");
+//        List<Message> messages = new ArrayList<>();
+//        try {
+//            messages = jdbcTemplate.queryForObject(sql,
+//                    new Object[]{receivingId}, (resultSet, i) -> fillMessages(resultSet));
+//            System.out.println("UniqueMessages - " + messages);
+//        } catch (Exception ex) {
+//            System.out.println(ex);
+//        }
+//        return getMessages(messages);
+//    }
 
     private List<Message> getMessages(List<Message> messages) {
         if (messages.size() == 0) {
@@ -123,16 +138,22 @@ public class MessageDao {
 
     private List<Message> fillMessagesAccount(ResultSet resultSet) throws SQLException {
         List<Message> messages = new ArrayList<>();
-        while (resultSet.next()) {
-            Message message = new Message();
-            message.setId(resultSet.getInt(1));
-            message.setSenderId(resultSet.getInt(2));
-            message.setReceiverId(resultSet.getInt(3));
-            message.setUsernameSender(resultSet.getString(4));
-            message.setMessage(resultSet.getString(5));
-            message.setPicture(resultSet.getString(6));
-            message.setPublicationDate(resultSet.getDate(7));
-            messages.add(message);
+        try {
+            while (resultSet.next()) {
+                Message message = new Message();
+                message.setId(resultSet.getInt(1));
+                message.setSenderId(resultSet.getInt(2));
+                message.setReceiverId(resultSet.getInt(3));
+                message.setUsernameSender(resultSet.getString(4));
+                message.setMessage(resultSet.getString(5));
+                message.setPicture(resultSet.getString(6));
+                message.setPublicationDate(resultSet.getDate(7));
+                message.setEdited(resultSet.getBoolean(8));
+                message.setMessageType(resultSet.getInt(9));
+                messages.add(message);
+            }
+        } catch (Exception ex) {
+            System.out.println("ex - " + ex);
         }
         return messages;
     }

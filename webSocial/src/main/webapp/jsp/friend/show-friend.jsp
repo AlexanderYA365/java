@@ -11,6 +11,12 @@
 <br>
 <br>
 <br>
+<div align="center">
+    <img src="data:image/jpg;base64, ${encodedPhoto}"
+         alt="Responsive image" style="width:120px;height:140px;"
+         onerror="this.src='resources/img/noPhotoAvailable.jpg'" class="img-fluid"
+         alt="Responsive image">
+</div>
 <main role="main">
     <div class="main">
         <br/>
@@ -34,6 +40,9 @@
     </div>
     <br>
 
+    <form method="post">
+        <button type="submit" name="write-message">Написать сообщение</button>
+    </form>
 
     <c:if test="${friendFlag == 1}">
     <!------аватарка, информация пользователя, подать заявку-->
@@ -51,9 +60,7 @@
     </c:if>
     <c:if test="${friendFlag == 0}">
         <%--    Вы можете просматривать страницу, оставлять сообщения на стене--%>
-    <form method="post">
-        <button type="submit" name="delete">удалить из друзей</button>
-    </form>
+
     <!------страница видна пользователю-->
     <br>
     <div>
@@ -72,8 +79,13 @@
             </c:forEach>
         </table>
     </div>
-
     </c:if>
     <br>
+
+    <form:form action="friend-wall-message" class="modal" method="post">
+    <textarea name="NewWallMessage" cols="40" rows="3"></textarea>
+    <button type="submit" name="id" value="${friendAccount.id}">
+
+        </form:form>
 </body>
 </html>

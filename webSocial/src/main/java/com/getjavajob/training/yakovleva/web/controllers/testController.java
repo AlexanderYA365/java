@@ -26,6 +26,44 @@ public class testController {
         this.accountService = accountService;
     }
 
+    @RequestMapping(value = "/createBD", method = RequestMethod.GET)
+    public ModelAndView sql() {
+        System.out.println("sql");
+        ModelAndView modelAndView = new ModelAndView("all-accounts");
+        String[] name = {"Александр", "Алексей", "Денис", "Вася", "Виталий"};
+        String[] surname = {"Любимов", "Фатыхов", "Назаренко", "Комаров", "Воронин"};
+        String[] lastName = {"Игоревич", "Николаевич", "Александрович", "Андреевич", "Викторович"};
+        String[] username = {"bobs", "Jonson", "Beap", "Bell", "Bold", "alex", "titer", "beep", "jost", "wolt"};
+        List<Account> accounts = new ArrayList<>();
+        for (int i = 0; i < 5_00_000; i++) {
+            Account account = new Account();
+            account.setName(name[(int) (Math.random() * 5)]);
+            account.setSurname(surname[(int) (Math.random() * 5)]);
+            account.setUsername("w" + username[(int) (Math.random() * 10)] + i);
+            account.setPassword("1111");
+            account.setLastName(lastName[(int) (Math.random() * 5)]);
+            account.setDate(new Date());
+            account.setRole(0);
+            account.setEmail("email");
+            account.setAddressJob("email");
+            account.setAddressHome("email");
+            account.setAboutMe("email");
+            account.setIcq(i);
+            List<Phone> phones = new ArrayList<>();
+            Phone phone = new Phone();
+            phone.setId(11);
+            phone.setPhoneType(1);
+            phone.setPhoneNumber("11111111");
+            account.setPhones(phones);
+            account.setDate(new Date());
+            accounts.add(account);
+        }
+        System.out.println("insert into DB");
+        accountService.createAccounts(accounts);
+        return modelAndView;
+    }
+
+
     @RequestMapping(value = "/test", method = RequestMethod.GET)
     public ModelAndView test(HttpServletRequest request,
                              HttpSession session,

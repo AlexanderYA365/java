@@ -4,6 +4,7 @@ import com.getjavajob.training.yakovleva.dao.*;
 import com.getjavajob.training.yakovleva.service.AccountService;
 import com.getjavajob.training.yakovleva.service.MessageService;
 import com.getjavajob.training.yakovleva.service.PhoneService;
+import com.getjavajob.training.yakovleva.web.controllers.utils.SocialNetworkUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -14,11 +15,9 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 
@@ -153,16 +152,8 @@ public class AccountController {
         System.out.println("public ModelAndView accountPage(){");
         ModelAndView modelAndView = new ModelAndView("main");
         System.out.println("account - " + account);
-        String encodedPhoto = "";
-        byte[] photo = account.getPhoto();
-        if (photo != null) {
-            byte[] encodedPhotoBytes = Base64.getEncoder().encode(account.getPhoto());
-            try {
-                encodedPhoto = new String(encodedPhotoBytes, "UTF-8");
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-        }
+        SocialNetworkUtils socialNetworkUtils = new SocialNetworkUtils();
+        String encodedPhoto = socialNetworkUtils.loadPhoto(account);
         modelAndView.addObject("encodedPhoto", encodedPhoto);
         List<Message> messages = messageService.getWallMassageAccount(account);
         modelAndView.addObject("messages", messages);
@@ -205,7 +196,7 @@ public class AccountController {
         ModelAndView modelAndView = new ModelAndView();
         if (username == null || password == null) {
             System.out.println("redirect to index");
-            modelAndView.setViewName("redirect:index");//надо ли возвращать значение, предлагаю заменить на /
+            modelAndView.setViewName("redirect:index");
         } else {
             Account account = accountService.getAccount(username, password);
             System.out.println("registeredAccount - " + account);

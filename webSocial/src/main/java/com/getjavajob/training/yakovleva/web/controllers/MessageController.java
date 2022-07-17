@@ -5,15 +5,14 @@ import com.getjavajob.training.yakovleva.dao.Message;
 import com.getjavajob.training.yakovleva.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
+@ControllerAdvice
+@SessionAttributes({"account", "friend", "selectUser"})
 public class MessageController {
     private MessageService messageService;
 
@@ -23,22 +22,18 @@ public class MessageController {
     }
 
     @RequestMapping(value = "/account-message", method = RequestMethod.GET)
-    public ModelAndView list(HttpSession session, HttpServletRequest request) {
+    public ModelAndView messages(@ModelAttribute("account") Account account) {
         System.out.println("list");
         ModelAndView modelAndView = new ModelAndView("/account/account-message");
-        Account account = (Account) session.getAttribute("account");
-        request.setAttribute("account", account);
+        System.out.println("account - " + account);
         try {
             List<Message> uniqueMessages = messageService.getUniqueMessages(account);
-            List<Message> messageList = messageService.getMessages(account);
-            if (messageList.size() != 0) {
-                int haveMessage = 0;
-                request.setAttribute("haveMessage", haveMessage);
-                request.setAttribute("uniqueMessages", uniqueMessages);
-                request.setAttribute("messageList", messageList);
+            System.out.println("unique - " + uniqueMessages);
+            if (uniqueMessages.size() != 0) {
+                modelAndView.addObject("haveMessage", 0);
+                modelAndView.addObject("uniqueMessages", uniqueMessages);
             } else {
-                int haveMessage = 1;
-                request.setAttribute("haveMessage", haveMessage);
+                modelAndView.addObject("haveMessage", 1);
             }
         } catch (Exception e) {
             System.out.println(e);
@@ -46,34 +41,39 @@ public class MessageController {
         return modelAndView;
     }
 
+    @RequestMapping(value = "/account-message", method = RequestMethod.POST)
+    public ModelAndView redirectToChart(@RequestParam("selectUser") int idFriend) {
+        System.out.println("redirectToChart");
+        System.out.println("idFriend - " + idFriend);
+        ModelAndView modelAndView = new ModelAndView("redirect:/account-write-message");
+        modelAndView.addObject("idFriend", idFriend);
+        return modelAndView;
+    }
+
     @RequestMapping(value = "/account-write-message", method = RequestMethod.GET)
-    public ModelAndView write(HttpSession session, HttpServletRequest request) {
+    public ModelAndView write(@ModelAttribute("idFriend") int senderId,
+                              @ModelAttribute("account") Account account) {
         System.out.println("write");
+        System.out.println("senderId - " + senderId);
+        System.out.println("account" + account);
         ModelAndView modelAndView = new ModelAndView("/account/account-write-message");
-        Account account = (Account) session.getAttribute("account");
-        String selectUser = request.getParameter("selectUser");
-        System.out.println("selectUser - " + selectUser);
-        int idSender = Integer.parseInt(selectUser);
-        request.setAttribute("account", account);
-        List<Message> personalMail = messageService.getAccountMessages(idSender, account.getId());
+        List<Message> personalMail = messageService.getAccountMessages(senderId, account.getId());
         System.out.println("AccountWriteMessage.personalMail" + personalMail);
-        request.setAttribute("personalMail", personalMail);
+        modelAndView.addObject("personalMail", personalMail);
+        modelAndView.addObject("selectUser", senderId);
         return modelAndView;
     }
 
     @RequestMapping(value = "/account-write-message", method = RequestMethod.POST)
-    public ModelAndView send(HttpSession session, HttpServletRequest request) {
+    public ModelAndView send(@ModelAttribute("account") Account account,
+                             @RequestParam(value = "NewMessage", required = false) String newMessage,
+                             @ModelAttribute("selectUser") int receivingId) {
         System.out.println("send");
-        Account account = (Account) session.getAttribute("account");
-        String newMessage = request.getParameter("NewMessage");
-        System.out.println("NewMessage - " + newMessage);
-        String selectUser = request.getParameter("selectUser");
-        System.out.println("selectUser - " + selectUser);
-        int IdReceiving = Integer.parseInt(selectUser);
-        System.out.println("IdReceiving - " + IdReceiving);
+        System.out.println("new message - " + newMessage);
+        System.out.println("select user - " + receivingId);
         try {
             Message message = new Message();
-            message.setReceiverId(IdReceiving);
+            message.setReceiverId(receivingId);
             message.setSenderId(account.getId());
             message.setMessage(newMessage);
             message.setMessageType(1);
@@ -81,7 +81,10 @@ public class MessageController {
         } catch (Exception e) {
             System.out.println(e);
         }
-        return write(session, request);
+        ModelAndView modelAndView = new ModelAndView("redirect:/account-write-message");
+        modelAndView.addObject("idFriend", receivingId);
+        modelAndView.addObject("account", account);
+        return modelAndView;
     }
 
 }
