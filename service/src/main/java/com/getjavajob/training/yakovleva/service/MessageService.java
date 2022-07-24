@@ -1,7 +1,7 @@
 package com.getjavajob.training.yakovleva.service;
 
-import com.getjavajob.training.yakovleva.dao.Account;
-import com.getjavajob.training.yakovleva.dao.Message;
+import com.getjavajob.training.yakovleva.common.Account;
+import com.getjavajob.training.yakovleva.common.Message;
 import com.getjavajob.training.yakovleva.dao.MessageDao;
 
 import java.util.List;

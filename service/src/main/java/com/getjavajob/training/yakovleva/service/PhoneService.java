@@ -1,15 +1,13 @@
 package com.getjavajob.training.yakovleva.service;
 
-import com.getjavajob.training.yakovleva.dao.Phone;
+import com.getjavajob.training.yakovleva.common.Phone;
 import com.getjavajob.training.yakovleva.dao.PhoneDao;
 
 import java.util.List;
 
-//@Service
 public class PhoneService {
     private final PhoneDao phoneDao;
 
-    //@Autowired
     public PhoneService(PhoneDao phoneDao) {
         this.phoneDao = phoneDao;
     }
@@ -26,7 +24,7 @@ public class PhoneService {
     }
 
     public List<Phone> get(int idPhone) {
-        System.out.println("Read Phone from PhoneService.read");
+        System.out.println("Read Phone from PhoneService.get");
         return phoneDao.get(idPhone);
     }
 

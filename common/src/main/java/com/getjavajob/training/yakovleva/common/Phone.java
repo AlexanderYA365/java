@@ -1,11 +1,19 @@
-package com.getjavajob.training.yakovleva.dao;
+package com.getjavajob.training.yakovleva.common;
 
+import javax.persistence.*;
 import java.util.Objects;
 
+@Entity
+@Table(name = "phone")
 public class Phone {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(name = "account_id")
     private int accountId;
+    @Column(name = "phone_number")
     private String phoneNumber;
+    @Column(name = "phone_type")
     private PhoneType phoneType;
 
     public int getId() {

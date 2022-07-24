@@ -1,15 +1,23 @@
-package com.getjavajob.training.yakovleva.dao;
+package com.getjavajob.training.yakovleva.common;
 
+import javax.persistence.*;
 import java.util.Date;
 import java.util.Objects;
 
+@Entity
+@Table(name = "group")
 public class Group {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "group_id")
     private int groupId;
+    @Column(name = "account_id")
     private int accountId;
-    private String nameAccount;
+    @Column(name = "group_name")
     private String groupName;
+    @Column(name = "logo")
     private String logo;
-    private Date dateCreateGroup;
+    @Column(name = "administrator_id")
     private int administratorId;
 
     public Group(String groupName, String logo, int administratorId, int accountId, Date dateCreateGroup) {
@@ -17,27 +25,10 @@ public class Group {
         this.logo = logo;
         this.administratorId = administratorId;
         this.accountId = accountId;
-        this.dateCreateGroup = dateCreateGroup;
     }
 
     public Group() {
 
-    }
-
-    public String getNameAccount() {
-        return nameAccount;
-    }
-
-    public void setNameAccount(String nameAccount) {
-        this.nameAccount = nameAccount;
-    }
-
-    public Date getDateCreateGroup() {
-        return dateCreateGroup;
-    }
-
-    public void setDateCreateGroup(Date dateCreateGroup) {
-        this.dateCreateGroup = dateCreateGroup;
     }
 
     public int getAccountId() {
@@ -85,10 +76,8 @@ public class Group {
         return "Group{" +
                 "groupId=" + groupId +
                 ", accountId=" + accountId +
-                ", nameAccount='" + nameAccount + '\'' +
                 ", groupName='" + groupName + '\'' +
                 ", logo='" + logo + '\'' +
-                ", dateCreateGroup=" + dateCreateGroup +
                 ", administratorId=" + administratorId +
                 '}';
     }
@@ -101,15 +90,13 @@ public class Group {
         return groupId == group.groupId &&
                 accountId == group.accountId &&
                 administratorId == group.administratorId &&
-                Objects.equals(nameAccount, group.nameAccount) &&
                 Objects.equals(groupName, group.groupName) &&
-                Objects.equals(logo, group.logo) &&
-                Objects.equals(dateCreateGroup, group.dateCreateGroup);
+                Objects.equals(logo, group.logo);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(groupId, accountId, nameAccount, groupName, logo, dateCreateGroup, administratorId);
+        return Objects.hash(groupId, accountId, groupName, logo, administratorId);
     }
 
 }

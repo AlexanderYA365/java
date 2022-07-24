@@ -63,7 +63,10 @@
 
     <!------страница видна пользователю-->
     <br>
-    <div>
+
+    </c:if>
+    <br>
+    <div class="modal">
         <table>
             <tr>
                 <th>Имя пользователя</th>
@@ -79,13 +82,10 @@
             </c:forEach>
         </table>
     </div>
-    </c:if>
     <br>
-
-    <form:form action="friend-wall-message" class="modal" method="post">
+    <form:form action="friend-add-wall-message" class="modal" method="post">
     <textarea name="NewWallMessage" cols="40" rows="3"></textarea>
-    <button type="submit" name="id" value="${friendAccount.id}">
-
-        </form:form>
+    <button type="submit">отправить</button>
+    </form:form>
 </body>
 </html>

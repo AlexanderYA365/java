@@ -5,9 +5,11 @@
 
     <bean id="accountDao" class="com.getjavajob.training.yakovleva.dao.AccountDao">
         <constructor-arg ref="jdbcTemplate"/>
+        <constructor-arg ref="sessionFactory"/>
     </bean>
     <bean id="phoneDao" class="com.getjavajob.training.yakovleva.dao.PhoneDao">
         <constructor-arg ref="jdbcTemplate"/>
+        <constructor-arg ref="sessionFactory"/>
     </bean>
     <bean id="applicationDao" class="com.getjavajob.training.yakovleva.dao.ApplicationDao">
         <constructor-arg ref="jdbcTemplate"/>

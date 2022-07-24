@@ -1,16 +1,22 @@
-package com.getjavajob.training.yakovleva.dao;
+package com.getjavajob.training.yakovleva.common;
 
+import javax.persistence.*;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+@Entity
+@Table(name = "account")
 public class Account {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String name;
     private String surname;
     private String lastName;
     private Date date;
+    @OneToMany(mappedBy = "phone")
     private List<Phone> phones;
     private int icq;
     private String photoFileName;

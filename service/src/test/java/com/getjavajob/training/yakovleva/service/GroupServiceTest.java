@@ -1,7 +1,7 @@
 package com.getjavajob.training.yakovleva.service;
 
-import com.getjavajob.training.yakovleva.dao.Account;
-import com.getjavajob.training.yakovleva.dao.Group;
+import com.getjavajob.training.yakovleva.common.Account;
+import com.getjavajob.training.yakovleva.common.Group;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

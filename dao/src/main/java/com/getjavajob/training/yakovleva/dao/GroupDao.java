@@ -1,5 +1,6 @@
 package com.getjavajob.training.yakovleva.dao;
 
+import com.getjavajob.training.yakovleva.common.Group;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.sql.ResultSet;
@@ -68,7 +69,7 @@ public class GroupDao {
         String sql = "INSERT INTO heroku_dc02d468f96562c.`group`(group_name, logo, administrator_id, account_id) " +
                 "VALUES (?, ?, ?, ?)";
         System.out.println(sql);
-        int result = jdbcTemplate.update(sql, group.getDateCreateGroup(), group.getLogo(),
+        int result = jdbcTemplate.update(sql, group.getGroupName(), group.getLogo(),
                 group.getAdministratorId(), group.getAccountId());
         return result > 0;
     }

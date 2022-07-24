@@ -1,6 +1,6 @@
 <%--
   Created by IntelliJ IDEA.
-  com.getjavajob.training.yakovleva.dao.User: Александр
+  com.getjavajob.training.yakovleva.common.User: Александр
   Date: 15.01.2022
   Time: 18:28
   To change this template use File | Settings | File Templates.

@@ -1,5 +1,8 @@
 package com.getjavajob.training.yakovleva.dao;
 
+import com.getjavajob.training.yakovleva.common.Application;
+import com.getjavajob.training.yakovleva.common.Group;
+import com.getjavajob.training.yakovleva.common.Relations;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.sql.ResultSet;

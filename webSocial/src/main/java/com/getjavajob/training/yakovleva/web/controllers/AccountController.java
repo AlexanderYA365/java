@@ -1,6 +1,6 @@
 package com.getjavajob.training.yakovleva.web.controllers;
 
-import com.getjavajob.training.yakovleva.dao.*;
+import com.getjavajob.training.yakovleva.common.*;
 import com.getjavajob.training.yakovleva.service.AccountService;
 import com.getjavajob.training.yakovleva.service.MessageService;
 import com.getjavajob.training.yakovleva.service.PhoneService;
@@ -79,7 +79,7 @@ public class AccountController {
         response.addCookie(cookieUsername);
         response.addCookie(cookiePassword);
         response.addCookie(cookieId);
-        return new ModelAndView("index");
+        return new ModelAndView("redirect:index");
     }
 
     @RequestMapping(value = "/registration-account", method = RequestMethod.GET)

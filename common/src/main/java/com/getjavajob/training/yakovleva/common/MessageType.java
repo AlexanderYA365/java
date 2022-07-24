@@ -1,4 +1,4 @@
-package com.getjavajob.training.yakovleva.dao;
+package com.getjavajob.training.yakovleva.common;
 
 public enum MessageType {
     WALL(0),

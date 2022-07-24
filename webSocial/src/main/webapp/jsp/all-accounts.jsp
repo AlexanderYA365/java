@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
-  com.getjavajob.training.yakovleva.dao.User: Александр
+  com.getjavajob.training.yakovleva.common.User: Александр
   Date: 29.01.2022
   Time: 21:50
   To change this template use File | Settings | File Templates.
@@ -17,7 +17,7 @@
 tttttttttyta
 <%--<input type="radio" name="questions[${questions.key.id}]" value="${answers.id}" id="radio"/>--%>
 
-<%--@elvariable id="friend" type="com.getjavajob.training.yakovleva.dao.Account"--%>
+<%--@elvariable id="friend" type="com.getjavajob.training.yakovleva.common.Account"--%>
 <label>${friends}</label>
 <br>
 <br>
@@ -25,7 +25,7 @@ tttttttttyta
 <br>
 
 
-<%--@elvariable id="Account" type="com.getjavajob.training.yakovleva.dao.Account"--%>
+<%--@elvariable id="Account" type="com.getjavajob.training.yakovleva.common.Account"--%>
 <form:form action="test5" method="post">
     <c:forEach items="${friends}" var="friend">
         <button type="submit" name="id" value="${friend.id}">

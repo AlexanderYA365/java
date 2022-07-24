@@ -1,15 +1,11 @@
 package com.getjavajob.training.yakovleva.service;
 
-import com.getjavajob.training.yakovleva.dao.Account;
-import com.getjavajob.training.yakovleva.dao.Message;
-import com.getjavajob.training.yakovleva.dao.Phone;
+import com.getjavajob.training.yakovleva.common.Phone;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class PhoneServiceTest {
 

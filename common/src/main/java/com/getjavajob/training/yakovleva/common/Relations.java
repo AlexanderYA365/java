@@ -1,13 +1,21 @@
-package com.getjavajob.training.yakovleva.dao;
+package com.getjavajob.training.yakovleva.common;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "relations")
 public class Relations {
+    @Column(name = "account_id")
     private int accountId;
+    @Column(name = "friend_id")
     private int friendId;
 
-    public Relations(){
+    public Relations() {
     }
 
-    public Relations(int accountId, int friendId){
+    public Relations(int accountId, int friendId) {
         this.accountId = accountId;
         this.friendId = friendId;
     }

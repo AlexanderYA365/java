@@ -42,16 +42,4 @@
         </mvc:interceptor>
     </mvc:interceptors>
 
-    <!--    <bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">-->
-    <!--        <property name="mappings">-->
-    <!--            <props>-->
-    <!--                <prop key="/index.jsp">AccountController</prop>-->
-    <!--            </props>-->
-    <!--        </property>-->
-    <!--    </bean>-->
-
-    <!--    <bean id="AccountController" class="com.getjavajob.training.yakovleva.web.controllers.AccountController"/>-->
-
-    <!--    <mvc:view-controller path="/index.jsp" view-name="/index"/>-->
-
 </beans>

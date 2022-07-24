@@ -1,9 +1,13 @@
-package com.getjavajob.training.yakovleva.dao;
+package com.getjavajob.training.yakovleva.common;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 
+@Entity
+@Table(name = "message")
 public class Message implements Serializable {
     private int id;
     private int senderId;
@@ -132,4 +136,7 @@ public class Message implements Serializable {
         return Objects.hash(id, senderId, receiverId, message, picture, publicationDate, edited, usernameSender, usernameReceiving, messageType);
     }
 
+    public void setMessageType(MessageType messageType) {
+        this.messageType = messageType;
+    }
 }

@@ -1,6 +1,6 @@
 package com.getjavajob.training.yakovleva.web.controllers;
 
-import com.getjavajob.training.yakovleva.dao.Account;
+import com.getjavajob.training.yakovleva.common.Account;
 import com.getjavajob.training.yakovleva.service.AccountService;
 import com.getjavajob.training.yakovleva.service.GroupService;
 import org.apache.commons.collections4.CollectionUtils;

@@ -1,5 +1,9 @@
 package com.getjavajob.training.yakovleva.dao;
 
+import com.getjavajob.training.yakovleva.common.Phone;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.sql.ResultSet;
@@ -9,9 +13,11 @@ import java.util.List;
 
 public class PhoneDao {
     private final JdbcTemplate jdbcTemplate;
+    private final SessionFactory sessionFactory;
 
-    public PhoneDao(JdbcTemplate jdbcTemplate) {
+    public PhoneDao(JdbcTemplate jdbcTemplate, SessionFactory sessionFactory) {
         this.jdbcTemplate = jdbcTemplate;
+        this.sessionFactory = sessionFactory;
     }
 
     public boolean create(Phone phone) {
@@ -32,14 +38,32 @@ public class PhoneDao {
         System.out.println("get phone accountId - " + accountId);
         String sql = "SELECT * FROM phone WHERE account_id = ?";
         System.out.println(sql);
-        List<Phone> phones = new ArrayList<>();
+        Phone phones = new Phone();
         try {
-            phones = jdbcTemplate.query(sql, new Object[]{accountId},
-                    (resultSet, i) -> fillPhone(resultSet));
+            Session session;
+            try {
+                //Step-2: Implementation
+                session = sessionFactory.getCurrentSession();
+            } catch (HibernateException e) {
+                //Step-3: Implementation
+                System.out.println("catch ex in hibernate");
+                session = sessionFactory.openSession();
+            }
+            phones = session.get(Phone.class, accountId);
+            System.out.println(phones);
         } catch (Exception ex) {
-            System.out.println("get phone exception - " + ex);
+            System.out.println(ex);
         }
-        return phones;
+        List<Phone> phones1 = new ArrayList<>();
+        return phones1;
+//        List<Phone> phones = new ArrayList<>();
+//        try {
+//            phones = jdbcTemplate.query(sql, new Object[]{accountId},
+//                    (resultSet, i) -> fillPhone(resultSet));
+//        } catch (Exception ex) {
+//            System.out.println("get phone exception - " + ex);
+//        }
+//        return phones;
     }
 
     public boolean update(Phone phone) {

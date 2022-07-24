@@ -1,9 +1,6 @@
 package com.getjavajob.training.yakovleva.web.controllers;
 
-import com.getjavajob.training.yakovleva.dao.Account;
-import com.getjavajob.training.yakovleva.dao.Application;
-import com.getjavajob.training.yakovleva.dao.Message;
-import com.getjavajob.training.yakovleva.dao.Relations;
+import com.getjavajob.training.yakovleva.common.*;
 import com.getjavajob.training.yakovleva.service.AccountService;
 import com.getjavajob.training.yakovleva.service.ApplicationService;
 import com.getjavajob.training.yakovleva.service.MessageService;
@@ -16,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -44,7 +42,6 @@ public class FriendController {
                                    @SessionAttribute("account") Account account) {
         System.out.println("friendPage");
         System.out.println(account);
-        System.out.println("id - " + friendId);
         ModelAndView modelAndView = new ModelAndView("/friend/show-friend");
         try {
             System.out.println("friendId - " + friendId);
@@ -111,16 +108,28 @@ public class FriendController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/friend-wall-message", method = RequestMethod.POST)
-    public void addFriendWallMassage(@ModelAttribute("account") Account account,
-                                     @ModelAttribute("friend") Account friend,
-                                     @RequestParam("NewWallMessage") String message) {
+    @RequestMapping(value = "/friend-add-wall-message", method = RequestMethod.POST)
+    public ModelAndView addFriendWallMassage(@ModelAttribute("account") Account account,
+                                             @ModelAttribute("friend") Account friend,
+                                             @RequestParam("NewWallMessage") String message) {
         System.out.println("account - " + account);
         System.out.println("friend - " + friend);
         System.out.println("message - " + message);
         System.out.println("addFriendWallMassage");
-//        ModelAndView modelAndView = new ModelAndView("redirect:/show-friend");
-//        return modelAndView;
+        Message wallMessage = new Message();
+        wallMessage.setMessageType(MessageType.WALL);
+        wallMessage.setMessage(message);
+        wallMessage.setPublicationDate(new Date());
+        wallMessage.setEdited(false);
+        wallMessage.setUsernameSender(account.getUsername());
+        wallMessage.setUsernameReceiving(friend.getUsername());
+        wallMessage.setPicture("");
+        wallMessage.setReceiverId(friend.getId());
+        wallMessage.setSenderId(account.getId());
+        messageService.createMassage(wallMessage);
+        ModelAndView modelAndView = new ModelAndView("redirect:/show-friend");
+        modelAndView.addObject("id", friend.getId());
+        return modelAndView;
     }
 
     @RequestMapping(value = "/account-friends", method = RequestMethod.GET)

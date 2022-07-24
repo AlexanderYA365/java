@@ -1,6 +1,6 @@
 <%--
   Created by IntelliJ IDEA.
-  com.getjavajob.training.yakovleva.dao.User: Александр
+  com.getjavajob.training.yakovleva.common.User: Александр
   Date: 15.03.2022
   Time: 15:18
   To change this template use File | Settings | File Templates.
@@ -24,6 +24,7 @@
 <div class="ui-widget">
     <label for="search">Поиск: </label>
     <input id="search"/>
+    <button href="${pageContext.request.contextPath}/result-search">поиск</button>
 </div>
 <script src="${pageContext.request.contextPath}/resources/js/jquery-3.6.0.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/jquery-ui.js"></script>

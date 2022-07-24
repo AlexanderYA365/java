@@ -1,4 +1,4 @@
-package com.getjavajob.training.yakovleva.dao;
+package com.getjavajob.training.yakovleva.common;
 
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;

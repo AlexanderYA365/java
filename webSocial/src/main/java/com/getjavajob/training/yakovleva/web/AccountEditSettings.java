@@ -1,9 +1,9 @@
 package com.getjavajob.training.yakovleva.web;
 
-import com.getjavajob.training.yakovleva.dao.Account;
-import com.getjavajob.training.yakovleva.dao.Phone;
-import com.getjavajob.training.yakovleva.dao.PhoneType;
-import com.getjavajob.training.yakovleva.dao.Role;
+import com.getjavajob.training.yakovleva.common.Account;
+import com.getjavajob.training.yakovleva.common.Phone;
+import com.getjavajob.training.yakovleva.common.PhoneType;
+import com.getjavajob.training.yakovleva.common.Role;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;

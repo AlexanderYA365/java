@@ -1,6 +1,6 @@
 <%--
   Created by IntelliJ IDEA.
-  com.getjavajob.training.yakovleva.dao.User: Александр
+  com.getjavajob.training.yakovleva.common.User: Александр
   Date: 16.01.2022
   Time: 18:52
   To change this template use File | Settings | File Templates.
@@ -17,10 +17,14 @@
 <br>
 <br>
 <br>
+<c:if test="${account.role == 1}">
+    <br>
+    <a href="${pageContext.request.contextPath}/admin-panel">панель администратра</a>
+</c:if>
 <div align="center">
     <img src="data:image/jpg;base64, ${encodedPhoto}"
          alt="Responsive image" style="width:120px;height:140px;"
-         onerror="${pageContext.request.contextPath}/resources/img/noPhotoAvailable.jpg" class="img-fluid"
+         onerror="this.src='resources/img/noPhotoAvailable.jpg'" class="img-fluid"
          alt="Responsive image">
 </div>
 <br>

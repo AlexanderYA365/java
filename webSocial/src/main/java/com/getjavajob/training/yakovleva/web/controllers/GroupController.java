@@ -1,8 +1,8 @@
 package com.getjavajob.training.yakovleva.web.controllers;
 
-import com.getjavajob.training.yakovleva.dao.Account;
-import com.getjavajob.training.yakovleva.dao.Application;
-import com.getjavajob.training.yakovleva.dao.Group;
+import com.getjavajob.training.yakovleva.common.Account;
+import com.getjavajob.training.yakovleva.common.Application;
+import com.getjavajob.training.yakovleva.common.Group;
 import com.getjavajob.training.yakovleva.service.ApplicationService;
 import com.getjavajob.training.yakovleva.service.GroupService;
 import org.springframework.stereotype.Controller;

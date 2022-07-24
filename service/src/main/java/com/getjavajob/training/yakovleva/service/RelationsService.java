@@ -1,6 +1,6 @@
 package com.getjavajob.training.yakovleva.service;
 
-import com.getjavajob.training.yakovleva.dao.Relations;
+import com.getjavajob.training.yakovleva.common.Relations;
 import com.getjavajob.training.yakovleva.dao.RelationsDao;
 
 import java.util.List;

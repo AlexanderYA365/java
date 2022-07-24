@@ -1,6 +1,6 @@
 package com.getjavajob.training.yakovleva.web;
 
-import com.getjavajob.training.yakovleva.dao.Account;
+import com.getjavajob.training.yakovleva.common.Account;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;

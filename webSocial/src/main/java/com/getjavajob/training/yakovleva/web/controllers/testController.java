@@ -1,8 +1,9 @@
 package com.getjavajob.training.yakovleva.web.controllers;
 
-import com.getjavajob.training.yakovleva.dao.Account;
-import com.getjavajob.training.yakovleva.dao.Phone;
+import com.getjavajob.training.yakovleva.common.Account;
+import com.getjavajob.training.yakovleva.common.Phone;
 import com.getjavajob.training.yakovleva.service.AccountService;
+import com.getjavajob.training.yakovleva.service.PhoneService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
@@ -21,25 +23,37 @@ import java.util.List;
 @SessionAttributes({"account", "friend"})
 public class testController {
     private AccountService accountService;
+    private PhoneService phoneService;
 
-    public testController(AccountService accountService) {
+    public testController(AccountService accountService, PhoneService phoneService) {
         this.accountService = accountService;
+        this.phoneService = phoneService;
     }
 
     @RequestMapping(value = "/createBD", method = RequestMethod.GET)
     public ModelAndView sql() {
-        System.out.println("sql");
+        long start = System.currentTimeMillis();
+        System.out.println("sql, time start - " + new Date());
         ModelAndView modelAndView = new ModelAndView("all-accounts");
-        String[] name = {"Александр", "Алексей", "Денис", "Вася", "Виталий"};
-        String[] surname = {"Любимов", "Фатыхов", "Назаренко", "Комаров", "Воронин"};
-        String[] lastName = {"Игоревич", "Николаевич", "Александрович", "Андреевич", "Викторович"};
+        String[] name = {"Зоя", "Даша", "Зина", "Нина", "Люба", "Ира", "Инна", "Наталья", "Саша", "Таня"};
+        String[] surname = {"Любимова", "Фатыхова", "Назаренко", "Комарова", "Воронина"};
+        String[] lastName = {"Игоревна", "Николаевна", "Александровна", "Андреевна", "Викторовна"};
         String[] username = {"bobs", "Jonson", "Beap", "Bell", "Bold", "alex", "titer", "beep", "jost", "wolt"};
+        List<Account> accounts = generateAccounts(name, surname, lastName, username);
+        System.out.println("sql, time start insert into DB - " + new Date());
+        accountService.createAccounts(accounts);
+        System.out.println("end - "
+                + (new SimpleDateFormat("mm:ss:SSS")).format(new Date(System.currentTimeMillis() - start)));
+        return modelAndView;
+    }
+
+    private List<Account> generateAccounts(String[] name, String[] surname, String[] lastName, String[] username) {
         List<Account> accounts = new ArrayList<>();
-        for (int i = 0; i < 5_00_000; i++) {
+        for (int i = 0; i < 1_000_000; i++) {
             Account account = new Account();
-            account.setName(name[(int) (Math.random() * 5)]);
+            account.setName(name[(int) (Math.random() * 10)]);
             account.setSurname(surname[(int) (Math.random() * 5)]);
-            account.setUsername("w" + username[(int) (Math.random() * 10)] + i);
+            account.setUsername("aq" + username[(int) (Math.random() * 10)] + i);
             account.setPassword("1111");
             account.setLastName(lastName[(int) (Math.random() * 5)]);
             account.setDate(new Date());
@@ -58,11 +72,17 @@ public class testController {
             account.setDate(new Date());
             accounts.add(account);
         }
-        System.out.println("insert into DB");
-        accountService.createAccounts(accounts);
-        return modelAndView;
+        return accounts;
     }
 
+    @RequestMapping(value = "/a", method = RequestMethod.GET)
+    public ModelAndView acc() {
+        System.out.println("acc");
+        ModelAndView modelAndView = new ModelAndView("all-accounts");
+        List<Phone> phones = phoneService.get(1);
+        System.out.println(phones);
+        return modelAndView;
+    }
 
     @RequestMapping(value = "/test", method = RequestMethod.GET)
     public ModelAndView test(HttpServletRequest request,

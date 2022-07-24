@@ -1,12 +1,21 @@
-package com.getjavajob.training.yakovleva.dao;
+package com.getjavajob.training.yakovleva.common;
 
+import javax.persistence.*;
 import java.util.Objects;
 
+@Entity
+@Table(name = "application")
 public class Application {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(name = "application_type")
     private ApplicationType applicationType;
+    @Column(name = "application_id")
     private int applicantId;
+    @Column(name = "recipient_id")
     private int recipientId;
+    @Column(name = "status")
     private ApplicationStatusType status;
 
     public Application(int id, ApplicationType applicationType, int applicantId, int recipientId, ApplicationStatusType status) {

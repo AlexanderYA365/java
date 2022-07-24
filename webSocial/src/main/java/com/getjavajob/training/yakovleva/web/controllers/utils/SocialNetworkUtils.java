@@ -1,6 +1,6 @@
 package com.getjavajob.training.yakovleva.web.controllers.utils;
 
-import com.getjavajob.training.yakovleva.dao.Account;
+import com.getjavajob.training.yakovleva.common.Account;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Base64;
