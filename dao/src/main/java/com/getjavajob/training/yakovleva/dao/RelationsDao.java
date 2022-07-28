@@ -2,10 +2,14 @@ package com.getjavajob.training.yakovleva.dao;
 
 import com.getjavajob.training.yakovleva.common.Relations;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.ResultSet;
 import java.util.List;
 
+@Repository
+@Transactional
 public class RelationsDao {
     private final JdbcTemplate jdbcTemplate;
 

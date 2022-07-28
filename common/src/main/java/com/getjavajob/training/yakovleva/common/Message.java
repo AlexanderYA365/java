@@ -1,7 +1,6 @@
 package com.getjavajob.training.yakovleva.common;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
@@ -9,15 +8,24 @@ import java.util.Objects;
 @Entity
 @Table(name = "message")
 public class Message implements Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(name = "sender_id")
     private int senderId;
+    @Column(name = "receiver_id")
     private int receiverId;
+    @Column(name = "message")
     private String message;
+    @Column(name = "picture")
     private String picture;
+    @Column(name = "publication_date")
     private Date publicationDate;
+    @Column(name = "edited")
     private boolean edited;
     private String usernameSender;
     private String usernameReceiving;
+    @Column(name = "message_type")
     private MessageType messageType;
 
     public int getMessageType() {

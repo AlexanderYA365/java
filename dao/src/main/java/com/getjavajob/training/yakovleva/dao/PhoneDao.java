@@ -1,24 +1,31 @@
 package com.getjavajob.training.yakovleva.dao;
 
 import com.getjavajob.training.yakovleva.common.Phone;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
+@Transactional
 public class PhoneDao {
-    private final JdbcTemplate jdbcTemplate;
-    private final SessionFactory sessionFactory;
+    private JdbcTemplate jdbcTemplate;
+    private SessionFactory sessionFactory;
 
-    public PhoneDao(JdbcTemplate jdbcTemplate, SessionFactory sessionFactory) {
-        this.jdbcTemplate = jdbcTemplate;
+    @Autowired
+    public PhoneDao(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
+
+    public PhoneDao() {
+    }
+
 
     public boolean create(Phone phone) {
         System.out.println("create phone - " + phone);
@@ -40,16 +47,7 @@ public class PhoneDao {
         System.out.println(sql);
         Phone phones = new Phone();
         try {
-            Session session;
-            try {
-                //Step-2: Implementation
-                session = sessionFactory.getCurrentSession();
-            } catch (HibernateException e) {
-                //Step-3: Implementation
-                System.out.println("catch ex in hibernate");
-                session = sessionFactory.openSession();
-            }
-            phones = session.get(Phone.class, accountId);
+            phones = sessionFactory.getCurrentSession().get(Phone.class, accountId);
             System.out.println(phones);
         } catch (Exception ex) {
             System.out.println(ex);

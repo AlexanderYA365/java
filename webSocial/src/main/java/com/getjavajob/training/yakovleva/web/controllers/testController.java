@@ -1,9 +1,12 @@
 package com.getjavajob.training.yakovleva.web.controllers;
 
 import com.getjavajob.training.yakovleva.common.Account;
+import com.getjavajob.training.yakovleva.common.Group;
 import com.getjavajob.training.yakovleva.common.Phone;
 import com.getjavajob.training.yakovleva.service.AccountService;
+import com.getjavajob.training.yakovleva.service.GroupService;
 import com.getjavajob.training.yakovleva.service.PhoneService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -24,10 +27,11 @@ import java.util.List;
 public class testController {
     private AccountService accountService;
     private PhoneService phoneService;
+    private GroupService groupService;
 
-    public testController(AccountService accountService, PhoneService phoneService) {
-        this.accountService = accountService;
-        this.phoneService = phoneService;
+    @Autowired
+    public testController(GroupService groupService) {
+        this.groupService = groupService;
     }
 
     @RequestMapping(value = "/createBD", method = RequestMethod.GET)
@@ -79,8 +83,17 @@ public class testController {
     public ModelAndView acc() {
         System.out.println("acc");
         ModelAndView modelAndView = new ModelAndView("all-accounts");
-        List<Phone> phones = phoneService.get(1);
-        System.out.println(phones);
+        //List<Group> group = groupService.getGroupName("1");
+        Group group = new Group();
+        group.setAccountId(1);
+//        group.setGroupId(2);
+        group.setAdministratorId(1);
+        group.setGroupName("tests");
+        Account account = new Account();
+        account.setId(1);
+        account.setPassword("111");
+        account.setUsername("1111");
+//        System.out.println(accountService.getId(account));
         return modelAndView;
     }
 

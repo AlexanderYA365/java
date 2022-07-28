@@ -2,6 +2,8 @@ package com.getjavajob.training.yakovleva.dao;
 
 import com.getjavajob.training.yakovleva.common.Message;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@Repository
+@Transactional
 public class MessageDao {
     private final JdbcTemplate jdbcTemplate;
 

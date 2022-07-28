@@ -4,14 +4,18 @@ import com.getjavajob.training.yakovleva.common.Application;
 import com.getjavajob.training.yakovleva.common.Group;
 import com.getjavajob.training.yakovleva.common.Relations;
 import com.getjavajob.training.yakovleva.dao.ApplicationDao;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-//@Service
+@Repository
+@Transactional
 public class ApplicationService {
     private ApplicationDao applicationDao;
 
-    //@Autowired
+    @Autowired
     public ApplicationService(ApplicationDao applicationDao) {
         this.applicationDao = applicationDao;
     }

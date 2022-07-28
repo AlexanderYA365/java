@@ -1,11 +1,9 @@
 package com.getjavajob.training.yakovleva.common;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 
-@Entity
-@Table(name = "relations")
+//@Entity
+//@Table(name = "relations")
 public class Relations {
     @Column(name = "account_id")
     private int accountId;

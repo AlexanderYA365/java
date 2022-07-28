@@ -37,6 +37,10 @@ public class AccountController {
         this.phoneService = phoneService;
     }
 
+    public AccountController() {
+
+    }
+
     @RequestMapping(value = "/edit-account-settings", method = RequestMethod.POST)
     public @ResponseBody
     ModelAndView saveSettings(HttpSession session, HttpServletRequest request,

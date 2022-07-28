@@ -5,10 +5,10 @@ import java.util.Date;
 import java.util.Objects;
 
 @Entity
-@Table(name = "group")
+@Table(name = "socialnetwork.group")
 public class Group {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     @Column(name = "group_id")
     private int groupId;
     @Column(name = "account_id")

@@ -4,13 +4,19 @@ import com.getjavajob.training.yakovleva.common.Account;
 import com.getjavajob.training.yakovleva.common.Phone;
 import com.getjavajob.training.yakovleva.dao.AccountDao;
 import com.getjavajob.training.yakovleva.dao.PhoneDao;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Repository
+@Transactional
 public class AccountService {
     private AccountDao accountDao;
     private PhoneDao phoneDao;
 
+    @Autowired
     public AccountService(AccountDao accountDao, PhoneDao phoneDao) {
         this.accountDao = accountDao;
         this.phoneDao = phoneDao;

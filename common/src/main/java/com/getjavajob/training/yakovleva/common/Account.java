@@ -10,23 +10,39 @@ import java.util.Objects;
 @Table(name = "account")
 public class Account {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue
+    @Column(name = "account_id")
     private int id;
+    @Column(name = "name")
     private String name;
+    @Column(name = "surname")
     private String surname;
+    @Column(name = "lastname")
     private String lastName;
+    @Column(name = "date")
     private Date date;
-    @OneToMany(mappedBy = "phone")
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "account_id", nullable = false)
     private List<Phone> phones;
+    @Column(name = "icq")
     private int icq;
+    @Column(name = "photo_file_name")
     private String photoFileName;
+    @Column(name = "photo")
     private byte[] photo;
+    @Column(name = "address_home")
     private String addressHome;
+    @Column(name = "address_job")
     private String addressJob;
+    @Column(name = "email")
     private String email;
+    @Column(name = "about_me")
     private String aboutMe;
+    @Column(name = "username")
     private String username;
+    @Column(name = "password")
     private String password;
+    @Column(name = "role")
     private Role role;
 
     public Account(String name, String surname, String lastName, Date date, List<Phone> phones,

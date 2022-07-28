@@ -3,14 +3,18 @@ package com.getjavajob.training.yakovleva.service;
 import com.getjavajob.training.yakovleva.common.Account;
 import com.getjavajob.training.yakovleva.common.Group;
 import com.getjavajob.training.yakovleva.dao.GroupDao;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-//@Service
+@Repository
+@Transactional
 public class GroupService {
     private GroupDao groupDao;
 
-    //@Autowired
+    @Autowired
     public GroupService(GroupDao groupDao) {
         this.groupDao = groupDao;
     }
@@ -28,6 +32,14 @@ public class GroupService {
             System.out.println("createAccountGroups exception - " + ex);
         }
         return false;
+    }
+
+    public boolean update(Group group) {
+        return groupDao.update(group);
+    }
+
+    public boolean delete(Group group) {
+        return groupDao.delete(group);
     }
 
     public List<Group> getGroups() {

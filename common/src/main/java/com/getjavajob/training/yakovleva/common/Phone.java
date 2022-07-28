@@ -8,8 +8,9 @@ import java.util.Objects;
 public class Phone {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
-    @Column(name = "account_id")
+    @Column(name = "account_id", insertable = false, updatable = false)
     private int accountId;
     @Column(name = "phone_number")
     private String phoneNumber;

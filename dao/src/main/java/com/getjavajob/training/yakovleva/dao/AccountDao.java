@@ -1,58 +1,56 @@
 package com.getjavajob.training.yakovleva.dao;
 
 import com.getjavajob.training.yakovleva.common.Account;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
+@Repository
+@Transactional
 public class AccountDao {
-    private final JdbcTemplate jdbcTemplate;
-    private final SessionFactory sessionFactory;
+    private JdbcTemplate jdbcTemplate;
+    private SessionFactory sessionFactory;
 
-    public AccountDao(JdbcTemplate jdbcTemplate, SessionFactory sessionFactory) {
-        this.jdbcTemplate = jdbcTemplate;
+    public AccountDao(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 
+    public AccountDao() {
+    }
+
     public void create(Account account) {
-        String sql = "INSERT INTO account(name, surname, lastname, date, icq, address_home, " +
-                "address_job, email, about_me, username, password, role, photo, photo_file_name) " +
-                "VALUES (?,?,?,NOW(),?,?,?,?,?,?,?,?,?,?);";
-        System.out.println(sql);
-        jdbcTemplate.update(sql,
-                account.getName(), account.getSurname(), account.getLastName(), account.getIcq(),
-                account.getAddressHome(), account.getAddressJob(), account.getEmail(), account.getAboutMe(),
-                account.getUsername(), account.getPassword(), account.getRole(),
-                account.getPhoto(), account.getPhotoFileName());
+        sessionFactory.getCurrentSession().save(account);
     }
 
     public int getIdAccount(Account account) {
         System.out.println("getIdAccount - account = " + account);
         String sql = "SELECT * FROM account WHERE username LIKE ? AND password LIKE ?";
-//        EntityManager entityManager = entityManagerFactory.createEntityManager();
-//        try {
-//            entityManager.getTransaction().begin();
-//            CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-//            CriteriaQuery<Account> criteriaQuery = criteriaBuilder.createQuery(Account.class);
-//            Root<Account> from =  criteriaQuery.from(Account.class);
-//            CriteriaQuery<Account> select =  criteriaQuery.select(from);
-////            select.where(criteriaBuilder.equal(from.get("username"), account.getUsername()));
-////            select.where(criteriaBuilder.equal(from.get("password"), account.getPassword()));
-//            criteriaQuery.distinct(true);
-//            List<Account> findAccount = entityManager.createQuery(select).getResultList();
-//            System.out.println(findAccount);
-//            return 1;
-//        } catch (Exception ex){
-//            System.out.println(ex);
-//            entityManager.getTransaction().rollback();
-//        }
-        return 0;
+        Session session = sessionFactory.getCurrentSession();
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<Account> criteriaQuery = criteriaBuilder.createQuery(Account.class);
+        Root<Account> from = criteriaQuery.from(Account.class);
+        List<Predicate> conditions = new ArrayList<>();
+        conditions.add(criteriaBuilder.like(from.get("username"), account.getUsername()));
+        conditions.add(criteriaBuilder.like(from.get("password"), account.getPassword()));
+        criteriaQuery.where(conditions.toArray(new Predicate[0]));
+        TypedQuery<Account> query = session.createQuery(criteriaQuery);
+        return query.getSingleResult().getId();
     }
 
     public Account getAccount(String username, String password) {
@@ -65,22 +63,40 @@ public class AccountDao {
     public Account getAccount(int id) {
         System.out.println("getAccount(int id)");
         String sql = "SELECT * FROM account WHERE account_id = ?";
-        return jdbcTemplate.query(sql,
-                new Object[]{id}, (resultSet, i) -> fillAccount(resultSet)).get(0);
+        Session session = sessionFactory.getCurrentSession();
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<Account> criteriaQuery = criteriaBuilder.createQuery(Account.class);
+        Root<Account> from = criteriaQuery.from(Account.class);
+        criteriaQuery.select(from);
+        criteriaQuery.where(criteriaBuilder.equal(from.get("id"), id));
+        Query<Account> query = session.createQuery(criteriaQuery);
+        return query.getSingleResult();
     }
 
     public List<Account> getAccountsName(String name) {
         System.out.println("getAccountsName");
         String sql = "SELECT * FROM account WHERE name LIKE ?";
         System.out.println(sql);
-        return jdbcTemplate.query(sql,
-                new Object[]{name}, (resultSet, i) -> fillAccount(resultSet));
+        Session session = sessionFactory.getCurrentSession();
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<Account> criteriaQuery = criteriaBuilder.createQuery(Account.class);
+        Root<Account> from = criteriaQuery.from(Account.class);
+        CriteriaQuery<Account> nameQuery = criteriaQuery.select(from).where(
+                criteriaBuilder.like(from.get("name"), name));
+        return session.createQuery(nameQuery).getResultList();
     }
 
     public List<Account> getAccounts() {
         System.out.println("getAccounts");
         String sql = "SELECT * FROM account";
-        return jdbcTemplate.query(sql, (resultSet, i) -> fillAccount(resultSet));
+        Session session = sessionFactory.getCurrentSession();
+        CriteriaBuilder cb = session.getCriteriaBuilder();
+        CriteriaQuery<Account> cr = cb.createQuery(Account.class);
+        Root<Account> root = cr.from(Account.class);
+        cr.select(root);
+        Query<Account> query = session.createQuery(cr);
+        List<Account> results = query.getResultList();
+        return results;
     }
 
     public List<Account> getAccountsLimit(int start, int end) {
@@ -93,61 +109,12 @@ public class AccountDao {
     public boolean deleteAccount(Account account) {
         System.out.println("readAccountsName");
         String sql = "DELETE FROM account WHERE account_id = ?";
-        return jdbcTemplate.update(sql, account.getId()) > 0;
+        sessionFactory.getCurrentSession().delete(account);
+        return true;
     }
 
     public boolean updateAccount(Account account) {
-        System.out.println("updateAccount - " + account);
-        String sql = "UPDATE account SET name = ?," +
-                " surname = ?," +
-                " lastname = ?, date = ?, icq = ?, " +
-                "address_home = ?, address_job = ?," +
-                " email = ?, about_me = ?," +
-                " role = ?," +
-                " photo = ?," +
-                "photo_file_name = ?" +
-                " WHERE account_id = ?";
-        boolean result = false;
-        System.out.println("photo - " + account.getPhoto());
-        System.out.println("photoFileName - " + account.getPhotoFileName());
-        try {
-            result = jdbcTemplate.update(sql, account.getName(),
-                    account.getSurname(),
-                    account.getLastName(), account.getDate(), account.getIcq(),
-                    account.getAddressHome(), account.getAddressJob(),
-                    account.getEmail(), account.getAboutMe(),
-                    account.getRole(),
-                    account.getPhoto(),
-                    account.getPhotoFileName(),
-                    account.getId()) > 0;
-        } catch (Exception ex) {
-            System.out.println("updateAccount exception - " + ex);
-        }
-        return result;
-    }
-
-    private Account fillAccount(ResultSet resultSet) {
-        Account account = new Account();
-        try {
-            account.setId(resultSet.getInt(1));
-            account.setName(resultSet.getString(2));
-            account.setSurname(resultSet.getString(3));
-            account.setLastName(resultSet.getString(4));
-            account.setDate(resultSet.getDate(5));
-            account.setIcq(resultSet.getInt(6));
-            account.setAddressHome(resultSet.getString(7));
-            account.setAddressJob(resultSet.getString(8));
-            account.setEmail(resultSet.getString(9));
-            account.setAboutMe(resultSet.getString(10));
-            account.setUsername(resultSet.getString(11));
-            account.setPassword(resultSet.getString(12));
-            account.setRole(resultSet.getInt(13));
-            account.setPhoto(resultSet.getBytes(14));
-            account.setPhotoFileName(resultSet.getString(15));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return account;
+        return sessionFactory.getCurrentSession().merge(account) != null;
     }
 
     public List<Account> getFriendsAccount(int accountId) {
@@ -161,7 +128,6 @@ public class AccountDao {
                 (resultSet, i) -> fillAccount(resultSet));
     }
 
-    //    @Transactional("txManager")
     public void createAccounts(List<Account> accounts) throws SQLException {
         String sql = "INSERT INTO account(name, surname, lastname, date, icq, address_home, " +
                 "address_job, email, about_me, " +
@@ -259,6 +225,30 @@ public class AccountDao {
 //                        return accounts.size();
 //                    }
 //                });
+    }
+
+    private Account fillAccount(ResultSet resultSet) {
+        Account account = new Account();
+        try {
+            account.setId(resultSet.getInt(1));
+            account.setName(resultSet.getString(2));
+            account.setSurname(resultSet.getString(3));
+            account.setLastName(resultSet.getString(4));
+            account.setDate(resultSet.getDate(5));
+            account.setIcq(resultSet.getInt(6));
+            account.setAddressHome(resultSet.getString(7));
+            account.setAddressJob(resultSet.getString(8));
+            account.setEmail(resultSet.getString(9));
+            account.setAboutMe(resultSet.getString(10));
+            account.setUsername(resultSet.getString(11));
+            account.setPassword(resultSet.getString(12));
+            account.setRole(resultSet.getInt(13));
+            account.setPhoto(resultSet.getBytes(14));
+            account.setPhotoFileName(resultSet.getString(15));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return account;
     }
 
 }
