@@ -12,11 +12,14 @@ import java.util.List;
 @Repository
 @Transactional
 public class MessageService {
-    private final MessageDao messageDao;
+    private MessageDao messageDao;
 
     @Autowired
     public MessageService(MessageDao messageDao) {
         this.messageDao = messageDao;
+    }
+
+    public MessageService() {
     }
 
     public List<Message> getWallMassageAccount(Account account) {

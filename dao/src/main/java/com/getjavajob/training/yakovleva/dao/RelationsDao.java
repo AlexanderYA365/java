@@ -1,65 +1,79 @@
 package com.getjavajob.training.yakovleva.dao;
 
 import com.getjavajob.training.yakovleva.common.Relations;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.ResultSet;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
 @Transactional
 public class RelationsDao {
-    private final JdbcTemplate jdbcTemplate;
+    private SessionFactory sessionFactory;
+    private static final Logger logger = LogManager.getLogger();
 
-    public RelationsDao(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public RelationsDao(SessionFactory sessionFactory) {
+        logger.info("RelationsDao(sessionFactory)");
+        this.sessionFactory = sessionFactory;
     }
 
-    public boolean create(Relations relations){
-        System.out.println("RelationsDao.create()");
-        String sql = "INSERT INTO relations(account_id, friend_id) VALUES(?, ?)";
-        return jdbcTemplate.update(sql, relations.getAccountId(), relations.getFriendId()) > 0;
+    public RelationsDao() {
     }
 
-    public List<Relations> getByAccountID(Relations relations){
-        System.out.println("RelationsDao.getByAccountID()");
-        String sql = "SELECT * FROM relations WHERE account_id = ?";
-        return jdbcTemplate.query(sql,
-                new Object[] {relations.getAccountId()},
-                (resultSet, i) -> fillRelations(resultSet));
+    public boolean create(Relations relations) {
+        logger.info("RelationsDao.create(relations)");
+        logger.debug("RelationsDao.create(relations = {})", relations);
+        sessionFactory.getCurrentSession().save(relations);
+        return true;
+    }
+
+    public List<Relations> getByAccountID(Relations relations) {
+        logger.info("RelationsDao.getByAccountID(relations)");
+        logger.debug("RelationsDao.getByAccountID(relations = {})", relations);
+        Session session = sessionFactory.getCurrentSession();
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<Relations> criteriaQuery = criteriaBuilder.createQuery(Relations.class);
+        Root<Relations> from = criteriaQuery.from(Relations.class);
+        CriteriaQuery<Relations> nameQuery = criteriaQuery.select(from).where(
+                criteriaBuilder.equal(from.get("accountId"), relations.getAccountId()));
+        return session.createQuery(nameQuery).getResultList();
     }
 
     public Relations getByFriendId(Relations relations) {
-        System.out.println("RelationsDao.getByFriendId()");
-        String sql = "SELECT * FROM relations WHERE account_id = ? AND friend_id = ?";
-        return (Relations) jdbcTemplate.query(sql,
-                new Object[] {relations.getAccountId(), relations.getFriendId()},
-                (resultSet, i) -> fillRelations(resultSet));
+        logger.info("RelationsDao.getByFriendId(relations)");
+        logger.debug("RelationsDao.getByFriendId(relations = {})", relations);
+        Session session = sessionFactory.getCurrentSession();
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<Relations> criteriaQuery = criteriaBuilder.createQuery(Relations.class);
+        Root<Relations> from = criteriaQuery.from(Relations.class);
+        List<Predicate> conditions = new ArrayList<>();
+        conditions.add(criteriaBuilder.equal(from.get("accountId"), relations.getAccountId()));
+        conditions.add(criteriaBuilder.equal(from.get("friendId"), relations.getFriendId()));
+        criteriaQuery.where(conditions.toArray(new Predicate[0]));
+        TypedQuery<Relations> query = session.createQuery(criteriaQuery);
+        return query.getSingleResult();
     }
 
-    public boolean update(Relations relations){
-        System.out.println("RelationsDao.update()");
-        String sql = "UPDATE relations SET account_id = ?, friend_id = ?";
-        return jdbcTemplate.update(sql, relations.getAccountId(), relations.getFriendId()) > 0;
+    public boolean update(Relations relations) {
+        logger.info("RelationsDao.update(relations)");
+        logger.debug("RelationsDao.update(relations = {})", relations);
+        return sessionFactory.getCurrentSession().save(relations) != null;
     }
 
-    public boolean deleteByAccountId(Relations relations){
+    public boolean deleteByAccountId(Relations relations) {
         System.out.println("RelationsDao.deleteByAccountId()");
-        String sql = "DELETE FROM relations WHERE account_id = ?";
-        return jdbcTemplate.update(sql, relations.getAccountId()) > 0;
-    }
-
-    private Relations fillRelations(ResultSet resultSet){
-        Relations relations = new Relations();
-        try{
-            relations.setAccountId(resultSet.getInt(1));
-            relations.setFriendId(resultSet.getInt(2));
-        } catch (Exception ex){
-            System.out.println("fillRelations exception - " + ex);
-        }
-        return relations;
+        sessionFactory.getCurrentSession().delete(relations);
+        return true;
     }
 
 }

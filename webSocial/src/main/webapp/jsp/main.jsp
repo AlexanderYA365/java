@@ -50,8 +50,14 @@
                         <td><c:out value="${message.usernameSender}"/></td>
                         <td><c:out value="${message.publicationDate}"/></td>
                         <td><c:out value="${message.message}"/></td>
-                        <td><button type="submit" name="replyAccount" value="${message.id}"/>ответить</td>
-                        <td><button type="submit" name="deleteText" value="${message.id}"/>удалить</td>
+                        <td>
+                            <button type="submit" name="replyAccount" value="${message.id}"/>
+                            ответить
+                        </td>
+                        <td>
+                            <button type="submit" name="deleteText" value="${message.id}"/>
+                            удалить
+                        </td>
                     </tr>
                 </c:forEach>
             </table>

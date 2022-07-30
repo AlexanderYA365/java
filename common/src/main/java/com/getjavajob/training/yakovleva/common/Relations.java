@@ -1,14 +1,19 @@
 package com.getjavajob.training.yakovleva.common;
 
-import javax.persistence.Column;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
-//@Entity
-//@Table(name = "relations")
+@Entity
+@Table(name = "relations")
 public class Relations {
+    @Id
     @Column(name = "account_id")
     private int accountId;
     @Column(name = "friend_id")
     private int friendId;
+    @ManyToMany(mappedBy = "relations")
+    private Set<Account> accountSet = new HashSet<>();
 
     public Relations() {
     }

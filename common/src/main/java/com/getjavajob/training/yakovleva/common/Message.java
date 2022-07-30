@@ -27,6 +27,27 @@ public class Message implements Serializable {
     private String usernameReceiving;
     @Column(name = "message_type")
     private MessageType messageType;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Account account;
+
+    public Message() {
+    }
+
+    public Message(int id, int senderId, int receiverId, String message, String picture, Date publicationDate,
+                   boolean edited, String usernameSender, String usernameReceiving, MessageType messageType,
+                   Account account) {
+        this.id = id;
+        this.senderId = senderId;
+        this.receiverId = receiverId;
+        this.message = message;
+        this.picture = picture;
+        this.publicationDate = publicationDate;
+        this.edited = edited;
+        this.usernameSender = usernameSender;
+        this.usernameReceiving = usernameReceiving;
+        this.messageType = messageType;
+        this.account = account;
+    }
 
     public int getMessageType() {
         return messageType.getStatus();
@@ -34,6 +55,10 @@ public class Message implements Serializable {
 
     public void setMessageType(int status) {
         this.messageType = MessageType.values()[status];
+    }
+
+    public void setMessageType(MessageType messageType) {
+        this.messageType = messageType;
     }
 
     public String getUsernameReceiving() {
@@ -142,9 +167,5 @@ public class Message implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(id, senderId, receiverId, message, picture, publicationDate, edited, usernameSender, usernameReceiving, messageType);
-    }
-
-    public void setMessageType(MessageType messageType) {
-        this.messageType = messageType;
     }
 }

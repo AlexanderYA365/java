@@ -19,6 +19,9 @@ public class GroupService {
         this.groupDao = groupDao;
     }
 
+    public GroupService() {
+    }
+
     public List<Group> getAccountGroups(Account account) {
         System.out.println("readGroup, account.getId() - " + account.getId());
         return groupDao.getGroupsAccount(account.getId());
@@ -59,12 +62,7 @@ public class GroupService {
 
     public boolean insertAccountGroup(Group group, int accountId) {
         System.out.println("Group read idGroup - " + group + " , accountId - " + accountId);
-        try {
-            return groupDao.insertAccount(group, accountId);
-        } catch (Exception ex) {
-            System.out.println("createAccountGroups exception - " + ex);
-            return false;
-        }
+        return groupDao.insertAccount(group, accountId);
     }
 
 }

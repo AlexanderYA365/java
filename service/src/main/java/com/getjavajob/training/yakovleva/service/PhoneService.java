@@ -11,11 +11,14 @@ import java.util.List;
 @Repository
 @Transactional
 public class PhoneService {
-    private final PhoneDao phoneDao;
+    private PhoneDao phoneDao;
 
     @Autowired
     public PhoneService(PhoneDao phoneDao) {
         this.phoneDao = phoneDao;
+    }
+
+    public PhoneService() {
     }
 
     public boolean create(Phone phone) {

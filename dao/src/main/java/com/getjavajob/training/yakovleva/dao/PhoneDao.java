@@ -1,99 +1,66 @@
 package com.getjavajob.training.yakovleva.dao;
 
 import com.getjavajob.training.yakovleva.common.Phone;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.List;
 
 @Repository
 @Transactional
 public class PhoneDao {
-    private JdbcTemplate jdbcTemplate;
     private SessionFactory sessionFactory;
+    private static final Logger logger = LogManager.getLogger();
 
     @Autowired
     public PhoneDao(SessionFactory sessionFactory) {
+        logger.info("PhoneDao(sessionFactory)");
         this.sessionFactory = sessionFactory;
     }
 
     public PhoneDao() {
     }
 
-
     public boolean create(Phone phone) {
-        System.out.println("create phone - " + phone);
-        String sql = "INSERT INTO phone(account_id, phone_number, phone_type) " +
-                "VALUES (?,?,?);";
-        System.out.println(sql);
-        boolean result = false;
-        try {
-            result = jdbcTemplate.update(sql, phone.getAccountId(), phone.getPhoneNumber(), phone.getPhoneType()) > 0;
-        } catch (Exception ex) {
-            System.out.println("crete phone exception - " + ex);
-        }
-        return result;
+        logger.info("PhoneDao.create(phone)");
+        logger.debug("PhoneDao.create(phone = {})", phone);
+        sessionFactory.getCurrentSession().save(phone);
+        return true;
     }
 
     public List<Phone> get(int accountId) {
-        System.out.println("get phone accountId - " + accountId);
-        String sql = "SELECT * FROM phone WHERE account_id = ?";
-        System.out.println(sql);
-        Phone phones = new Phone();
-        try {
-            phones = sessionFactory.getCurrentSession().get(Phone.class, accountId);
-            System.out.println(phones);
-        } catch (Exception ex) {
-            System.out.println(ex);
-        }
-        List<Phone> phones1 = new ArrayList<>();
-        return phones1;
-//        List<Phone> phones = new ArrayList<>();
-//        try {
-//            phones = jdbcTemplate.query(sql, new Object[]{accountId},
-//                    (resultSet, i) -> fillPhone(resultSet));
-//        } catch (Exception ex) {
-//            System.out.println("get phone exception - " + ex);
-//        }
-//        return phones;
+        logger.info("PhoneDao.get(accountId)");
+        logger.debug("PhoneDao.get(accountId = {})", accountId);
+        Session session = sessionFactory.getCurrentSession();
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<Phone> criteriaQuery = criteriaBuilder.createQuery(Phone.class);
+        Root<Phone> from = criteriaQuery.from(Phone.class);
+        CriteriaQuery<Phone> selectAccountId = criteriaQuery.select(from).where(
+                criteriaBuilder.equal(from.get("accountId"), accountId));
+        return session.createQuery(selectAccountId).getResultList();
     }
 
     public boolean update(Phone phone) {
-        System.out.println("update phone - " + phone);
-        System.out.println("phone.getPhoneType() - " + phone.getPhoneType());
-        String sql = "UPDATE phone SET phone_number = ?, phone_type = ? WHERE id = ?";
-        System.out.println(sql);
-        boolean result = false;
-        try {
-            result = jdbcTemplate.update(sql, phone.getPhoneNumber(), phone.getPhoneType(),
-                    phone.getId()) > 0;
-        } catch (Exception ex) {
-            System.out.println("update phone error - " + ex);
-        }
-        return result;
+        logger.info("PhoneDao.update(phone)");
+        logger.debug("PhoneDao.update(phone = {})", phone);
+        return sessionFactory.getCurrentSession().merge(phone) != null;
     }
 
     public boolean delete(Phone phone) {
-        System.out.println("delete phone - " + phone);
-        String sql = "DELETE FROM phone WHERE account_id = ? AND phone_number = ?";
-        System.out.println(sql);
-        int result = jdbcTemplate.update(sql, phone.getAccountId(), phone.getPhoneNumber());
-        return result > 0;
-    }
-
-    private Phone fillPhone(ResultSet resultSet) throws SQLException {
-        Phone phone = new Phone();
-        phone.setId(resultSet.getInt(1));
-        phone.setPhoneNumber(resultSet.getString(2));
-        phone.setPhoneType(resultSet.getInt(3));
-        phone.setAccountId(resultSet.getInt(4));
-        return phone;
+        logger.info("PhoneDao.delete(phone)");
+        logger.debug("PhoneDao.delete(phone = {})", phone);
+        Session session = sessionFactory.getCurrentSession();
+        Phone deletePhone = session.find(Phone.class, phone.getId());
+        session.delete(deletePhone);
+        return true;
     }
 
 }

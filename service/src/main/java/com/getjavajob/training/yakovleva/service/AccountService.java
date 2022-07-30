@@ -22,6 +22,9 @@ public class AccountService {
         this.phoneDao = phoneDao;
     }
 
+    public AccountService() {
+    }
+
     public boolean create(Account account) {
         System.out.println("Creat new Account from AccountService.create");
         try {
@@ -90,9 +93,6 @@ public class AccountService {
     public Account get(int accountId) {
         System.out.println("Account read accountId - " + accountId);
         Account account = accountDao.getAccount(accountId);
-        List<Phone> phones = phoneDao.get(accountId);
-        System.out.println(phones);
-        account.setPhones(phones);
         return account;
     }
 
@@ -114,8 +114,6 @@ public class AccountService {
     public Account getAccount(String username, String password) {
         System.out.println("getAccount(String username, String password)");
         Account account = accountDao.getAccount(username, password);
-        List<Phone> phones = phoneDao.get(account.getId());
-        account.setPhones(phones);
         return account;
     }
 

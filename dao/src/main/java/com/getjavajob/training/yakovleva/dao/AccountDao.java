@@ -1,22 +1,17 @@
 package com.getjavajob.training.yakovleva.dao;
 
 import com.getjavajob.training.yakovleva.common.Account;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import javax.persistence.criteria.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,10 +19,12 @@ import java.util.List;
 @Repository
 @Transactional
 public class AccountDao {
-    private JdbcTemplate jdbcTemplate;
     private SessionFactory sessionFactory;
+    private static final Logger logger = LogManager.getLogger();
 
+    @Autowired
     public AccountDao(SessionFactory sessionFactory) {
+        logger.info("create accountDao");
         this.sessionFactory = sessionFactory;
     }
 
@@ -35,12 +32,14 @@ public class AccountDao {
     }
 
     public void create(Account account) {
+        logger.info("AccountDao.create(Account account)");
         sessionFactory.getCurrentSession().save(account);
     }
 
     public int getIdAccount(Account account) {
-        System.out.println("getIdAccount - account = " + account);
-        String sql = "SELECT * FROM account WHERE username LIKE ? AND password LIKE ?";
+        logger.info("AccountDao.getIdAccount(Account account)");
+        logger.debug("AccountDao.getIdAccount(account.username = {) , account.password = {)",
+                account.getUsername(), account.getPassword());
         Session session = sessionFactory.getCurrentSession();
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
         CriteriaQuery<Account> criteriaQuery = criteriaBuilder.createQuery(Account.class);
@@ -54,15 +53,23 @@ public class AccountDao {
     }
 
     public Account getAccount(String username, String password) {
-        System.out.println("getAccount - username = " + username + " ,password = " + password);
-        String sql = "SELECT * FROM account WHERE username LIKE ? AND password LIKE ?";
-        return jdbcTemplate.query(sql,
-                new Object[]{username, password}, (resultSet, i) -> fillAccount(resultSet)).get(0);
+        logger.info("AccountDao.getAccount(username, password)");
+        logger.debug("AccountDao.getAccount(username = {}, password = {})", username, password);
+        Session session = sessionFactory.getCurrentSession();
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<Account> criteriaQuery = criteriaBuilder.createQuery(Account.class);
+        Root<Account> from = criteriaQuery.from(Account.class);
+        List<Predicate> conditions = new ArrayList<>();
+        conditions.add(criteriaBuilder.like(from.get("username"), username));
+        conditions.add(criteriaBuilder.like(from.get("password"), password));
+        criteriaQuery.where(conditions.toArray(new Predicate[0]));
+        TypedQuery<Account> query = session.createQuery(criteriaQuery);
+        return query.getSingleResult();
     }
 
     public Account getAccount(int id) {
-        System.out.println("getAccount(int id)");
-        String sql = "SELECT * FROM account WHERE account_id = ?";
+        logger.info("AccountDao.getAccount(id)");
+        logger.debug("AccountDao.getAccount(id = {})", id);
         Session session = sessionFactory.getCurrentSession();
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
         CriteriaQuery<Account> criteriaQuery = criteriaBuilder.createQuery(Account.class);
@@ -74,9 +81,8 @@ public class AccountDao {
     }
 
     public List<Account> getAccountsName(String name) {
-        System.out.println("getAccountsName");
-        String sql = "SELECT * FROM account WHERE name LIKE ?";
-        System.out.println(sql);
+        logger.info("AccountDao.getAccountsName(name)");
+        logger.debug("AccountDao.getAccountsName(name = {})", name);
         Session session = sessionFactory.getCurrentSession();
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
         CriteriaQuery<Account> criteriaQuery = criteriaBuilder.createQuery(Account.class);
@@ -87,28 +93,31 @@ public class AccountDao {
     }
 
     public List<Account> getAccounts() {
-        System.out.println("getAccounts");
-        String sql = "SELECT * FROM account";
+        logger.info("AccountDao.getAccounts()");
         Session session = sessionFactory.getCurrentSession();
         CriteriaBuilder cb = session.getCriteriaBuilder();
         CriteriaQuery<Account> cr = cb.createQuery(Account.class);
         Root<Account> root = cr.from(Account.class);
         cr.select(root);
         Query<Account> query = session.createQuery(cr);
-        List<Account> results = query.getResultList();
-        return results;
+        return query.getResultList();
     }
 
     public List<Account> getAccountsLimit(int start, int end) {
-        System.out.println("getAccountsLimit");
-        String sql = "SELECT * FROM account LIMIT ?, ?";
-        System.out.println(sql);
-        return jdbcTemplate.query(sql, new Object[]{start, end}, (resultSet, i) -> fillAccount(resultSet));
+        logger.info("AccountDao.getAccountsLimit(start, end)");
+        logger.debug("AccountDao.getAccountsLimit(start = {}, end = {})", start, end);
+        Session session = sessionFactory.getCurrentSession();
+        CriteriaBuilder cb = session.getCriteriaBuilder();
+        CriteriaQuery<Account> cr = cb.createQuery(Account.class);
+        Root<Account> root = cr.from(Account.class);
+        cr.select(root);
+        Query<Account> query = session.createQuery(cr).setFirstResult(start).setMaxResults(end);
+        return query.getResultList();
     }
 
     public boolean deleteAccount(Account account) {
-        System.out.println("readAccountsName");
-        String sql = "DELETE FROM account WHERE account_id = ?";
+        logger.info("AccountDao.deleteAccount(Account account)");
+        logger.debug("AccountDao.getFriendsAccount(account.id = {})", account.getId());
         sessionFactory.getCurrentSession().delete(account);
         return true;
     }
@@ -118,48 +127,47 @@ public class AccountDao {
     }
 
     public List<Account> getFriendsAccount(int accountId) {
-        System.out.println("List<Account> getFriendsAccount");
-        String sql = "SELECT a.account_id, a.name, a.surname, a.lastname, " +
-                "a.date, a.icq, a.address_home, a.address_job, a.email, " +
-                "a.about_me, a.username, a.password, a.role, a.photo, a.photo_file_name FROM account a, " +
-                "relations r WHERE a.account_id = r.friend_id and r.account_id = ?";
-        return jdbcTemplate.query(sql,
-                new Object[]{accountId},
-                (resultSet, i) -> fillAccount(resultSet));
+        logger.info("AccountDao.getFriendsAccount(accountId)");
+        logger.debug("AccountDao.getFriendsAccount(accountId = {})", accountId);
+        Session session = sessionFactory.getCurrentSession();
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<Account> query = criteriaBuilder.createQuery(Account.class);
+        Root<Account> root = query.from(Account.class);
+        Join<Object, Object> relations = root.join("relations");
+        query.where(criteriaBuilder.and(criteriaBuilder.equal(relations.get("friendId"), root.get("id")),
+                criteriaBuilder.equal(relations.get("accountId"), accountId)));
+        return session.createQuery(query).getResultList();
     }
 
     public void createAccounts(List<Account> accounts) throws SQLException {
-        String sql = "INSERT INTO account(name, surname, lastname, date, icq, address_home, " +
-                "address_job, email, about_me, " +
-                "username, password, role, photo, photo_file_name) " +
-                "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
-        System.out.println(sql);
-
-        DataSource ds = jdbcTemplate.getDataSource();
-        Connection connection = ds.getConnection();
-        connection.setAutoCommit(false);
-        PreparedStatement ps = connection.prepareStatement(sql);
-        for (Account account : accounts) {
-            ps.setString(1, account.getName());
-            ps.setString(2, account.getSurname());
-            ps.setString(3, account.getLastName());
-            ps.setDate(4, new java.sql.Date(account.getDate().getTime()));
-            ps.setInt(5, account.getIcq());
-            ps.setString(6, account.getAddressHome());
-            ps.setString(7, account.getAddressJob());
-            ps.setString(8, account.getEmail());
-            ps.setString(9, account.getAboutMe());
-            ps.setString(10, account.getUsername());
-            ps.setString(11, account.getPassword());
-            ps.setInt(12, account.getRole());
-            ps.setBytes(13, account.getPhoto());
-            ps.setString(14, account.getPhotoFileName());
-            ps.addBatch();
-        }
-        ps.executeBatch();
-        ps.clearBatch();
-        connection.commit();
-        ps.close();
+        logger.info("AccountDao.createAccounts(accounts.size() = %d)", accounts.size());
+        logger.debug("AccountDao.createAccounts(accounts.size() = {}", accounts.size());
+        sessionFactory.getCurrentSession().save(accounts);
+//        DataSource ds = jdbcTemplate.getDataSource();
+//        Connection connection = ds.getConnection();
+//        connection.setAutoCommit(false);
+//        PreparedStatement ps = connection.prepareStatement(sql);
+//        for (Account account : accounts) {
+//            ps.setString(1, account.getName());
+//            ps.setString(2, account.getSurname());
+//            ps.setString(3, account.getLastName());
+//            ps.setDate(4, new java.sql.Date(account.getDate().getTime()));
+//            ps.setInt(5, account.getIcq());
+//            ps.setString(6, account.getAddressHome());
+//            ps.setString(7, account.getAddressJob());
+//            ps.setString(8, account.getEmail());
+//            ps.setString(9, account.getAboutMe());
+//            ps.setString(10, account.getUsername());
+//            ps.setString(11, account.getPassword());
+//            ps.setInt(12, account.getRole());
+//            ps.setBytes(13, account.getPhoto());
+//            ps.setString(14, account.getPhotoFileName());
+//            ps.addBatch();
+//        }
+//        ps.executeBatch();
+//        ps.clearBatch();
+//        connection.commit();
+//        ps.close();
 
 //        int[] argTypes = new int[35];
 //        argTypes[0] = Types.VARCHAR;
@@ -225,30 +233,6 @@ public class AccountDao {
 //                        return accounts.size();
 //                    }
 //                });
-    }
-
-    private Account fillAccount(ResultSet resultSet) {
-        Account account = new Account();
-        try {
-            account.setId(resultSet.getInt(1));
-            account.setName(resultSet.getString(2));
-            account.setSurname(resultSet.getString(3));
-            account.setLastName(resultSet.getString(4));
-            account.setDate(resultSet.getDate(5));
-            account.setIcq(resultSet.getInt(6));
-            account.setAddressHome(resultSet.getString(7));
-            account.setAddressJob(resultSet.getString(8));
-            account.setEmail(resultSet.getString(9));
-            account.setAboutMe(resultSet.getString(10));
-            account.setUsername(resultSet.getString(11));
-            account.setPassword(resultSet.getString(12));
-            account.setRole(resultSet.getInt(13));
-            account.setPhoto(resultSet.getBytes(14));
-            account.setPhotoFileName(resultSet.getString(15));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return account;
     }
 
 }

@@ -20,6 +20,9 @@ public class ApplicationService {
         this.applicationDao = applicationDao;
     }
 
+    public ApplicationService() {
+    }
+
     public boolean create(Application application) {
         System.out.println("Creat new Application from ApplicationService.create");
         try {

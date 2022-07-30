@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.Objects;
 
 @Entity
-@Table(name = "socialnetwork.group")
+@Table(name = "group_social")
 public class Group {
     @Id
     @GeneratedValue

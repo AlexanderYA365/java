@@ -18,6 +18,9 @@ public class RelationsService {
         this.relationsDao = relationsDao;
     }
 
+    public RelationsService() {
+    }
+
     public boolean create(Relations relations) {
         System.out.println("RelationsService.create()");
         return relationsDao.create(relations);

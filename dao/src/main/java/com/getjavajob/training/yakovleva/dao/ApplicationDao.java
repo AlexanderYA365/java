@@ -3,119 +3,104 @@ package com.getjavajob.training.yakovleva.dao;
 import com.getjavajob.training.yakovleva.common.Application;
 import com.getjavajob.training.yakovleva.common.Group;
 import com.getjavajob.training.yakovleva.common.Relations;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.List;
 
 @Repository
 @Transactional
 public class ApplicationDao {
-    private final JdbcTemplate jdbcTemplate;
+    private SessionFactory sessionFactory;
+    private static final Logger logger = LogManager.getLogger();
 
-    public ApplicationDao(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public ApplicationDao(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
+
+    public ApplicationDao() {
     }
 
     public boolean create(Application application) {
-        System.out.println("Application create");
-        String sql = "INSERT INTO application (application_type, applicant_id, recipient_id, status)" +
-                " VALUES (?, ?, ?, ?);";
-        System.out.println(sql);
-        int result = jdbcTemplate.update(sql, application.getApplicationType(), application.getApplicantId(),
-                application.getRecipientId(), application.getStatus());
-        return result > 0;
+        logger.info("ApplicationDao.create(application)");
+        logger.debug("ApplicationDao.create(application = {})", application);
+        sessionFactory.getCurrentSession().save(application);
+        return true;
     }
 
     public Application get(int id) {
-        System.out.println("Application get");
-        String sql = "SELECT * FROM application WHERE id = ?";
-        System.out.println(sql);
-        return jdbcTemplate.queryForObject(sql, new Object[]{id},
-                (resultSet, i) -> fillFieldQuery(resultSet));
+        logger.info("ApplicationDao.get(id)");
+        logger.debug("ApplicationDao.get(id = {})", id);
+        Session session = sessionFactory.getCurrentSession();
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<Application> criteriaQuery = criteriaBuilder.createQuery(Application.class);
+        Root<Application> from = criteriaQuery.from(Application.class);
+        criteriaQuery.select(from);
+        criteriaQuery.where(criteriaBuilder.equal(from.get("id"), id));
+        Query<Application> query = session.createQuery(criteriaQuery);
+        return query.getSingleResult();
     }
 
     public Application get(Group group, int recipientId) {
-        System.out.println("Application get(Group group, int recipientId)");
-        String sql = "SELECT * FROM application WHERE applicant_id = ? AND recipient_id = ? AND application_type = 0";
-        System.out.println(sql);
-        return jdbcTemplate.queryForObject(sql, new Object[]{group.getGroupId(), recipientId},
-                (resultSet, i) -> fillFieldQuery(resultSet));
+        logger.info("ApplicationDao.get(group, recipientId)");
+        logger.debug("ApplicationDao.get(group.id = {}, recipientId = {})", group.getGroupId(), recipientId);
+        Session session = sessionFactory.getCurrentSession();
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<Application> criteriaQuery = criteriaBuilder.createQuery(Application.class);
+        Root<Application> from = criteriaQuery.from(Application.class);
+        criteriaQuery.select(from);
+        criteriaQuery.where(criteriaBuilder.and(
+                criteriaBuilder.equal(from.get("applicantId"), group.getGroupId()),
+                criteriaBuilder.equal(from.get("recipientId"), recipientId),
+                criteriaBuilder.equal(from.get("applicationType"), 0)));
+        return session.createQuery(criteriaQuery).getSingleResult();
     }
 
     public Application get(Relations relations) {
-        System.out.println("Application get(Friend friend)");
-        String sql = "SELECT * FROM application WHERE applicant_id = ? AND recipient_id = ? AND application_type = 1";
-        System.out.println(sql);
-        Application application = null;
-        try {
-            application = jdbcTemplate.queryForObject(sql,
-                    new Object[]{ relations.getFriendId(), relations.getAccountId()},
-                    (resultSet, i) -> fillFieldQuery(resultSet));
-        } catch (Exception ex) {
-            System.out.println(ex);
-        }
-        if (application == null) {
-            System.out.println("new application");
-            application = new Application();
-            application.setId(0);
-            application.setApplicationType(0);
-            application.setApplicantId(0);
-            application.setStatus(0);
-            application.setRecipientId(0);
-        }
-        return application;
+        logger.info("ApplicationDao.get(relations)");
+        logger.debug("ApplicationDao.get(relations = {})", relations);
+        Session session = sessionFactory.getCurrentSession();
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<Application> criteriaQuery = criteriaBuilder.createQuery(Application.class);
+        Root<Application> from = criteriaQuery.from(Application.class);
+        criteriaQuery.select(from);
+        criteriaQuery.where(criteriaBuilder.and(
+                criteriaBuilder.equal(from.get("applicantId"), relations.getAccountId()),
+                criteriaBuilder.equal(from.get("recipientId"), relations.getFriendId()),
+                criteriaBuilder.equal(from.get("applicationType"), 1)));
+        return session.createQuery(criteriaQuery).getSingleResult();
     }
 
     public List<Application> getApplications() {
-        System.out.println("List<Application> getApplications");
-        String sql = "SELECT * FROM application";
-        System.out.println(sql);
-        return jdbcTemplate.queryForObject(sql,
-                (resultSet, i) -> fillApplications(resultSet));
+        logger.info("ApplicationDao.getApplications()");
+        Session session = sessionFactory.getCurrentSession();
+        CriteriaBuilder cb = session.getCriteriaBuilder();
+        CriteriaQuery<Application> cr = cb.createQuery(Application.class);
+        Root<Application> root = cr.from(Application.class);
+        cr.select(root);
+        Query<Application> query = session.createQuery(cr);
+        return query.getResultList();
     }
 
     public boolean update(Application application) {
-        System.out.println("update(Application application)");
-        String sql = "UPDATE application SET id = ?, application_type = ?, idAdministrator = ?, " +
-                "idAdministrator = ?;";
-        System.out.println(sql);
-        int result = jdbcTemplate.update(sql, application.getId(), application.getApplicationType(),
-                application.getApplicantId(), application.getRecipientId(), application.getStatus());
-        return result > 0;
+        logger.info("ApplicationDao.update(application)");
+        logger.debug("ApplicationDao.update(application = {})", application);
+        return sessionFactory.getCurrentSession().merge(application) != null;
     }
 
     public boolean delete(Application application) {
-        System.out.println("delete(Application application)");
-        String sql = "DELETE FROM application WHERE id = " + application.getId();
-        System.out.println(sql);
-        return jdbcTemplate.update(sql, application.getId()) > 0;
-    }
-
-    private List<Application> fillApplications(ResultSet resultSet) {
-        List<Application> applications = new ArrayList<>();
-        try {
-            while (resultSet.next()) {
-                applications.add(fillFieldQuery(resultSet));
-            }
-        } catch (SQLException e) {
-            System.out.println(e.toString());
-        }
-        return applications;
-    }
-
-    private Application fillFieldQuery(ResultSet resultSet) throws SQLException {
-        Application application = new Application();
-        application.setId(resultSet.getInt(1));
-        application.setApplicationType(resultSet.getInt(2));
-        application.setApplicantId(resultSet.getInt(3));
-        application.setRecipientId(resultSet.getInt(4));
-        application.setStatus(resultSet.getInt(5));
-        return application;
+        logger.info("ApplicationDao.delete(application)");
+        logger.debug("ApplicationDao.delete(application = {})", application);
+        sessionFactory.getCurrentSession().delete(application);
+        return true;
     }
 
 }

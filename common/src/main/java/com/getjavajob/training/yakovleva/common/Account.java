@@ -44,10 +44,22 @@ public class Account {
     private String password;
     @Column(name = "role")
     private Role role;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "relations",
+            joinColumns = @JoinColumn(name = "friend_id"),
+            inverseJoinColumns = @JoinColumn(name = "account_id")
+    )
+    private List<Relations> relations;
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "message",
+            joinColumns = @JoinColumn(name = "receiver_id"),
+            inverseJoinColumns = @JoinColumn(name = "account_id")
+    )
+    private List<Message> messages;
 
     public Account(String name, String surname, String lastName, Date date, List<Phone> phones,
                    int icq, String photoFileName, byte[] photo, String addressHome, String addressJob, String email, String aboutMe, String username,
-                   String password, Role role) {
+                   String password, Role role, List<Relations> relations, List<Message> messages) {
         this.name = name;
         this.surname = surname;
         this.lastName = lastName;
@@ -64,10 +76,31 @@ public class Account {
         this.password = password;
         this.phones = phones;
         this.role = role;
+        this.relations = relations;
+        this.messages = messages;
     }
 
     public Account() {
+    }
 
+    public List<Message> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(List<Message> messages) {
+        this.messages = messages;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public List<Relations> getRelations() {
+        return relations;
+    }
+
+    public void setRelations(List<Relations> relations) {
+        this.relations = relations;
     }
 
     public int getRole() {
