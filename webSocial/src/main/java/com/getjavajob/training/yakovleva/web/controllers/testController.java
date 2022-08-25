@@ -2,9 +2,8 @@ package com.getjavajob.training.yakovleva.web.controllers;
 
 import com.getjavajob.training.yakovleva.common.Account;
 import com.getjavajob.training.yakovleva.common.Phone;
-import com.getjavajob.training.yakovleva.service.AccountService;
-import com.getjavajob.training.yakovleva.service.GroupService;
-import com.getjavajob.training.yakovleva.service.PhoneService;
+import com.getjavajob.training.yakovleva.common.Relations;
+import com.getjavajob.training.yakovleva.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,12 +26,17 @@ public class testController {
     private AccountService accountService;
     private PhoneService phoneService;
     private GroupService groupService;
+    private MessageService messageService;
+    private ApplicationService applicationService;
 
     @Autowired
-    public testController(GroupService groupService, AccountService accountService, PhoneService phoneService) {
+    public testController(MessageService messageService, ApplicationService applicationService,
+                          GroupService groupService, AccountService accountService, PhoneService phoneService) {
         this.groupService = groupService;
         this.accountService = accountService;
         this.phoneService = phoneService;
+        this.messageService = messageService;
+        this.applicationService = applicationService;
     }
 
     @RequestMapping(value = "/createBD", method = RequestMethod.GET)
@@ -85,7 +89,14 @@ public class testController {
         System.out.println("acc");
         ModelAndView modelAndView = new ModelAndView("all-accounts");
         try {
-            System.out.println(accountService.get(1));
+            Account account = new Account();
+            account.setId(1);
+            Relations relations = new Relations();
+            relations.setAccountId(1);
+            relations.setFriendId(1);
+//            System.out.println(applicationService.getAccount(relations));
+            //System.out.println(messageService.getWallMassageAccount(account));
+            System.out.println(accountService.getAccountsCriteriaLimit(0, 5, "Комаров"));
         } catch (Exception ex) {
             System.out.println(ex);
         }

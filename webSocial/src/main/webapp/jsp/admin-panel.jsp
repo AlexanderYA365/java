@@ -72,7 +72,7 @@
 <%--    &lt;%&ndash;    </c:forEach>&ndash;%&gt;--%>
 <%--</table>--%>
 <table border="0" margin="0" padding="0" width="100%"
-       class="dataTables_wrapper" id="studentListTable">
+       class="dataTables_wrapper" id="admin">
     <thead>
     <tr>
         <th>Id</th>
@@ -108,6 +108,7 @@
             "aoColumns": [{"bSearchable": false, "bVisible": false, "asSorting": ["asc"]},
                 {"sWidth": "20%", "bSortable": true},
                 {"sWidth": "20%", "bSortable": true},
+                {"sWidth": "10%", "bSortable": true},
                 {"sWidth": "10%", "bSortable": true},
                 {"sWidth": "20%", "bSortable": true},
                 {"sWidth": "20%", "bSortable": true}

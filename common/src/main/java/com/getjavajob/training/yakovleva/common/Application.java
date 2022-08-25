@@ -1,13 +1,14 @@
 package com.getjavajob.training.yakovleva.common;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
 @Table(name = "application")
-public class Application {
+public class Application implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private int id;
     @Column(name = "application_type")
     private ApplicationType applicationType;
@@ -18,16 +19,15 @@ public class Application {
     @Column(name = "status")
     private ApplicationStatusType status;
 
+    public Application() {
+    }
+
     public Application(int id, ApplicationType applicationType, int applicantId, int recipientId, ApplicationStatusType status) {
         this.id = id;
         this.applicationType = applicationType;
         this.applicantId = applicantId;
         this.recipientId = recipientId;
         this.status = status;
-    }
-
-    public Application() {
-
     }
 
     public int getRecipientId() {

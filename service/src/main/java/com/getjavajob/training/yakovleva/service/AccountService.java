@@ -4,6 +4,8 @@ import com.getjavajob.training.yakovleva.common.Account;
 import com.getjavajob.training.yakovleva.common.Phone;
 import com.getjavajob.training.yakovleva.dao.AccountDao;
 import com.getjavajob.training.yakovleva.dao.PhoneDao;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,11 +15,13 @@ import java.util.List;
 @Repository
 @Transactional
 public class AccountService {
+    private static final Logger logger = LogManager.getLogger();
     private AccountDao accountDao;
     private PhoneDao phoneDao;
 
     @Autowired
     public AccountService(AccountDao accountDao, PhoneDao phoneDao) {
+        logger.info("AccountService(AccountDao accountDao, PhoneDao phoneDao)");
         this.accountDao = accountDao;
         this.phoneDao = phoneDao;
     }
@@ -26,7 +30,8 @@ public class AccountService {
     }
 
     public boolean create(Account account) {
-        System.out.println("Creat new Account from AccountService.create");
+        logger.info("create(Account account)");
+        logger.debug("create(account - {})", account);
         try {
             accountDao.create(account);
             int id = accountDao.getIdAccount(account);
@@ -37,27 +42,30 @@ public class AccountService {
             }
             return id > 0 || result;
         } catch (Exception e) {
-            System.out.println("create Exception - " + e);
+            logger.error("AccountService.create Exception - {}", e);
             return false;
         }
     }
 
     public void createAccounts(List<Account> accounts) {
-        System.out.println("create accounts");
+        logger.info("createAccounts(List<Account> accounts)");
+        logger.debug("createAccounts(accounts - {})", accounts);
         try {
             accountDao.createAccounts(accounts);
         } catch (Exception ex) {
-            System.out.println("create accounts exception - " + ex);
+            logger.error("create accounts exception - {}", ex);
         }
     }
 
     public int getId(Account account) {
-        System.out.println("get id - " + account);
+        logger.info("getId(Account account)");
+        logger.debug("get(account - {})", account);
         return accountDao.getIdAccount(account);
     }
 
     public boolean update(Account account) {
-        System.out.println("Account update accountId - " + account.getId());
+        logger.info("update(Account account)");
+        logger.debug("update(account - {})", account);
         try {
             int id = accountDao.getIdAccount(account);
             boolean result = false;
@@ -69,13 +77,14 @@ public class AccountService {
             }
             return accountDao.updateAccount(account) || result;
         } catch (Exception e) {
-            System.out.println("create Exception - " + e);
+            logger.error("create exception - {}", e);
             return false;
         }
     }
 
     public boolean delete(Account account) {
-        System.out.println("Account delete accountId - " + account);
+        logger.info("delete(Account account)");
+        logger.debug("delete(account - {})", account);
         try {
             int id = accountDao.getIdAccount(account);
             boolean result = false;
@@ -85,40 +94,52 @@ public class AccountService {
             }
             return accountDao.deleteAccount(account) || result;
         } catch (Exception e) {
-            System.out.println("create Exception - " + e);
+            logger.error("create Exception - {}", e);
             return false;
         }
     }
 
     public Account get(int accountId) {
-        System.out.println("Account read accountId - " + accountId);
+        logger.info("get(int accountId)");
+        logger.debug("get(accountId = {})", accountId);
         Account account = accountDao.getAccount(accountId);
         return account;
     }
 
     public List<Account> getAllAccounts() {
-        System.out.println("read all account dao");
-        return accountDao.getAccounts();
+        logger.info("getAllAccounts()");
+        return accountDao.getAllAccounts();
+    }
+
+    public List<Account> getAccountsCriteriaLimit(int start, int end, String criteriaName) {
+        logger.info("getAccountsCriteriaLimit(int start, int end, String criteriaName)");
+        logger.debug("getAccountsCriteriaLimit(start = {}, end = {}, criteriaName = {})", start, end, criteriaName);
+        return accountDao.getAccountsCriteriaLimit(start, end, criteriaName);
     }
 
     public List<Account> getAllAccountsLimit(int start, int end) {
-        System.out.println("getAllAccountsLimit");
+        logger.info("getAllAccountsLimit(int start, int end)");
+        logger.debug("getAllAccountsLimit(start = {}, end = {})", start, end);
         return accountDao.getAccountsLimit(start, end);
     }
 
     public List<Account> getAccountName(String name) {
-        System.out.println("getAccountName, name - " + name);
+        logger.info("getAccountName(String name)");
+        logger.debug("getAccountName(name = {})", name);
         return accountDao.getAccountsName(name);
     }
 
     public Account getAccount(String username, String password) {
-        System.out.println("getAccount(String username, String password)");
+        logger.info("getAccount(String username, String password)");
+        logger.debug("getAccount(username = {}, password = {})", username, password);
         Account account = accountDao.getAccount(username, password);
         return account;
     }
 
     public List<Account> getFriendsAccount(int accountId) {
-        System.out.println("List<Account> getFriendAccount");
+        logger.info("getFriendsAccount(int accountId)");
+        logger.debug("getFriendsAccount(accountId = {})", accountId);
         return accountDao.getFriendsAccount(accountId);
     }
+
 }

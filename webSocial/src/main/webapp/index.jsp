@@ -7,7 +7,6 @@
 --%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-
 <html>
 <head>
     <title>Добро пожаловать</title>
@@ -19,6 +18,7 @@
 <p align="center">
     Добро пожаловать
 </p>
+
 <div class="form">
     <form class="modal" modelAttribute="account" action="${pageContext.request.contextPath}/index" method="GET">
         <fieldset>

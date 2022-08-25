@@ -69,7 +69,7 @@ public class GroupController {
         System.out.println("saveGroup");
         ModelAndView modelAndView = new ModelAndView("/group/create-group");
         Account account = (Account) session.getAttribute("account");
-        List<Group> groups = groupService.getGroups();
+        List<Group> groups = groupService.getAllGroups();
         try {
             if (createNewGroup(groups, request.getParameter("name"))) {
                 Group group = new Group();

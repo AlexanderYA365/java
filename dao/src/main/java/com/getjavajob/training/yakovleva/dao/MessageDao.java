@@ -9,18 +9,15 @@ import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Repository
 @Transactional
 public class MessageDao {
-    private SessionFactory sessionFactory;
     private static final Logger logger = LogManager.getLogger();
+    private SessionFactory sessionFactory;
 
     public MessageDao(SessionFactory sessionFactory) {
         logger.info("MessageDao(sessionFactory)");
@@ -48,8 +45,6 @@ public class MessageDao {
     public List<Message> getMessageUserIdNameSender(int receiverId) {
         logger.info("MessageDao.getMessageUserIdNameSender(receiverId)");
         logger.debug("MessageDao.getMessageUserIdNameSender(receiverId = {})", receiverId);
-        System.out.println("readMessageUserIdNameSender");
-
         String sql = "SELECT id, sender_id, receiver_id, name, message, picture, publication_date, edited," +
                 " message_type FROM account JOIN message " +
                 "ON account_id = sender_id WHERE receiver_id =? OR sender_id =? AND message_type = 1;";
@@ -57,23 +52,14 @@ public class MessageDao {
         Session session = sessionFactory.getCurrentSession();
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
         CriteriaQuery<Account> query = criteriaBuilder.createQuery(Account.class);
-        Root<Account> root = query.from(Account.class);
-        Join<Object, Object> messages = root.join("message");
-        query.where(criteriaBuilder.or(criteriaBuilder.equal(messages.get("friendId"), root.get("id")),
-                criteriaBuilder.equal(messages.get("accountId"), accountId)));
-        return session.createQuery(query).getResultList();
-//
-//        Session session = sessionFactory.getCurrentSession();
-//        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-//        CriteriaQuery<Message> criteriaQuery = criteriaBuilder.createQuery(Message.class);
-//        Root<Message> from = criteriaQuery.from(Message.class);
-//        ListJoin<Message,Account> join = from.join(Account.class);
-//
-//
-//
-//        return jdbcTemplate.queryForObject(sql, new Object[]{receiverId, receiverId}, (resultSet, i)
-//                -> fillMessagesAccount(resultSet));
-        return new ArrayList<>();
+        Root<Account> fromAccount = query.from(Account.class);
+        Join<Object, Object> messages = fromAccount.join("message");
+        Predicate receiverIdOrSenderId = criteriaBuilder.or(
+                criteriaBuilder.equal(messages.get("receiverId"), receiverId),
+                criteriaBuilder.equal(messages.get("senderId"), receiverId));
+        Predicate andMessageType = criteriaBuilder.and(criteriaBuilder.equal(messages.get("messageType"), 1));
+        query.where(criteriaBuilder.and(andMessageType, receiverIdOrSenderId));
+        return session.createQuery(query).getSingleResult().getMessage();
     }
 
     public List<Message> getUniqueMessagesForUser(int receiverId) {
@@ -85,16 +71,17 @@ public class MessageDao {
                 " FROM account JOIN message " +
                 "ON account_id = sender_id WHERE sender_id = ? OR receiver_id = ? AND message_type = 1 GROUP BY sender_id;";
         System.out.println(sql);
-//        List<Message> messages = new ArrayList<>();
-//        try {
-//            messages = jdbcTemplate.queryForObject(sql, new Object[]{receiverId, receiverId},
-//                    (resultSet, i) -> fillMessagesAccount(resultSet));
-//        } catch (Exception ex) {
-//            System.out.println(ex);
-//        }
-//        System.out.println("mes - " + messages);
-//        return messages;
-        return new ArrayList<>();
+        Session session = sessionFactory.getCurrentSession();
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<Account> query = criteriaBuilder.createQuery(Account.class);
+        Root<Account> fromAccount = query.from(Account.class);
+        Join<Account, Message> messages = fromAccount.join("message");
+        Predicate receiverIdOrSenderId = criteriaBuilder.or(
+                criteriaBuilder.equal(messages.get("receiverId"), receiverId),
+                criteriaBuilder.equal(messages.get("senderId"), receiverId));
+        Predicate andMessageType = criteriaBuilder.and(criteriaBuilder.equal(messages.get("messageType"), 1));
+        query.where(criteriaBuilder.and(andMessageType, receiverIdOrSenderId));
+        return session.createQuery(query).getSingleResult().getMessage();
     }
 
     public List<Message> getMessageAccounts(int senderId, int receiverId) {
@@ -107,30 +94,50 @@ public class MessageDao {
                 "INNER JOIN account b ON sender_id = b.account_id " +
                 "WHERE (sender_id = ? AND receiver_id = ?) OR (sender_id = ? AND receiver_id = ?) AND message_type = 1";
         System.out.println(sql);
-//        List<Message> messages = new ArrayList<>();
-//        try {
-//            messages = jdbcTemplate.queryForObject(sql, new Object[]{senderId, receiverId, receiverId, senderId},
-//                    (resultSet, i) -> fillMessages(resultSet));
-//        } catch (Exception ex) {
-//            System.out.println(ex);
-//        }
-//        return messages;
+        Session session = sessionFactory.getCurrentSession();
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<Account> query = criteriaBuilder.createQuery(Account.class);
+        Root<Account> root = query.from(Account.class);
+        Join<Account, Message> messages = root.join("message", JoinType.INNER);
+        List<Predicate> conditions = new ArrayList();
+        Predicate predicate =
+                criteriaBuilder.or(criteriaBuilder.and(criteriaBuilder.equal(messages.get("senderId"), senderId),
+                        criteriaBuilder.equal(messages.get("receiverId"), receiverId)),
+                        criteriaBuilder.and(criteriaBuilder.equal(messages.get("senderId"), receiverId),
+                                criteriaBuilder.equal(messages.get("receiverId"), senderId)));
+
+//        conditions.add(criteriaBuilder.equal(messages.get("messageType"), 1));
+//        conditions.add(
+//                criteriaBuilder.or(criteriaBuilder.and(criteriaBuilder.equal(messages.get("senderId"), senderId),
+//                criteriaBuilder.equal(messages.get("receiverId"), receiverId)),
+//                criteriaBuilder.and(criteriaBuilder.equal(messages.get("senderId"), receiverId),
+//                criteriaBuilder.equal(messages.get("receiverId"), senderId))));
+//        query.where(conditions.toArray(new Predicate[] {}));
+        query.where(predicate);
+        System.out.println(session.createQuery(query).getSingleResult().getMessage());
         return new ArrayList<>();
     }
 
     public List<Message> getWallMessage(int receiverId) {
         logger.info("MessageDao.getWallMessage(receiverId)");
         logger.debug("MessageDao.getWallMessage(receiverId = {})", receiverId);
-        System.out.println("readWallMessage - start");
         String sql = "SELECT id, sender_id, receiver_id, a.name, b.name, message, picture, publication_date, edited, " +
                 "message_type FROM message " +
                 "INNER JOIN account a ON receiver_id = a.account_id " +
                 "INNER JOIN account b ON sender_id = b.account_id " +
                 "WHERE receiver_id = ? AND message_type = 0";
         System.out.println(sql);
-//        List<Message> messages = getMessages(receivingId, sql);
-//        return messages;
-        return new ArrayList<>();
+        Session session = sessionFactory.getCurrentSession();
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<Account> query = criteriaBuilder.createQuery(Account.class);
+        Root<Account> root = query.from(Account.class);
+        Join<Account, Message> messages = root.join("message", JoinType.INNER);
+        Predicate predicate =
+                criteriaBuilder.and(criteriaBuilder.equal(messages.get("receiverId"), receiverId),
+                        criteriaBuilder.equal(messages.get("messageType"), 0));
+        query.where(predicate);
+        System.out.println(session.createQuery(query).getSingleResult().getMessage());
+        return session.createQuery(query).getSingleResult().getMessage();
     }
 
     public boolean delete(int id) {

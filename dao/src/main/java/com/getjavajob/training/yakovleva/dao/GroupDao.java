@@ -18,8 +18,8 @@ import java.util.List;
 @Repository
 @Transactional
 public class GroupDao {
-    private SessionFactory sessionFactory;
     private static final Logger logger = LogManager.getLogger();
+    private SessionFactory sessionFactory;
 
     @Autowired
     public GroupDao(SessionFactory sessionFactory) {
@@ -43,7 +43,7 @@ public class GroupDao {
         return sessionFactory.getCurrentSession().get(Group.class, group_id);
     }
 
-    public List<Group> getGroups(String groupName) {
+    public List<Group> getAllGroups(String groupName) {
         logger.info("GroupDao.getGroups(groupName)");
         logger.debug("GroupDao.getGroups(groupName = {})", groupName);
         Session session = sessionFactory.getCurrentSession();
@@ -55,7 +55,21 @@ public class GroupDao {
         return session.createQuery(selectGroupName).getResultList();
     }
 
-    public List<Group> getGroups() {
+    public List<Group> getCriteriaLimit(int start, int end, String criteriaName) {
+        logger.info("AccountDao.getAccountsLimit(start, end, criteriaName)");
+        logger.debug("AccountDao.getAccountsCriteriaLimit(start = {}, end = {}, criteriaName = {})",
+                start, end, criteriaName);
+        Session session = sessionFactory.getCurrentSession();
+        CriteriaBuilder cb = session.getCriteriaBuilder();
+        CriteriaQuery<Group> cr = cb.createQuery(Group.class);
+        Root<Group> from = cr.from(Group.class);
+        cr.select(from);
+        CriteriaQuery<Group> nameQuery = cr.select(from).where(cb.like(from.get("groupName"), criteriaName));
+        Query<Group> query = session.createQuery(nameQuery).setFirstResult(start).setMaxResults(end);
+        return query.getResultList();
+    }
+
+    public List<Group> getAllGroups() {
         logger.info("GroupDao.getGroups()");
         Session session = sessionFactory.getCurrentSession();
         CriteriaBuilder cb = session.getCriteriaBuilder();

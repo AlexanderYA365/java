@@ -9,6 +9,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -24,12 +26,13 @@ import java.util.Date;
 import java.util.List;
 
 @Controller
+@ControllerAdvice
 @SessionAttributes("account")
 public class AccountController {
+    private static final Logger logger = LogManager.getLogger();
     private AccountService accountService;
     private MessageService messageService;
     private PhoneService phoneService;
-    private static final Logger logger = LogManager.getLogger();
 
     @Autowired
     public AccountController(AccountService accountService,
@@ -161,14 +164,18 @@ public class AccountController {
         return modelAndView;
     }
 
+    @ModelAttribute("account")
+    public Account getAccount() {
+        return new Account();
+    }
+
     @RequestMapping(value = "/index", method = RequestMethod.GET)
     //TODO RequestParam - заменить на ModelAttribute
-    public ModelAndView login(@RequestParam(value = "username", required = false) String username,
-                              @RequestParam(value = "password", required = false) String password,
-                              @RequestParam(value = "checkbox", required = false) String checkbox,
-                              HttpSession session) {
-        logger.info("login, username = {}, password = {} ", username, password);
-        return userValidation(checkbox, username, password, session);
+    public ModelAndView login(@ModelAttribute("account") final Account account,
+                              final BindingResult result, final ModelMap model,
+                              @RequestParam(value = "checkbox", required = false) String checkbox) {
+        logger.info("login, username = {}, password = {} ", account.getUsername(), account.getPassword());
+        return userValidation(checkbox, account);
     }
 
     @RequestMapping(value = "/main", method = RequestMethod.POST)
@@ -196,25 +203,25 @@ public class AccountController {
     }
 
     private ModelAndView userValidation(String cookies,
-                                        String username,
-                                        String password,
-                                        HttpSession session) {
+                                        Account account) {
+        logger.info("ModelAndView userValidation(cookies = {}," +
+                        "account.username = {}, account.password = {})",
+                cookies, account.getUsername(), account.getPassword());
         ModelAndView modelAndView = new ModelAndView();
-        if (username == null || password == null) {
+        if (account.getUsername() == null || account.getPassword() == null) {
             logger.info("userValidation, redirect to index");
             modelAndView.setViewName("redirect:index");
         } else {
-            Account account = accountService.getAccount(username, password);
-            System.out.println("registeredAccount - " + account);
-            if (account.getId() != 0) {
-                modelAndView.addObject("account", account);
-                session.setAttribute("account", account);
+            Account registeredAccount = accountService.getAccount(account.getUsername(), account.getPassword());
+            System.out.println("registeredAccount - " + registeredAccount);
+            if (registeredAccount.getId() != 0) {
+                modelAndView.addObject("account", registeredAccount);
                 modelAndView.setViewName("redirect:main");
             } else {
                 logger.info("userValidation -> else");
                 int errorLogin = 1;
                 modelAndView.addObject("errorLogin", errorLogin);
-                modelAndView.setViewName("/");
+                modelAndView.setViewName("redirect:index");
             }
         }
         return modelAndView;

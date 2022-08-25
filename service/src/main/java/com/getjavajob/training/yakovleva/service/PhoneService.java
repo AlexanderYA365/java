@@ -2,6 +2,8 @@ package com.getjavajob.training.yakovleva.service;
 
 import com.getjavajob.training.yakovleva.common.Phone;
 import com.getjavajob.training.yakovleva.dao.PhoneDao;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,10 +13,12 @@ import java.util.List;
 @Repository
 @Transactional
 public class PhoneService {
+    private static final Logger logger = LogManager.getLogger();
     private PhoneDao phoneDao;
 
     @Autowired
     public PhoneService(PhoneDao phoneDao) {
+        logger.info("MessageService(PhoneDao phoneDao)");
         this.phoneDao = phoneDao;
     }
 
@@ -22,28 +26,31 @@ public class PhoneService {
     }
 
     public boolean create(Phone phone) {
-        System.out.println("Create new Phone from PhoneService.create");
-        boolean result = false;
+        logger.info("create(Phone phone)");
+        logger.debug("create(phone = {})", phone);
         try {
             return phoneDao.create(phone);
         } catch (Exception ex) {
-            System.out.println("create exception - " + ex);
+            logger.error("create exception - {}", ex);
             return false;
         }
     }
 
     public List<Phone> get(int idPhone) {
-        System.out.println("Read Phone from PhoneService.get");
+        logger.info("get(int idPhone)");
+        logger.debug("get(idPhone = {})", idPhone);
         return phoneDao.get(idPhone);
     }
 
     public boolean update(Phone phone) {
-        System.out.println("Update Phone from PhoneService.update");
+        logger.info("update(Phone phone)");
+        logger.debug("update(phone = {})", phone);
         return phoneDao.update(phone);
     }
 
     public boolean delete(Phone phone) {
-        System.out.println("Delete Phone from PhoneService.delete");
+        logger.info("delete(Phone phone)");
+        logger.debug("delete(phone = {})", phone);
         return phoneDao.delete(phone);
     }
 

@@ -12,15 +12,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 @Repository
 @Transactional
 public class AccountDao {
-    private SessionFactory sessionFactory;
     private static final Logger logger = LogManager.getLogger();
+    private SessionFactory sessionFactory;
 
     @Autowired
     public AccountDao(SessionFactory sessionFactory) {
@@ -92,7 +91,7 @@ public class AccountDao {
         return session.createQuery(nameQuery).getResultList();
     }
 
-    public List<Account> getAccounts() {
+    public List<Account> getAllAccounts() {
         logger.info("AccountDao.getAccounts()");
         Session session = sessionFactory.getCurrentSession();
         CriteriaBuilder cb = session.getCriteriaBuilder();
@@ -100,6 +99,24 @@ public class AccountDao {
         Root<Account> root = cr.from(Account.class);
         cr.select(root);
         Query<Account> query = session.createQuery(cr);
+        System.out.println(query.getResultList());
+        return query.getResultList();
+    }
+
+    public List<Account> getAccountsCriteriaLimit(int start, int end, String criteriaName) {
+        logger.info("AccountDao.getAccountsLimit(start, end, criteriaName)");
+        logger.debug("AccountDao.getAccountsCriteriaLimit(start = {}, end = {}, criteriaName = {})",
+                start, end, criteriaName);
+        Session session = sessionFactory.getCurrentSession();
+        CriteriaBuilder cb = session.getCriteriaBuilder();
+        CriteriaQuery<Account> cr = cb.createQuery(Account.class);
+        Root<Account> from = cr.from(Account.class);
+        cr.select(from);
+        CriteriaQuery<Account> nameQuery = cr.select(from).where(
+                cb.or(cb.like(from.get("name"), criteriaName),
+                        cb.like(from.get("surname"), criteriaName),
+                        cb.like(from.get("lastName"), criteriaName)));
+        Query<Account> query = session.createQuery(nameQuery).setFirstResult(start).setMaxResults(end);
         return query.getResultList();
     }
 
@@ -139,7 +156,7 @@ public class AccountDao {
         return session.createQuery(query).getResultList();
     }
 
-    public void createAccounts(List<Account> accounts) throws SQLException {
+    public void createAccounts(List<Account> accounts) {
         logger.info("AccountDao.createAccounts(accounts.size() = %d)", accounts.size());
         logger.debug("AccountDao.createAccounts(accounts.size() = {}", accounts.size());
         sessionFactory.getCurrentSession().save(accounts);

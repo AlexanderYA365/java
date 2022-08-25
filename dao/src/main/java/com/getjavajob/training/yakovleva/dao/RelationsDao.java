@@ -19,8 +19,8 @@ import java.util.List;
 @Repository
 @Transactional
 public class RelationsDao {
-    private SessionFactory sessionFactory;
     private static final Logger logger = LogManager.getLogger();
+    private SessionFactory sessionFactory;
 
     public RelationsDao(SessionFactory sessionFactory) {
         logger.info("RelationsDao(sessionFactory)");

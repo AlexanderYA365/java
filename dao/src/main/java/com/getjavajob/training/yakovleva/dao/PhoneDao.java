@@ -17,8 +17,8 @@ import java.util.List;
 @Repository
 @Transactional
 public class PhoneDao {
-    private SessionFactory sessionFactory;
     private static final Logger logger = LogManager.getLogger();
+    private SessionFactory sessionFactory;
 
     @Autowired
     public PhoneDao(SessionFactory sessionFactory) {

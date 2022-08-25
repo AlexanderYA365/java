@@ -28,7 +28,6 @@
 </div>
 <script src="${pageContext.request.contextPath}/resources/js/jquery-3.6.0.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/jquery-ui.js"></script>
-<%--<script src="${pageContext.request.contextPath}/resources/js/navbar.js"></script>--%>
 <script>
 
     $(function () {
@@ -40,29 +39,33 @@
                         filter: request.term
                     },
                     success: function (data) {
-                        response($.map(data, function (account, i) {
-                            let id = account.id
+                        response($.map(data, function (searchResult, i) {
                             return {
-                                value: account.id,
-                                label: account.name + " " + account.surname
+                                value: searchResult,
+                                label: searchResult.isGroup ? "Группа - " + searchResult.groupName :
+                                    "Пользователь - " + searchResult.name + " " + searchResult.surname
                             }
                         }));
                     },
                 });
             },
-            minLength: 1,
+            minLength: 3,
         });
     });
 
     $("#search").autocomplete({
         select: function (event, ui) {
-            console.log("tyt3")
-
         }
     });
 
     $("#search").on("autocompleteselect", function (event, ui) {
-        document.location.href = "/socnet/show-friend?id=" + ui.item.value;
+        console.log(ui.item.value.id.toString())
+        if (ui.item.value.isGroup) {
+            console.log(ui.item.value.isGroup.toString())
+            document.location.href = "/socnet/show-group?id=" + ui.item.value.id;
+        } else {
+            document.location.href = "/socnet/show-friend?id=" + ui.item.value.id;
+        }
     });
 
 </script>

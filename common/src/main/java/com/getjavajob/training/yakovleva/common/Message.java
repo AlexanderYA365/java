@@ -11,7 +11,7 @@ public class Message implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column(name = "sender_id")
+    @Column(name = "sender_id", insertable = false, updatable = false)
     private int senderId;
     @Column(name = "receiver_id")
     private int receiverId;
@@ -27,8 +27,17 @@ public class Message implements Serializable {
     private String usernameReceiving;
     @Column(name = "message_type")
     private MessageType messageType;
-    @ManyToOne(fetch = FetchType.LAZY)
+
+    @ManyToOne(targetEntity = Account.class, fetch = FetchType.LAZY)
+//    @JoinColumn(name="sender_id", insertable = false, updatable = false)
+    @JoinColumns(
+            {
+                    @JoinColumn(updatable = false, insertable = false, name = "sender_id", referencedColumnName = "account_id"),
+                    @JoinColumn(updatable = false, insertable = false, name = "receiver_id", referencedColumnName = "account_id"),
+            }
+    )
     private Account account;
+
 
     public Message() {
     }
@@ -46,6 +55,14 @@ public class Message implements Serializable {
         this.usernameSender = usernameSender;
         this.usernameReceiving = usernameReceiving;
         this.messageType = messageType;
+        this.account = account;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
         this.account = account;
     }
 

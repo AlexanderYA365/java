@@ -1,6 +1,9 @@
 package com.getjavajob.training.yakovleva.common;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -8,7 +11,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "account")
-public class Account {
+public class Account implements Serializable {
     @Id
     @GeneratedValue
     @Column(name = "account_id")
@@ -44,22 +47,21 @@ public class Account {
     private String password;
     @Column(name = "role")
     private Role role;
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
     @JoinTable(name = "relations",
+//            foreignKey = @ForeignKey(name = ""),
             joinColumns = @JoinColumn(name = "friend_id"),
             inverseJoinColumns = @JoinColumn(name = "account_id")
     )
     private List<Relations> relations;
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "message",
-            joinColumns = @JoinColumn(name = "receiver_id"),
-            inverseJoinColumns = @JoinColumn(name = "account_id")
-    )
-    private List<Message> messages;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "account")
+    @JsonIgnore
+    private List<Message> message;
 
     public Account(String name, String surname, String lastName, Date date, List<Phone> phones,
                    int icq, String photoFileName, byte[] photo, String addressHome, String addressJob, String email, String aboutMe, String username,
-                   String password, Role role, List<Relations> relations, List<Message> messages) {
+                   String password, Role role, List<Relations> relations, List<Message> message) {
         this.name = name;
         this.surname = surname;
         this.lastName = lastName;
@@ -77,22 +79,18 @@ public class Account {
         this.phones = phones;
         this.role = role;
         this.relations = relations;
-        this.messages = messages;
+        this.message = message;
     }
 
     public Account() {
     }
 
-    public List<Message> getMessages() {
-        return messages;
+    public List<Message> getMessage() {
+        return message;
     }
 
-    public void setMessages(List<Message> messages) {
-        this.messages = messages;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
+    public void setMessage(List<Message> messages) {
+        this.message = message;
     }
 
     public List<Relations> getRelations() {
@@ -105,6 +103,10 @@ public class Account {
 
     public int getRole() {
         return role.getStatus();
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     public void setRole(int status) {

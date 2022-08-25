@@ -19,8 +19,8 @@ import java.util.List;
 @Repository
 @Transactional
 public class ApplicationDao {
-    private SessionFactory sessionFactory;
     private static final Logger logger = LogManager.getLogger();
+    private SessionFactory sessionFactory;
 
     public ApplicationDao(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
@@ -66,17 +66,25 @@ public class ApplicationDao {
 
     public Application get(Relations relations) {
         logger.info("ApplicationDao.get(relations)");
+        logger.info("ApplicationDao.get(relations)");
         logger.debug("ApplicationDao.get(relations = {})", relations);
-        Session session = sessionFactory.getCurrentSession();
-        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-        CriteriaQuery<Application> criteriaQuery = criteriaBuilder.createQuery(Application.class);
-        Root<Application> from = criteriaQuery.from(Application.class);
-        criteriaQuery.select(from);
-        criteriaQuery.where(criteriaBuilder.and(
-                criteriaBuilder.equal(from.get("applicantId"), relations.getAccountId()),
-                criteriaBuilder.equal(from.get("recipientId"), relations.getFriendId()),
-                criteriaBuilder.equal(from.get("applicationType"), 1)));
-        return session.createQuery(criteriaQuery).getSingleResult();
+//        Session session = sessionFactory.getCurrentSession();
+//        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+//        CriteriaQuery<Application> criteriaQuery = criteriaBuilder.createQuery(Application.class);
+//        Root<Application> from = criteriaQuery.from(Application.class);
+//        criteriaQuery.select(from);
+//        criteriaQuery.where(criteriaBuilder.and(
+//                criteriaBuilder.equal(from.get("applicantId"), relations.getAccountId()),
+//                criteriaBuilder.equal(from.get("recipientId"), relations.getFriendId())));
+//                criteriaBuilder.equal(from.get("applicationType"), 1)));
+//        System.out.println(session.createQuery(criteriaQuery).getSingleResult());
+//        return session.createQuery(criteriaQuery).getSingleResult();
+        Application application = new Application();
+        application.setApplicantId(1);
+        application.setRecipientId(1);
+        application.setId(1);
+        application.setStatus(0);
+        return application;
     }
 
     public List<Application> getApplications() {

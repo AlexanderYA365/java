@@ -26,8 +26,8 @@ public class AdminController {
     @RequestMapping(value = "/admin-panel", method = RequestMethod.GET)
     public ModelAndView admin() {
         System.out.println("admin");
-        //List<Account> accounts = accountService.getAllAccountsLimit(0, 100);
-//        System.out.println(accounts);
+        List<Account> accounts = accountService.getAllAccountsLimit(0, 100);
+        System.out.println(accounts);
         ModelAndView modelAndView = new ModelAndView("admin-panel");
         //modelAndView.addObject("accounts", accounts);
         return modelAndView;
