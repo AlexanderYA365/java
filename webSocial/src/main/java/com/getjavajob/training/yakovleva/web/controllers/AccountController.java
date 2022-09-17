@@ -117,7 +117,7 @@ public class AccountController {
         response.addCookie(cookieUsername);
         response.addCookie(cookiePassword);
         response.addCookie(cookieId);
-        return new ModelAndView("redirect:index");
+        return new ModelAndView("redirect:/");
     }
 
     @RequestMapping(value = "/registration-account", method = RequestMethod.GET)

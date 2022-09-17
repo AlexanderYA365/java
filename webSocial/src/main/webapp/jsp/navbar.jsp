@@ -21,11 +21,11 @@
     <li><a href="${pageContext.request.contextPath}/account-logout">Выйти</a></li>
 </ul>
 
-<div class="ui-widget">
+<form class="ui-widget" action="${pageContext.request.contextPath}/result-search" method="GET">
     <label for="search">Поиск: </label>
-    <input id="search"/>
-    <button href="${pageContext.request.contextPath}/result-search">поиск</button>
-</div>
+    <input id="search" name="search"/>
+    <button type="submit" onclick="location.href='${pageContext.request.contextPath}/result-search'">поиск</button>
+</form>
 <script src="${pageContext.request.contextPath}/resources/js/jquery-3.6.0.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/jquery-ui.js"></script>
 <script>

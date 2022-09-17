@@ -4,10 +4,7 @@ import com.getjavajob.training.yakovleva.common.Account;
 import com.getjavajob.training.yakovleva.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -29,16 +26,74 @@ public class AdminController {
         List<Account> accounts = accountService.getAllAccountsLimit(0, 100);
         System.out.println(accounts);
         ModelAndView modelAndView = new ModelAndView("admin-panel");
-        //modelAndView.addObject("accounts", accounts);
         return modelAndView;
     }
 
     @RequestMapping(value = "/getAccounts", method = RequestMethod.GET)
     @ResponseBody
-    public List<Account> updateTable() {
+    public TableResult updateTable(final @RequestParam("draw") int draw,
+                                   final @RequestParam("start") int start,
+                                   final @RequestParam("length") int length) {
         System.out.println("updateTable");
-        List<Account> accounts = accountService.getAllAccountsLimit(0, 100);
-        return accounts;
+        List<Account> accounts = accountService.getAllAccountsLimit(start, length);
+        TableResult tableResult = new TableResult(draw, length * 10, length * 10, accounts);
+        return tableResult;
+    }
+
+    class TableResult {
+        int draw;
+        int recordsTotal;
+        int recordsFiltered;
+        List<Account> data;
+
+        public int getDraw() {
+            return draw;
+        }
+
+        public void setDraw(int draw) {
+            this.draw = draw;
+        }
+
+        public int getRecordsTotal() {
+            return recordsTotal;
+        }
+
+        public void setRecordsTotal(int recordsTotal) {
+            this.recordsTotal = recordsTotal;
+        }
+
+        public int getRecordsFiltered() {
+            return recordsFiltered;
+        }
+
+        public void setRecordsFiltered(int recordsFiltered) {
+            this.recordsFiltered = recordsFiltered;
+        }
+
+        public List<Account> getData() {
+            return data;
+        }
+
+        public void setData(List<Account> data) {
+            this.data = data;
+        }
+
+        public TableResult(int draw, int recordsTotal, int recordsFiltered, List<Account> data) {
+            this.draw = draw;
+            this.recordsTotal = recordsTotal;
+            this.recordsFiltered = recordsFiltered;
+            this.data = data;
+        }
+
+        @Override
+        public String toString() {
+            return "TableResult{" +
+                    "draw=" + draw +
+                    ", recordsTotal=" + recordsTotal +
+                    ", recordsFiltered=" + recordsFiltered +
+                    ", data=" + data +
+                    '}';
+        }
     }
 
 }

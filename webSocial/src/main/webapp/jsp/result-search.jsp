@@ -20,51 +20,39 @@
 <br>
 <br>
 <br>
-
 <table border="0" margin="0" padding="0" width="100%"
-       class="dataTables_wrapper" id="studentListTable">
+       class="dataTables_wrapper" id="search-result">
     <thead>
     <tr>
-        <th>Id</th>
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th>Gender</th>
-        <th>Address</th>
-        <th>Grade</th>
+        <th>id</th>
+        <th>Имя</th>
+        <th>Фамилия</th>
+        <th>Отчество</th>
+        <th>Дата рождения</th>
+        <th>isGroup</th>
     </tr>
     </thead>
-    <tbody>
-    <tr>
-        <td>${account.id}</td>
-        <td>${account.id}</td>
-        <td>${account.id}</td>
-        <td>${account.id}</td>
-        <td>${account.id}</td>
-        <td>${account.id}</td>
-    </tr>
-    </tbody>
 </table>
 <script src="${pageContext.request.contextPath}/resources/js/bootstrap.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/datatables.min.js"></script>
 <script>
     $(document).ready(function () {
-        $('#admin').DataTable({
-            "bJQueryUI": true,
-            "sPaginationType": "full_numbers",
-            "iDisplayLength": 10,
-            "bProcessing": true,
-            "bServerSide": true,
-            "sAjaxSource": "/getAccounts",
-            "aoColumns": [{"bSearchable": false, "bVisible": false, "asSorting": ["asc"]},
-                {"sWidth": "20%", "bSortable": true},
-                {"sWidth": "20%", "bSortable": true},
-                {"sWidth": "10%", "bSortable": true},
-                {"sWidth": "20%", "bSortable": true},
-                {"sWidth": "20%", "bSortable": true}
-            ]
+        $('#search-result').dataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: '/socnet/getSearch',
+            },
+            columns: [
+                {data: 'id'},
+                {data: 'name'},
+                {data: 'surname'},
+                {data: 'lastName'},
+                {data: 'groupName'},
+                {data: 'isGroup'},
+            ],
         });
-    })
-
+    });
 </script>
 
 </body>
