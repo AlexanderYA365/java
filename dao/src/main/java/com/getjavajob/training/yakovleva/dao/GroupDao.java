@@ -5,6 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Projections;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -12,7 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -128,6 +131,26 @@ public class GroupDao {
 //                group.getAdministratorId(), group.getAccountId());
 //        return result > 0;
         return true;
+    }
+
+    public int getSizeRecords() {
+        logger.info("getSizeRecords");
+        Object result = sessionFactory.getCurrentSession().createCriteria(Group.class)
+                .setProjection(Projections.rowCount()).uniqueResult();
+        return Integer.parseInt(result.toString());
+    }
+
+    public long getSizeRecords(String search) {
+        logger.info("GroupDao.getSizeRecords(search = {})", search);
+        Session session = sessionFactory.getCurrentSession();
+        CriteriaBuilder cb = session.getCriteriaBuilder();
+        CriteriaQuery<Long> cq = cb.createQuery(Long.class);
+        Root<Group> from = cq.from(Group.class);
+        List<Predicate> conditions = new ArrayList<>();
+        conditions.add(cb.like(from.get("groupName"), search));
+        cq.where(conditions.toArray(new Predicate[0]));
+        cq.select(cb.count(from));
+        return session.createQuery(cq).getSingleResult();
     }
 
 }

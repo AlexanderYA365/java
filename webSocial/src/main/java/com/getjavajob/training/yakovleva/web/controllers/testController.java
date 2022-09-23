@@ -96,7 +96,8 @@ public class testController {
             relations.setFriendId(1);
 //            System.out.println(applicationService.getAccount(relations));
             //System.out.println(messageService.getWallMassageAccount(account));
-            System.out.println(accountService.getAccountsCriteriaLimit(0, 5, "Комаров"));
+            System.out.println(groupService.getSizeRecords("Александр"));
+            System.out.println(accountService.getSizeRecords("Александр"));
         } catch (Exception ex) {
             System.out.println(ex);
         }

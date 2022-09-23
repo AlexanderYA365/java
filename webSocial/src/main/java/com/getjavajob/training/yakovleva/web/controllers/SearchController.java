@@ -22,6 +22,7 @@ public class SearchController {
     private static final Logger logger = LogManager.getLogger();
     private final AccountService accountService;
     private final GroupService groupService;
+    private String searchParameter;
 
     @Autowired
     public SearchController(AccountService accountService, GroupService groupService) {
@@ -34,6 +35,7 @@ public class SearchController {
     public ModelAndView resultSearch(@RequestParam("search") String search) {
         logger.info("resultSearch");
         logger.info("search = {}", search);
+        searchParameter = search;
         ModelAndView modelAndView = new ModelAndView("result-search");
         modelAndView.addObject("search", search);
         return modelAndView;
@@ -44,28 +46,30 @@ public class SearchController {
     public TableResult tableResult(final @RequestParam("draw") int draw,
                                    final @RequestParam("start") int start,
                                    final @RequestParam("length") int length) {
-        String search = "Александр";
         logger.info("tableResult");
         logger.info("draw = {}", draw);
         logger.info("start = {}", start);
         logger.info("length = {}", length);
-        logger.info("search = {}", search);
-        List<SearchResult> searchResults = searchCriteria(search, start, length);
-        TableResult tableResult = new TableResult(draw, length * 10, length * 10, searchResults);
+        logger.info("searchP = {}", searchParameter);
+        List<SearchResult> searchResults = searchCriteria(searchParameter, start, length);
+        long size = accountService.getSizeRecords(searchParameter) + groupService.getSizeRecords(searchParameter);
+        logger.info("records size = {}", size);
+        TableResult tableResult = new TableResult(draw, size, size, searchResults);
         return tableResult;
     }
 
     private List<SearchResult> searchCriteria(String criteria, int start, int end) {
+        logger.info("criteria = {}", criteria);
         List<Account> accounts = accountService.getAccountsCriteriaLimit(start, end, criteria);
         List<Group> groups = groupService.getCriteriaLimit(start, end, criteria);
         List<SearchResult> searchResults = new ArrayList<>();
         for (int i = 0; i < accounts.size(); i++) {
             searchResults.add(new SearchResult(accounts.get(i).getId(), accounts.get(i).getName(),
-                    accounts.get(i).getSurname(), accounts.get(i).getLastName(), "", false));
+                    accounts.get(i).getSurname(), accounts.get(i).getLastName(), false));
         }
         for (int i = 0; i < groups.size(); i++) {
-            searchResults.add(new SearchResult(groups.get(i).getGroupId(), "", "", "",
-                    groups.get(i).getGroupName(), true));
+            searchResults.add(new SearchResult(groups.get(i).getGroupId(), groups.get(i).getGroupName(),
+                    "", "", true));
         }
         logger.info("searchResults = {}", searchResults);
         return searchResults;
@@ -81,27 +85,15 @@ public class SearchController {
 
     private List<SearchResult> getSearchResults(String filter) {
         return searchCriteria(filter, 0, 5);
-//        List<Account> accounts = accountService.getAccountsCriteriaLimit(0, 5, filter);
-//        List<Group> groups = groupService.getCriteriaLimit(0, 5, filter);
-//        List<SearchResult> searchResults = new ArrayList<>();
-//        for (int i = 0; i < accounts.size(); i++) {
-//            searchResults.add(new SearchResult(accounts.get(i).getId(), accounts.get(i).getName(),
-//                    accounts.get(i).getSurname(), accounts.get(i).getLastName(), "", false));
-//        }
-//        for (int i = 0; i < groups.size(); i++) {
-//            searchResults.add(new SearchResult(groups.get(i).getGroupId(), "", "", "",
-//                    groups.get(i).getGroupName(), true));
-//        }
-//        return searchResults;
     }
 
     class TableResult {
         private int draw;
-        private int recordsTotal;
-        private int recordsFiltered;
+        private long recordsTotal;
+        private long recordsFiltered;
         private List<SearchResult> searchResults;
 
-        public TableResult(int draw, int recordsTotal, int recordsFiltered, List<SearchResult> searchResults) {
+        public TableResult(int draw, long recordsTotal, long recordsFiltered, List<SearchResult> searchResults) {
             this.draw = draw;
             this.recordsTotal = recordsTotal;
             this.recordsFiltered = recordsFiltered;
@@ -116,7 +108,7 @@ public class SearchController {
             this.draw = draw;
         }
 
-        public int getRecordsTotal() {
+        public long getRecordsTotal() {
             return recordsTotal;
         }
 
@@ -124,7 +116,7 @@ public class SearchController {
             this.recordsTotal = recordsTotal;
         }
 
-        public int getRecordsFiltered() {
+        public long getRecordsFiltered() {
             return recordsFiltered;
         }
 
@@ -156,15 +148,13 @@ public class SearchController {
         public String name;
         public String surname;
         public String lastName;
-        public String groupName;
         public boolean isGroup;
 
-        public SearchResult(int id, String name, String surname, String lastName, String groupName, boolean isGroup) {
+        public SearchResult(int id, String name, String surname, String lastName, boolean isGroup) {
             this.id = id;
             this.name = name;
             this.surname = surname;
             this.lastName = lastName;
-            this.groupName = groupName;
             this.isGroup = isGroup;
         }
 
@@ -175,7 +165,6 @@ public class SearchController {
                     ", name='" + name + '\'' +
                     ", surname='" + surname + '\'' +
                     ", lastName='" + lastName + '\'' +
-                    ", groupName='" + groupName + '\'' +
                     ", isGroup=" + isGroup +
                     '}';
         }

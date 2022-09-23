@@ -11,6 +11,7 @@
 <head>
     <title>All Accounts</title>
     <link href="${pageContext.request.contextPath}/resources/css/style.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/resources/css/result-search.css" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/datatables.min.css"/>
 </head>
 <body>
@@ -28,7 +29,6 @@
         <th>Имя</th>
         <th>Фамилия</th>
         <th>Отчество</th>
-        <th>Дата рождения</th>
         <th>isGroup</th>
     </tr>
     </thead>
@@ -42,15 +42,71 @@
             serverSide: true,
             ajax: {
                 url: '/socnet/getSearch',
+                dataSrc: 'searchResults'
             },
             columns: [
-                {data: 'id'},
-                {data: 'name'},
-                {data: 'surname'},
-                {data: 'lastName'},
-                {data: 'groupName'},
-                {data: 'isGroup'},
+                {
+                    data: 'id',
+                    name: 'id',
+                    visible: false,
+                },
+                {
+                    data: 'name',
+                    name: 'name',
+                    render: function (data, type, row, meta) {
+                        if (row.isGroup) {
+                            return '<a class=" d-inline-block fw-normal w-100 h-100 pe-auto" href="show-group?id=' + row.id + '">' + row.name + '</a>';
+                        } else {
+                            return '<a class=" d-inline-block fw-normal w-100 h-100 pe-auto" href="show-friend?id=' + row.id + '">' + row.name + '</a>';
+                        }
+                    },
+
+                },
+                {
+                    data: 'surname',
+                    name: 'surname',
+                    render: function (data, type, row, meta) {
+                        if (row.isGroup) {
+                            return '<a class=" d-inline-block fw-normal w-100 h-100 pe-auto" href="show-group?id=' + row.id + '">' + '</a>';
+                        } else {
+                            return '<a class=" d-inline-block fw-normal w-100 h-100 pe-auto" href="show-friend?id=' + row.id + '">' + row.surname + '</a>';
+                        }
+                    },
+                },
+                {
+                    data: 'lastName',
+                    name: 'lastName',
+                    render: function (data, type, row, meta) {
+                        if (row.isGroup) {
+                            return '<a class=" d-inline-block fw-normal w-100 h-100 pe-auto" href="show-group?id=' + row.id + '">' + '</a>';
+                        } else {
+                            return '<a class=" d-inline-block fw-normal w-100 h-100 pe-auto" href="show-friend?id=' + row.id + '">' + row.lastName + '</a>';
+                        }
+                    },
+                },
+                {
+                    data: 'isGroup',
+                    name: 'isGroup',
+                    render: function (data) {
+                        return data ? 'Группы' : 'Пользователи';
+                    },
+                    visible: false,
+                },
             ],
+            "drawCallback": function (settings) {
+                var api = this.api();
+                var rows = api.rows({page: 'current'}).nodes();
+                var last = null;
+                api.column(4, {page: 'current'}).data().each(function (group, i) {
+                    if (last !== group) {
+                        $(rows).eq(i).before(
+                            '<tr class="group"><td colspan="5">' + (group ? 'Группы' : 'Пользователи') + '</td></tr>'
+                        );
+
+                        last = group;
+                    }
+                });
+            }
         });
     });
 </script>

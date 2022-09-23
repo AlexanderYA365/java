@@ -123,6 +123,16 @@ public class AccountService {
         return accountDao.getAccountsLimit(start, end);
     }
 
+    public int getSizeRecords() {
+        logger.info("getSizeRecords()");
+        return accountDao.getSizeRecords();
+    }
+
+    public long getSizeRecords(String search) {
+        logger.info("getSizeRecords()");
+        return accountDao.getSizeRecords(search);
+    }
+
     public List<Account> getAccountName(String name) {
         logger.info("getAccountName(String name)");
         logger.debug("getAccountName(name = {})", name);

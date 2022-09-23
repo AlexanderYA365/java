@@ -32,6 +32,16 @@ public class GroupService {
         return groupDao.getGroupsAccount(account.getId());
     }
 
+    public int getSizeRecords() {
+        logger.info("getSizeRecords()");
+        return groupDao.getSizeRecords();
+    }
+
+    public long getSizeRecords(String search) {
+        logger.info("getSizeRecords()");
+        return groupDao.getSizeRecords(search);
+    }
+
     public boolean createAccountGroups(Group group) {
         logger.info("createAccountGroups(Group group)");
         logger.debug("createAccountGroups(group = {})", group);

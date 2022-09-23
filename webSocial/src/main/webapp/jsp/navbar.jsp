@@ -42,7 +42,7 @@
                         response($.map(data, function (searchResult, i) {
                             return {
                                 value: searchResult,
-                                label: searchResult.isGroup ? "Группа - " + searchResult.groupName :
+                                label: searchResult.isGroup ? "Группа - " + searchResult.name :
                                     "Пользователь - " + searchResult.name + " " + searchResult.surname
                             }
                         }));

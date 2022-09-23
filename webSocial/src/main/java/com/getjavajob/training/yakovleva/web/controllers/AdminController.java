@@ -36,15 +36,16 @@ public class AdminController {
                                    final @RequestParam("length") int length) {
         System.out.println("updateTable");
         List<Account> accounts = accountService.getAllAccountsLimit(start, length);
-        TableResult tableResult = new TableResult(draw, length * 10, length * 10, accounts);
+        int max = accountService.getSizeRecords();
+        TableResult tableResult = new TableResult(draw, max, max, accounts);
         return tableResult;
     }
 
     class TableResult {
-        int draw;
-        int recordsTotal;
-        int recordsFiltered;
-        List<Account> data;
+        private int draw;
+        private int recordsTotal;
+        private int recordsFiltered;
+        private List<Account> data;
 
         public int getDraw() {
             return draw;

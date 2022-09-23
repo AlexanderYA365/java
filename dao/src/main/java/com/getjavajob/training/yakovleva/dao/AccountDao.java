@@ -5,6 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Projections;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -118,6 +119,29 @@ public class AccountDao {
                         cb.like(from.get("lastName"), criteriaName)));
         Query<Account> query = session.createQuery(nameQuery).setFirstResult(start).setMaxResults(end);
         return query.getResultList();
+    }
+
+    public int getSizeRecords() {
+        logger.info("getSizeRecords");
+        Object result = sessionFactory.getCurrentSession().createCriteria(Account.class)
+                .setProjection(Projections.rowCount()).uniqueResult();
+        return Integer.parseInt(result.toString());
+    }
+
+    public long getSizeRecords(String search) {
+        logger.info("AccountDao.getSizeRecords(search = {})", search);
+        Session session = sessionFactory.getCurrentSession();
+        CriteriaBuilder cb = session.getCriteriaBuilder();
+        CriteriaQuery<Long> cq = cb.createQuery(Long.class);
+        Root<Account> from = cq.from(Account.class);
+        List<Predicate> conditions = new ArrayList<>();
+        conditions.add(cb.or(
+                cb.like(from.get("name"), search),
+                cb.like(from.get("surname"), search),
+                cb.like(from.get("lastName"), search)));
+        cq.where(conditions.toArray(new Predicate[0]));
+        cq.select(cb.count(from));
+        return session.createQuery(cq).getSingleResult();
     }
 
     public List<Account> getAccountsLimit(int start, int end) {
