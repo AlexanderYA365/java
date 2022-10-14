@@ -101,8 +101,7 @@ public class GroupController {
     @RequestMapping(value = "/create-group", method = RequestMethod.GET)
     public ModelAndView createGroup() {
         System.out.println("createGroup");
-        ModelAndView modelAndView = new ModelAndView("/group/create-group");
-        return modelAndView;
+        return new ModelAndView("/group/create-group");
     }
 
     @RequestMapping(value = "/show-group", method = RequestMethod.GET)

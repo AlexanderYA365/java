@@ -2,6 +2,7 @@ package com.getjavajob.training.yakovleva.service;
 
 import com.getjavajob.training.yakovleva.common.Account;
 import com.getjavajob.training.yakovleva.common.Message;
+import com.getjavajob.training.yakovleva.dao.AccountDao;
 import com.getjavajob.training.yakovleva.dao.MessageDao;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,11 +17,13 @@ import java.util.List;
 public class MessageService {
     private static final Logger logger = LogManager.getLogger();
     private MessageDao messageDao;
+    private AccountDao accountDao;
 
     @Autowired
-    public MessageService(MessageDao messageDao) {
+    public MessageService(MessageDao messageDao, AccountDao accountDao) {
         logger.info("MessageService(MessageDao messageDao)");
         this.messageDao = messageDao;
+        this.accountDao = accountDao;
     }
 
     public MessageService() {
@@ -41,13 +44,23 @@ public class MessageService {
     public List<Message> getUniqueMessages(Account account) {
         logger.info("getUniqueMessages(Account account)");
         logger.debug("getUniqueMessages(account = {})", account);
-        return messageDao.getUniqueMessagesForUser(account.getId());
+        List<Message> uniqueMessages = messageDao.getUniqueMessagesForUser(account.getId());
+        for (Message m : uniqueMessages) {
+            m.setUsernameReceiving(accountDao.getAccount(m.getReceiverId()).getUsername());
+            m.setUsernameSender(accountDao.getAccount(m.getSenderId()).getUsername());
+        }
+        return uniqueMessages;
     }
 
     public List<Message> getAccountMessages(int senderId, int receiverId) {
         logger.info("getAccountMessages(int senderId, int receiverId)");
         logger.debug("getAccountMessages(senderId = {}, receiverId = {})", senderId, receiverId);
-        return messageDao.getMessageAccounts(senderId, receiverId);
+        List<Message> uniqueMessages = messageDao.getMessageAccounts(senderId, receiverId);
+        for (Message m : uniqueMessages) {
+            m.setUsernameReceiving(accountDao.getAccount(m.getReceiverId()).getUsername());
+            m.setUsernameSender(accountDao.getAccount(m.getSenderId()).getUsername());
+        }
+        return uniqueMessages;
     }
 
     public boolean createMassage(Message message) {

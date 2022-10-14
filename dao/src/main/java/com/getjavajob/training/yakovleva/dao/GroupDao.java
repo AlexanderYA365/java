@@ -112,24 +112,12 @@ public class GroupDao {
     }
 
     public boolean insertAccount(Group group, int accountId) {
-        logger.info("GroupDao.delete(group)");
-        logger.debug("GroupDao.delete(group = {}, accountId = {})", group, accountId);
-        System.out.println("insertAccount, group - " + group + " ,accountId - " + accountId);
+        logger.info("GroupDao.insertAccount(group = {}, accountId = {})", group, accountId);
+        logger.debug("GroupDao.insertAccount(group = {}, accountId = {})", group, accountId);
         String sql = "INSERT INTO heroku_dc02d468f96562c.`group`(group_name, logo, administrator_id, account_id) " +
                 "VALUES (?, ?, ?, ?)";
-        System.out.println(sql);
-
-//        Session session = sessionFactory.getCurrentSession();
-//        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-//        CriteriaQuery<Group> criteriaQuery = criteriaBuilder.createQuery(Group.class);
-//        Root<Group> from = criteriaQuery.from(Group.class);
-//        criteriaQuery.ins(from);
-//        criteriaQuery.where(criteriaBuilder.equal(from.get("accountId"), account_id));
-//        Query<Group> query = session.createQuery(criteriaQuery);
-//
-//        int result = jdbcTemplate.update(sql, group.getGroupName(), group.getLogo(),
-//                group.getAdministratorId(), group.getAccountId());
-//        return result > 0;
+        group.setAccountId(accountId);
+        sessionFactory.getCurrentSession().save(group);
         return true;
     }
 

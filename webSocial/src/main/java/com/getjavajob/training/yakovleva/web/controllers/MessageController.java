@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -76,7 +77,9 @@ public class MessageController {
             message.setReceiverId(receivingId);
             message.setSenderId(account.getId());
             message.setMessage(newMessage);
+            message.setPublicationDate(new Date());
             message.setMessageType(1);
+            message.setAccount(account);
             messageService.createMassage(message);
         } catch (Exception e) {
             System.out.println(e);

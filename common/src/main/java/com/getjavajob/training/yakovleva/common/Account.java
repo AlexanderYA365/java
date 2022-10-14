@@ -1,8 +1,13 @@
 package com.getjavajob.training.yakovleva.common;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Date;
@@ -11,9 +16,11 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "account")
+@XmlRootElement(name = "account")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Account implements Serializable {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @Column(name = "account_id")
     private int id;
     @Column(name = "name")
@@ -25,6 +32,7 @@ public class Account implements Serializable {
     @Column(name = "date")
     private Date date;
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @Fetch(value = FetchMode.SUBSELECT)
     @JoinColumn(name = "account_id", nullable = false)
     private List<Phone> phones;
     @Column(name = "icq")
@@ -47,17 +55,35 @@ public class Account implements Serializable {
     private String password;
     @Column(name = "role")
     private Role role;
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @Fetch(value = FetchMode.SUBSELECT)
+    @JoinColumn(name = "account_id", nullable = false)
     @JsonIgnore
-    @JoinTable(name = "relations",
-//            foreignKey = @ForeignKey(name = ""),
-            joinColumns = @JoinColumn(name = "friend_id"),
-            inverseJoinColumns = @JoinColumn(name = "account_id")
-    )
     private List<Relations> relations;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "account")
     @JsonIgnore
     private List<Message> message;
+
+    public Account(int id, String name, String surname, String lastName, Date date, List<Phone> phones,
+                   int icq, String photoFileName, byte[] photo, String addressHome, String addressJob,
+                   String email, String aboutMe, String username, String password, Role role) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.lastName = lastName;
+        this.date = date;
+        this.phones = phones;
+        this.icq = icq;
+        this.photoFileName = photoFileName;
+        this.photo = photo;
+        this.addressHome = addressHome;
+        this.addressJob = addressJob;
+        this.email = email;
+        this.aboutMe = aboutMe;
+        this.username = username;
+        this.password = password;
+        this.role = role;
+    }
 
     public Account(String name, String surname, String lastName, Date date, List<Phone> phones,
                    int icq, String photoFileName, byte[] photo, String addressHome, String addressJob, String email, String aboutMe, String username,
@@ -92,6 +118,14 @@ public class Account implements Serializable {
     public void setMessage(List<Message> messages) {
         this.message = message;
     }
+
+//    public List<Relations> getRelationsFriends() {
+//        return relationsFriends;
+//    }
+//
+//    public void setRelationsFriends(List<Relations> relationsFriends) {
+//        this.relationsFriends = relationsFriends;
+//    }
 
     public List<Relations> getRelations() {
         return relations;
@@ -251,6 +285,7 @@ public class Account implements Serializable {
                 ", aboutMe='" + aboutMe + '\'' +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
+                ", relations='" + relations + '\'' +
                 ", role=" + role +
                 '}';
     }

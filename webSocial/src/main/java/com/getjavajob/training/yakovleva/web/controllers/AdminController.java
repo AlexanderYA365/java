@@ -47,6 +47,13 @@ public class AdminController {
         private int recordsFiltered;
         private List<Account> data;
 
+        public TableResult(int draw, int recordsTotal, int recordsFiltered, List<Account> data) {
+            this.draw = draw;
+            this.recordsTotal = recordsTotal;
+            this.recordsFiltered = recordsFiltered;
+            this.data = data;
+        }
+
         public int getDraw() {
             return draw;
         }
@@ -76,13 +83,6 @@ public class AdminController {
         }
 
         public void setData(List<Account> data) {
-            this.data = data;
-        }
-
-        public TableResult(int draw, int recordsTotal, int recordsFiltered, List<Account> data) {
-            this.draw = draw;
-            this.recordsTotal = recordsTotal;
-            this.recordsFiltered = recordsFiltered;
             this.data = data;
         }
 

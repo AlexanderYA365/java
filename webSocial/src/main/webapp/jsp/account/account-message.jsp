@@ -26,12 +26,12 @@
                 </tr>
                 <c:forEach var="uniqueMessage" items="${uniqueMessages}">
                     <tr>
-                        <td><c:out value="${uniqueMessage.usernameSender}"/></td>
+                        <td><c:out value="${uniqueMessage.usernameReceiving}"/></td>
                         <td><c:out value="${uniqueMessage.publicationDate}"/></td>
                         <td><c:out value="${uniqueMessage.message}"/></td>
                         <td>
                             <button type="submit" name="selectUser"
-                                    value=${uniqueMessage.senderId}>ответить
+                                    value=${uniqueMessage.receiverId}>ответить
                             </button>
                         </td>
                     </tr>

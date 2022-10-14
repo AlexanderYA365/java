@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,7 +23,9 @@ public class ApplicationDao {
     private static final Logger logger = LogManager.getLogger();
     private SessionFactory sessionFactory;
 
+    @Autowired
     public ApplicationDao(SessionFactory sessionFactory) {
+        logger.info("create ApplicationDao");
         this.sessionFactory = sessionFactory;
     }
 
@@ -37,7 +40,7 @@ public class ApplicationDao {
     }
 
     public Application get(int id) {
-        logger.info("ApplicationDao.get(id)");
+        logger.info("ApplicationDao.get(id = {})", id);
         logger.debug("ApplicationDao.get(id = {})", id);
         Session session = sessionFactory.getCurrentSession();
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
@@ -65,26 +68,19 @@ public class ApplicationDao {
     }
 
     public Application get(Relations relations) {
-        logger.info("ApplicationDao.get(relations)");
-        logger.info("ApplicationDao.get(relations)");
+        logger.info("ApplicationDao.get(relations = {})", relations);
         logger.debug("ApplicationDao.get(relations = {})", relations);
-//        Session session = sessionFactory.getCurrentSession();
-//        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-//        CriteriaQuery<Application> criteriaQuery = criteriaBuilder.createQuery(Application.class);
-//        Root<Application> from = criteriaQuery.from(Application.class);
-//        criteriaQuery.select(from);
-//        criteriaQuery.where(criteriaBuilder.and(
-//                criteriaBuilder.equal(from.get("applicantId"), relations.getAccountId()),
-//                criteriaBuilder.equal(from.get("recipientId"), relations.getFriendId())));
-//                criteriaBuilder.equal(from.get("applicationType"), 1)));
-//        System.out.println(session.createQuery(criteriaQuery).getSingleResult());
-//        return session.createQuery(criteriaQuery).getSingleResult();
-        Application application = new Application();
-        application.setApplicantId(1);
-        application.setRecipientId(1);
-        application.setId(1);
-        application.setStatus(0);
-        return application;
+        Session session = sessionFactory.getCurrentSession();
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<Application> criteriaQuery = criteriaBuilder.createQuery(Application.class);
+        Root<Application> from = criteriaQuery.from(Application.class);
+        criteriaQuery.select(from);
+        criteriaQuery.where(criteriaBuilder.and(
+                criteriaBuilder.equal(from.get("applicantId"), relations.getAccountId()),
+                criteriaBuilder.equal(from.get("recipientId"), relations.getFriendId()),
+                criteriaBuilder.equal(from.get("applicationType"), 1)));
+        System.out.println(session.createQuery(criteriaQuery).getSingleResult());
+        return session.createQuery(criteriaQuery).getSingleResult();
     }
 
     public List<Application> getApplications() {

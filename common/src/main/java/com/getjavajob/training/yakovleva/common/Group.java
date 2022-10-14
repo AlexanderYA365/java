@@ -1,12 +1,13 @@
 package com.getjavajob.training.yakovleva.common;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 
 @Entity
 @Table(name = "group_social")
-public class Group {
+public class Group implements Serializable {
     @Id
     @GeneratedValue
     @Column(name = "group_id")

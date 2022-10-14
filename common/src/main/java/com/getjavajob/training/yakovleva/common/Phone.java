@@ -1,11 +1,12 @@
 package com.getjavajob.training.yakovleva.common;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
 @Table(name = "phone")
-public class Phone {
+public class Phone implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -16,6 +17,20 @@ public class Phone {
     private String phoneNumber;
     @Column(name = "phone_type")
     private PhoneType phoneType;
+//    @ManyToOne(targetEntity = Account.class, fetch = FetchType.EAGER)
+//    @JsonIgnore
+//    @JoinColumn(updatable = false, insertable = false, name = "account_id", referencedColumnName = "account_id")
+//    private Account account;
+
+    public Phone() {
+    }
+
+    public Phone(int id, int accountId, String phoneNumber, PhoneType phoneType) {
+        this.id = id;
+        this.accountId = accountId;
+        this.phoneNumber = phoneNumber;
+        this.phoneType = phoneType;
+    }
 
     public int getId() {
         return id;

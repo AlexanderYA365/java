@@ -91,7 +91,7 @@ public class GroupService {
 
     public boolean insertAccountGroup(Group group, int accountId) {
         logger.info("insertAccountGroup(Group group, int accountId)");
-        logger.debug("ginsertAccountGroup(group = {}, accountId = {})", group, accountId);
+        logger.debug("insertAccountGroup(group = {}, accountId = {})", group, accountId);
         return groupDao.insertAccount(group, accountId);
     }
 

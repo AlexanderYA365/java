@@ -9,8 +9,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -153,15 +151,13 @@ public class AccountController {
     @RequestMapping(value = "/edit-account-settings", method = RequestMethod.GET)
     public ModelAndView editSettings(@ModelAttribute("account") Account account) {
         logger.info("editSettings");
-        ModelAndView modelAndView = new ModelAndView("/account/edit-account-settings");
-        return modelAndView;
+        return new ModelAndView("/account/edit-account-settings");
     }
 
     @RequestMapping(value = "/my-account", method = RequestMethod.GET)
     public ModelAndView settings(@ModelAttribute("account") Account account) {
         logger.info("settings");
-        ModelAndView modelAndView = new ModelAndView("/account/my-account");
-        return modelAndView;
+        return new ModelAndView("/account/my-account");
     }
 
     @ModelAttribute("account")
@@ -172,7 +168,7 @@ public class AccountController {
     @RequestMapping(value = "/index", method = RequestMethod.GET)
     //TODO RequestParam - заменить на ModelAttribute
     public ModelAndView login(@ModelAttribute("account") final Account account,
-                              final BindingResult result, final ModelMap model,
+//                              final BindingResult result, final ModelMap model,
                               @RequestParam(value = "checkbox", required = false) String checkbox) {
         logger.info("login, username = {}, password = {} ", account.getUsername(), account.getPassword());
         return userValidation(checkbox, account);

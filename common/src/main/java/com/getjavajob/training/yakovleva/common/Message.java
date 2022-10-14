@@ -1,5 +1,7 @@
 package com.getjavajob.training.yakovleva.common;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -9,9 +11,9 @@ import java.util.Objects;
 @Table(name = "message")
 public class Message implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    @Column(name = "sender_id", insertable = false, updatable = false)
+    @Column(name = "sender_id")
     private int senderId;
     @Column(name = "receiver_id")
     private int receiverId;
@@ -27,19 +29,26 @@ public class Message implements Serializable {
     private String usernameReceiving;
     @Column(name = "message_type")
     private MessageType messageType;
-
     @ManyToOne(targetEntity = Account.class, fetch = FetchType.LAZY)
-//    @JoinColumn(name="sender_id", insertable = false, updatable = false)
-    @JoinColumns(
-            {
-                    @JoinColumn(updatable = false, insertable = false, name = "sender_id", referencedColumnName = "account_id"),
-                    @JoinColumn(updatable = false, insertable = false, name = "receiver_id", referencedColumnName = "account_id"),
-            }
-    )
+    @JsonIgnore
+    @JoinColumn(updatable = false, insertable = false, name = "sender_id", referencedColumnName = "account_id")
     private Account account;
 
-
     public Message() {
+    }
+
+    public Message(int id, int senderId, int receiverId, String message, String picture, Date publicationDate,
+                   boolean edited, String usernameSender, String usernameReceiving, MessageType messageType) {
+        this.id = id;
+        this.senderId = senderId;
+        this.receiverId = receiverId;
+        this.message = message;
+        this.picture = picture;
+        this.publicationDate = publicationDate;
+        this.edited = edited;
+        this.usernameSender = usernameSender;
+        this.usernameReceiving = usernameReceiving;
+        this.messageType = messageType;
     }
 
     public Message(int id, int senderId, int receiverId, String message, String picture, Date publicationDate,
