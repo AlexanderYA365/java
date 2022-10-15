@@ -3,6 +3,8 @@ package com.getjavajob.training.yakovleva.web.controllers;
 import com.getjavajob.training.yakovleva.common.Account;
 import com.getjavajob.training.yakovleva.common.Message;
 import com.getjavajob.training.yakovleva.service.MessageService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -16,20 +18,21 @@ import java.util.List;
 @SessionAttributes({"account", "friend", "selectUser"})
 public class MessageController {
     private MessageService messageService;
+    private static final Logger logger = LogManager.getLogger();
 
     @Autowired
     public MessageController(MessageService messageService) {
         this.messageService = messageService;
+        logger.info("MessageController");
     }
 
     @RequestMapping(value = "/account-message", method = RequestMethod.GET)
     public ModelAndView messages(@ModelAttribute("account") Account account) {
-        System.out.println("list");
+        logger.info("messages(account = {})", account);
         ModelAndView modelAndView = new ModelAndView("/account/account-message");
-        System.out.println("account - " + account);
         try {
             List<Message> uniqueMessages = messageService.getUniqueMessages(account);
-            System.out.println("unique - " + uniqueMessages);
+            logger.info("uniqueMessages = {}", uniqueMessages);
             if (uniqueMessages.size() != 0) {
                 modelAndView.addObject("haveMessage", 0);
                 modelAndView.addObject("uniqueMessages", uniqueMessages);
@@ -37,15 +40,14 @@ public class MessageController {
                 modelAndView.addObject("haveMessage", 1);
             }
         } catch (Exception e) {
-            System.out.println(e);
+            logger.error("exception = {}", e);
         }
         return modelAndView;
     }
 
     @RequestMapping(value = "/account-message", method = RequestMethod.POST)
     public ModelAndView redirectToChart(@RequestParam("selectUser") int idFriend) {
-        System.out.println("redirectToChart");
-        System.out.println("idFriend - " + idFriend);
+        logger.info("redirectToChart(idFriend = {})", idFriend);
         ModelAndView modelAndView = new ModelAndView("redirect:/account-write-message");
         modelAndView.addObject("idFriend", idFriend);
         return modelAndView;
@@ -54,12 +56,10 @@ public class MessageController {
     @RequestMapping(value = "/account-write-message", method = RequestMethod.GET)
     public ModelAndView write(@ModelAttribute("idFriend") int senderId,
                               @ModelAttribute("account") Account account) {
-        System.out.println("write");
-        System.out.println("senderId - " + senderId);
-        System.out.println("account" + account);
+        logger.info("write(senderId = {}, account = {})", senderId, account);
         ModelAndView modelAndView = new ModelAndView("/account/account-write-message");
         List<Message> personalMail = messageService.getAccountMessages(senderId, account.getId());
-        System.out.println("AccountWriteMessage.personalMail" + personalMail);
+        logger.info("personalMail = {}", personalMail);
         modelAndView.addObject("personalMail", personalMail);
         modelAndView.addObject("selectUser", senderId);
         return modelAndView;
@@ -69,9 +69,7 @@ public class MessageController {
     public ModelAndView send(@ModelAttribute("account") Account account,
                              @RequestParam(value = "NewMessage", required = false) String newMessage,
                              @ModelAttribute("selectUser") int receivingId) {
-        System.out.println("send");
-        System.out.println("new message - " + newMessage);
-        System.out.println("select user - " + receivingId);
+        logger.info("send(account = {}, newMessage = {}, receivingId = {})", account, newMessage, receivingId);
         try {
             Message message = new Message();
             message.setReceiverId(receivingId);
@@ -82,7 +80,7 @@ public class MessageController {
             message.setAccount(account);
             messageService.createMassage(message);
         } catch (Exception e) {
-            System.out.println(e);
+            logger.error("Exception = {}", e);
         }
         ModelAndView modelAndView = new ModelAndView("redirect:/account-write-message");
         modelAndView.addObject("idFriend", receivingId);

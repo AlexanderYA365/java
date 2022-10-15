@@ -1,8 +1,6 @@
 package com.getjavajob.training.yakovleva.dao;
 
-import com.getjavajob.training.yakovleva.common.Application;
-import com.getjavajob.training.yakovleva.common.Group;
-import com.getjavajob.training.yakovleva.common.Relations;
+import com.getjavajob.training.yakovleva.common.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -79,8 +77,14 @@ public class ApplicationDao {
                 criteriaBuilder.equal(from.get("applicantId"), relations.getAccountId()),
                 criteriaBuilder.equal(from.get("recipientId"), relations.getFriendId()),
                 criteriaBuilder.equal(from.get("applicationType"), 1)));
-        System.out.println(session.createQuery(criteriaQuery).getSingleResult());
-        return session.createQuery(criteriaQuery).getSingleResult();
+        List<Application> application = session.createQuery(criteriaQuery).getResultList();
+        if (application.size() >= 1) {
+            logger.info("application.size() = {}", application.size());
+            return application.get(0);
+        } else {
+            logger.info("application.size() =>else = {}", application.size());
+            return new Application(0, ApplicationType.GROUP, 0, 0, ApplicationStatusType.REJECTED);
+        }
     }
 
     public List<Application> getApplications() {

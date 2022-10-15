@@ -1,8 +1,8 @@
 package com.getjavajob.training.yakovleva.web.controllers;
 
 import com.getjavajob.training.yakovleva.common.Account;
-import com.getjavajob.training.yakovleva.common.Group;
 import com.getjavajob.training.yakovleva.common.Phone;
+import com.getjavajob.training.yakovleva.common.Relations;
 import com.getjavajob.training.yakovleva.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -89,14 +89,10 @@ public class testController {
         System.out.println("acc");
         ModelAndView modelAndView = new ModelAndView("all-accounts");
         try {
-            Group group = new Group();//group_name, logo, administrator_id, account_id
-            group.setGroupName("1");
-            group.setLogo("1");
-            group.setAdministratorId(1);
-            group.setAccountId(1);
-            Account account = new Account();
-            account.setId(1);
-            System.out.println(accountService.getFriendsAccount(1));
+            Relations relations = new Relations();
+            relations.setAccountId(1);
+            relations.setFriendId(15174);
+            System.out.println(applicationService.getAccount(relations));
         } catch (Exception ex) {
             System.out.println(ex);
         }

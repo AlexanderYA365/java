@@ -168,7 +168,6 @@ public class AccountController {
     @RequestMapping(value = "/index", method = RequestMethod.GET)
     //TODO RequestParam - заменить на ModelAttribute
     public ModelAndView login(@ModelAttribute("account") final Account account,
-//                              final BindingResult result, final ModelMap model,
                               @RequestParam(value = "checkbox", required = false) String checkbox) {
         logger.info("login, username = {}, password = {} ", account.getUsername(), account.getPassword());
         return userValidation(checkbox, account);

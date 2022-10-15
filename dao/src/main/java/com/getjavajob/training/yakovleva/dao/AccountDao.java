@@ -185,7 +185,6 @@ public class AccountDao {
         for (Relations accountFriends : relations) {
             friends.add(getAccount(accountFriends.getFriendId()));
         }
-//        System.out.println(friends);
         return friends;
     }
 

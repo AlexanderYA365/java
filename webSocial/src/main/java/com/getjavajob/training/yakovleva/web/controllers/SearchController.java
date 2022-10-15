@@ -46,10 +46,7 @@ public class SearchController {
     public TableResult tableResult(final @RequestParam("draw") int draw,
                                    final @RequestParam("start") int start,
                                    final @RequestParam("length") int length) {
-        logger.info("tableResult");
-        logger.info("draw = {}", draw);
-        logger.info("start = {}", start);
-        logger.info("length = {}", length);
+        logger.info("tableResult(draw = {}, start = {}, length = {})", draw, start, length);
         logger.info("searchP = {}", searchParameter);
         List<SearchResult> searchResults = searchCriteria(searchParameter, start, length);
         long size = accountService.getSizeRecords(searchParameter) + groupService.getSizeRecords(searchParameter);

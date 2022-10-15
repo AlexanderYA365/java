@@ -2,6 +2,8 @@ package com.getjavajob.training.yakovleva.web.controllers;
 
 import com.getjavajob.training.yakovleva.common.Account;
 import com.getjavajob.training.yakovleva.service.AccountService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -13,18 +15,18 @@ import java.util.List;
 @ControllerAdvice
 public class AdminController {
     private AccountService accountService;
+    private static final Logger logger = LogManager.getLogger();
 
     @Autowired
     public AdminController(AccountService accountService) {
         this.accountService = accountService;
+        logger.info("AdminController");
     }
 
 
     @RequestMapping(value = "/admin-panel", method = RequestMethod.GET)
     public ModelAndView admin() {
-        System.out.println("admin");
-        List<Account> accounts = accountService.getAllAccountsLimit(0, 100);
-        System.out.println(accounts);
+        logger.info("admin");
         ModelAndView modelAndView = new ModelAndView("admin-panel");
         return modelAndView;
     }
@@ -34,7 +36,7 @@ public class AdminController {
     public TableResult updateTable(final @RequestParam("draw") int draw,
                                    final @RequestParam("start") int start,
                                    final @RequestParam("length") int length) {
-        System.out.println("updateTable");
+        logger.info("updateTable(draw = {}, start = {}, length = {})", draw, start, length);
         List<Account> accounts = accountService.getAllAccountsLimit(start, length);
         int max = accountService.getSizeRecords();
         TableResult tableResult = new TableResult(draw, max, max, accounts);

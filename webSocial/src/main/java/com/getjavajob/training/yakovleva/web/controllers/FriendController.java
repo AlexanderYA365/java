@@ -6,6 +6,8 @@ import com.getjavajob.training.yakovleva.service.ApplicationService;
 import com.getjavajob.training.yakovleva.service.MessageService;
 import com.getjavajob.training.yakovleva.service.RelationsService;
 import com.getjavajob.training.yakovleva.web.controllers.utils.SocialNetworkUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +26,7 @@ public class FriendController {
     private ApplicationService applicationService;
     private AccountService accountService;
     private MessageService messageService;
+    private static final Logger logger = LogManager.getLogger();
 
     @Autowired
     public FriendController(RelationsService relationsService,
@@ -34,24 +37,23 @@ public class FriendController {
         this.applicationService = applicationService;
         this.accountService = accountService;
         this.messageService = messageService;
+        logger.info("FriendController");
     }
 
     @RequestMapping(value = "/show-friend", method = RequestMethod.GET)
     public ModelAndView friendPage(@RequestParam("id") int friendId,
                                    HttpSession session,
                                    @SessionAttribute("account") Account account) {
-        System.out.println("friendPage");
-        System.out.println(account);
+        logger.info("friendPage(friendId = {}, account = {})", friendId, account);
         ModelAndView modelAndView = new ModelAndView("/friend/show-friend");
         try {
-            System.out.println("friendId - " + friendId);
             Account friendAccount = accountService.get(friendId);
-            System.out.println("ShowFriend friendAccount - " + friendAccount);
+            logger.info("friendAccount = {}", friendAccount);
             Relations relations = new Relations(account.getId(), friendId);
             Application application = applicationService.getAccount(relations);
-            System.out.println("application - " + application);
+            logger.info("application = {}", application);
             int friendFlag = application.getId() != 0 ? application.getStatus() : 1;
-            System.out.println("friendFlag - " + friendFlag);
+            logger.info("friendFlag = {}", friendFlag);
             List<Message> messages = messageService.getWallMassageAccount(friendAccount);
             SocialNetworkUtils socialNetworkUtils = new SocialNetworkUtils();
             String encodedPhoto = socialNetworkUtils.loadPhoto(friendAccount);
@@ -62,7 +64,7 @@ public class FriendController {
             modelAndView.addObject("account", account);
             modelAndView.addObject("messages", messages);
         } catch (Exception e) {
-            System.out.println(e);//send redirect
+            logger.info("Exception = {}", e);
         }
         return modelAndView;
     }
@@ -74,6 +76,8 @@ public class FriendController {
                                        @RequestParam(value = "write-message", required = false) String writeMessage,
                                        @RequestParam(value = "delete", required = false) String delete,
                                        @RequestParam(value = "add", required = false) String add) {
+        logger.info("addApplication(id = {}, friend = {}, account = {}, writeMessage = {}, delete = {}, add = {})",
+                id, friend, account, writeMessage, delete, add);
         Relations relations = new Relations(account.getId(), friend.getId());
         Application application = applicationService.getAccount(relations);
         if (add != null) {
@@ -84,7 +88,7 @@ public class FriendController {
             relationsService.deleteByAccountId(relations);
         }
         if (writeMessage != null) {
-            System.out.println("write message");
+            logger.info("write message");
             ModelAndView modelAndView = new ModelAndView("redirect:/account-write-message");
             modelAndView.addObject("idFriend", friend.getId());
             modelAndView.addObject("account", account);
@@ -92,7 +96,7 @@ public class FriendController {
         }
         ModelAndView modelAndView = new ModelAndView("/friend/show-friend");
         int friendFlag = application.getId() != 0 ? application.getStatus() : 1;
-        System.out.println("friendFlag - " + friendFlag);
+        logger.info("friendFlag = {}", friendFlag);
         List<Message> messages = messageService.getWallMassageAccount(friend);
         modelAndView.addObject("friendFlag", friendFlag);
         modelAndView.addObject("friendAccount", friend);
@@ -103,7 +107,7 @@ public class FriendController {
 
     @RequestMapping(value = "/add-friend-account", method = RequestMethod.GET)
     public ModelAndView addFriend() {
-        System.out.println("addFriend");
+        logger.info("addFriend()");
         ModelAndView modelAndView = new ModelAndView("/friend/add-friend-account");
         return modelAndView;
     }
@@ -112,10 +116,8 @@ public class FriendController {
     public ModelAndView addFriendWallMassage(@ModelAttribute("account") Account account,
                                              @ModelAttribute("friend") Account friend,
                                              @RequestParam("NewWallMessage") String message) {
-        System.out.println("account - " + account);
-        System.out.println("friend - " + friend);
-        System.out.println("message - " + message);
-        System.out.println("addFriendWallMassage");
+        logger.info("addFriendWallMassage(account = {}, friend = {}, message = {})",
+                account, friend, message);
         Message wallMessage = new Message();
         wallMessage.setMessageType(MessageType.WALL);
         wallMessage.setMessage(message);
@@ -134,10 +136,10 @@ public class FriendController {
 
     @RequestMapping(value = "/account-friends", method = RequestMethod.GET)
     public ModelAndView friends(@ModelAttribute("account") Account account) {
-        System.out.println("friends");
+        logger.info("friends( account = {})", account);
         ModelAndView modelAndView = new ModelAndView("/friend/account-friends");
         List<Account> friends = accountService.getFriendsAccount(account.getId());
-        System.out.println("friends - " + friends);
+        logger.info("friends = {}", friends);
         modelAndView.addObject("friends", friends);
         return modelAndView;
     }
@@ -145,14 +147,14 @@ public class FriendController {
     @RequestMapping(value = "/account-friends", method = RequestMethod.POST)
     public ModelAndView friendsRedirect(@ModelAttribute("account") Account account,
                                         @ModelAttribute Account friend) {
-        System.out.println("friendsRedirect");
+        logger.info("friendsRedirect( account = {}, friend)", account, friend);
         ModelAndView modelAndView = new ModelAndView("/friend/account-friends");
         return modelAndView;
     }
 
     @RequestMapping(value = "/add-friend-account", method = RequestMethod.POST)
     public ModelAndView saveFriend(HttpSession session, HttpServletRequest request) {
-        System.out.println("saveFriend");
+        logger.info("saveFriend()");
         ModelAndView modelAndView = new ModelAndView("/friend/add-friend-account");
         String accountId = request.getParameter("friendId");
         String name = request.getParameter("name");
@@ -161,6 +163,7 @@ public class FriendController {
                 try {
                     List<Account> accounts = accountService.getAccountName(name);
                     System.out.println(accounts);
+                    logger.info("accounts = {}", accounts);
                     request.setAttribute("accounts", accounts);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -177,7 +180,7 @@ public class FriendController {
                 relationsService.create(relations);
             }
         } catch (Exception e) {
-            System.out.println(e);//send redirect
+            logger.info("Exception = {}", e);
         }
         return modelAndView;
     }
