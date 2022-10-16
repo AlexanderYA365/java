@@ -17,6 +17,11 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -31,6 +36,7 @@ public class AccountController {
     private AccountService accountService;
     private MessageService messageService;
     private PhoneService phoneService;
+    private static final int BUFFER_SIZE = 4096;
 
     @Autowired
     public AccountController(AccountService accountService,
@@ -157,6 +163,63 @@ public class AccountController {
     @RequestMapping(value = "/my-account", method = RequestMethod.GET)
     public ModelAndView settings(@ModelAttribute("account") Account account) {
         logger.info("settings");
+        return new ModelAndView("/account/my-account");
+    }
+
+    @RequestMapping(value = "/update-account-settings", method = RequestMethod.POST)
+    //@RequestParam("file") MultipartFile file
+    public ModelAndView update(@RequestParam("uploadXml") MultipartFile file) {
+        logger.info("load");
+        Account account = new Account();
+        try {
+            JAXBContext jaxbContext = JAXBContext.newInstance(Account.class);
+            Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+            File fileToUpdate = new File(file.getOriginalFilename());
+            file.transferTo(fileToUpdate);
+            account = (Account) unmarshaller.unmarshal(fileToUpdate);
+            logger.info("account = {}", account);
+            accountService.update(account);
+        } catch (JAXBException e) {
+            logger.error("Error with JAXB instance. Exception: " + e);
+        } catch (IOException e) {
+            logger.error("Error with transfer to file. Exception: " + e);
+        }
+        ModelAndView modelAndView = new ModelAndView("/account/my-account");
+        modelAndView.addObject("account", account);
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/save-account-settings", method = RequestMethod.GET)
+    public ModelAndView save(@ModelAttribute("account") Account account, HttpServletResponse response) {
+        logger.info("save = {}", account);
+        File file = new File("account.xml");
+        try {
+            JAXBContext jaxbContext = JAXBContext.newInstance(Account.class);
+            Marshaller marshaller = jaxbContext.createMarshaller();
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+            marshaller.setProperty(Marshaller.JAXB_ENCODING, "utf-8");
+            marshaller.marshal(account, file);
+        } catch (JAXBException e) {
+            logger.error("Error with JAXB instance. Exception: " + e);
+        }
+        try (FileInputStream inputStream = new FileInputStream(file)) {
+            response.setContentType("application/xml");
+            response.setHeader("Content-Disposition", "attachment; filename=\"" + file.getName() + "\"");
+            response.setContentType("application/xml");
+            response.setContentLength((int) file.length());
+            byte[] buffer = new byte[BUFFER_SIZE];
+            OutputStream outStream = response.getOutputStream();
+            int bytesRead;
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                outStream.write(buffer, 0, bytesRead);
+            }
+            inputStream.close();
+            outStream.close();
+        } catch (FileNotFoundException e) {
+            logger.error("FileNotFoundException: " + e);
+        } catch (IOException e) {
+            logger.error("IOException: " + e);
+        }
         return new ModelAndView("/account/my-account");
     }
 

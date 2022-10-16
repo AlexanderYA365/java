@@ -8,6 +8,7 @@ import javax.persistence.*;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Date;
@@ -62,6 +63,7 @@ public class Account implements Serializable {
     private List<Relations> relations;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "account")
     @JsonIgnore
+    @XmlTransient
     private List<Message> message;
 
     public Account(int id, String name, String surname, String lastName, Date date, List<Phone> phones,
