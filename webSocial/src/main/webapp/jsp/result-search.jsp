@@ -60,7 +60,6 @@
                             return '<a class=" d-inline-block fw-normal w-100 h-100 pe-auto" href="show-friend?id=' + row.id + '">' + row.name + '</a>';
                         }
                     },
-
                 },
                 {
                     data: 'surname',

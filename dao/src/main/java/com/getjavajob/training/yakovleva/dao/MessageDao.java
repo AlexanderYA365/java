@@ -79,19 +79,13 @@ public class MessageDao {
         Predicate andMessageType = criteriaBuilder.and(
                 criteriaBuilder.equal(messages.get("messageType"), 1),
                 receiverIdOrSenderId);
-        query.where(andMessageType).groupBy(messages.get("senderId"));
+        query.where(andMessageType).groupBy(messages.get("receiverId"));
         return session.createQuery(query).getResultList().get(0).getMessage();
     }
 
     public List<Message> getMessageAccounts(int senderId, int receiverId) {
         logger.info("MessageDao.getMessageAccounts(senderId, receiverId)");
         logger.info("MessageDao.getMessageAccounts(senderId = {}, receiverId = {})", senderId, receiverId);
-        String sql = "SELECT id, sender_id, receiver_id, a.name, b.name, message, picture, publication_date, " +
-                "edited, message_type FROM message " +
-                "INNER JOIN account a ON receiver_id = a.account_id " +
-                "INNER JOIN account b ON sender_id = b.account_id " +
-                "WHERE (sender_id = ? AND receiver_id = ?) OR (sender_id = ? AND receiver_id = ?) AND message_type = 1";
-        System.out.println(sql);
         Session session = sessionFactory.getCurrentSession();
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
         CriteriaQuery<Message> query = criteriaBuilder.createQuery(Message.class);

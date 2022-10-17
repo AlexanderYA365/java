@@ -61,7 +61,8 @@ public class Account implements Serializable {
     @JoinColumn(name = "account_id", nullable = false)
     @JsonIgnore
     private List<Relations> relations;
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "account")
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "account")
+    @Fetch(value = FetchMode.SUBSELECT)
     @JsonIgnore
     @XmlTransient
     private List<Message> message;
