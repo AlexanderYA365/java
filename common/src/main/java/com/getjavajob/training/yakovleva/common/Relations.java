@@ -8,12 +8,12 @@ import java.util.Objects;
 @IdClass(RelationId.class)
 @Table(name = "relations")
 public class Relations {
+    @Id
     @Column(name = "account_id", insertable = false, updatable = false)
     private int accountId;
+    @Id
     @Column(name = "friend_id")
     private int friendId;
-    @Id
-    private long id = accountId + friendId;
 
     public Relations() {
     }

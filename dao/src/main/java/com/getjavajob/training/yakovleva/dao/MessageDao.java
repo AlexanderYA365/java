@@ -64,23 +64,18 @@ public class MessageDao {
     public List<Message> getUniqueMessagesForUser(int receiverId) {
         logger.info("MessageDao.getUniqueMessagesForUser(receiverId)");
         logger.info("MessageDao.getUniqueMessagesForUser(receiverId = {})", receiverId);
-        String sql = "SELECT id, sender_id, receiver_id, name, message, picture, publication_date, edited, message_type" +
-                " FROM account JOIN message " +
-                "ON account_id = sender_id WHERE sender_id = ? OR receiver_id = ? AND message_type = 1 GROUP BY sender_id;";
-        System.out.println(sql);
         Session session = sessionFactory.getCurrentSession();
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-        CriteriaQuery<Account> query = criteriaBuilder.createQuery(Account.class);
-        Root<Account> fromAccount = query.from(Account.class);
-        Join<Account, Message> messages = fromAccount.join("message", JoinType.INNER);
+        CriteriaQuery<Message> query = criteriaBuilder.createQuery(Message.class);
+        Root<Message> from = query.from(Message.class);
         Predicate receiverIdOrSenderId = criteriaBuilder.or(
-                criteriaBuilder.equal(messages.get("receiverId"), receiverId),
-                criteriaBuilder.equal(messages.get("senderId"), receiverId));
+                criteriaBuilder.equal(from.get("receiverId"), receiverId),
+                criteriaBuilder.equal(from.get("senderId"), receiverId));
         Predicate andMessageType = criteriaBuilder.and(
-                criteriaBuilder.equal(messages.get("messageType"), 1),
+                criteriaBuilder.equal(from.get("messageType"), 1),
                 receiverIdOrSenderId);
-        query.where(andMessageType).groupBy(messages.get("receiverId"));
-        return session.createQuery(query).getResultList().get(0).getMessage();
+        query.where(andMessageType).groupBy(from.get("receiverId"));
+        return session.createQuery(query).getResultList();
     }
 
     public List<Message> getMessageAccounts(int senderId, int receiverId) {

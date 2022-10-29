@@ -32,35 +32,25 @@ public class MessageService {
     public List<Message> getWallMassageAccount(Account account) {
         logger.info("getWallMassageAccount(Account account)");
         logger.debug("getWallMassageAccount(account = {})", account);
-        return messageDao.getWallMessage(account.getId());
+        return setUsernames(messageDao.getWallMessage(account.getId()));
     }
 
     public List<Message> getMessages(Account account) {
         logger.info("getMessages(Account account)");
         logger.debug("getMessages(account = {})", account);
-        return messageDao.getMessageUserIdNameSender(account.getId());
+        return setUsernames(messageDao.getMessageUserIdNameSender(account.getId()));
     }
 
     public List<Message> getUniqueMessages(Account account) {
         logger.info("getUniqueMessages(Account account)");
         logger.debug("getUniqueMessages(account = {})", account);
-        List<Message> uniqueMessages = messageDao.getUniqueMessagesForUser(account.getId());
-        for (Message m : uniqueMessages) {
-            m.setUsernameReceiving(accountDao.getAccount(m.getReceiverId()).getUsername());
-            m.setUsernameSender(accountDao.getAccount(m.getSenderId()).getUsername());
-        }
-        return uniqueMessages;
+        return setUsernames(messageDao.getUniqueMessagesForUser(account.getId()));
     }
 
     public List<Message> getAccountMessages(int senderId, int receiverId) {
         logger.info("getAccountMessages(int senderId, int receiverId)");
         logger.debug("getAccountMessages(senderId = {}, receiverId = {})", senderId, receiverId);
-        List<Message> uniqueMessages = messageDao.getMessageAccounts(senderId, receiverId);
-        for (Message m : uniqueMessages) {
-            m.setUsernameReceiving(accountDao.getAccount(m.getReceiverId()).getUsername());
-            m.setUsernameSender(accountDao.getAccount(m.getSenderId()).getUsername());
-        }
-        return uniqueMessages;
+        return setUsernames(messageDao.getMessageAccounts(senderId, receiverId));
     }
 
     public boolean createMassage(Message message) {
@@ -78,6 +68,14 @@ public class MessageService {
         logger.info("delete(int id)");
         logger.debug("delete(id = {})", id);
         return messageDao.delete(id);
+    }
+
+    private List<Message> setUsernames(List<Message> Messages) {
+        for (Message m : Messages) {
+            m.setUsernameReceiving(accountDao.getAccount(m.getReceiverId()).getUsername());
+            m.setUsernameSender(accountDao.getAccount(m.getSenderId()).getUsername());
+        }
+        return Messages;
     }
 
 }

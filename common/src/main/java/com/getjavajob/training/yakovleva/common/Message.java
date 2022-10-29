@@ -25,20 +25,23 @@ public class Message implements Serializable {
     private Date publicationDate;
     @Column(name = "edited")
     private boolean edited;
+    @Transient
     private String usernameSender;
+    @Transient
     private String usernameReceiving;
     @Column(name = "message_type")
     private MessageType messageType;
     @ManyToOne(targetEntity = Account.class, fetch = FetchType.LAZY)
+    @JoinColumn(updatable = false, insertable = false, name = "receiver_id", referencedColumnName = "account_id")
     @JsonIgnore
-    @JoinColumn(updatable = false, insertable = false, name = "sender_id", referencedColumnName = "account_id")
+//    @JoinColumn(updatable = false, insertable = false, name = "sender_id", referencedColumnName = "account_id")
     private Account account;
 
     public Message() {
     }
 
     public Message(int id, int senderId, int receiverId, String message, String picture, Date publicationDate,
-                   boolean edited, String usernameSender, String usernameReceiving, MessageType messageType) {
+                   boolean edited, MessageType messageType) {
         this.id = id;
         this.senderId = senderId;
         this.receiverId = receiverId;
@@ -51,29 +54,28 @@ public class Message implements Serializable {
         this.messageType = messageType;
     }
 
-    public Message(int id, int senderId, int receiverId, String message, String picture, Date publicationDate,
-                   boolean edited, String usernameSender, String usernameReceiving, MessageType messageType,
-                   Account account) {
-        this.id = id;
-        this.senderId = senderId;
-        this.receiverId = receiverId;
-        this.message = message;
-        this.picture = picture;
-        this.publicationDate = publicationDate;
-        this.edited = edited;
-        this.usernameSender = usernameSender;
-        this.usernameReceiving = usernameReceiving;
-        this.messageType = messageType;
-        this.account = account;
-    }
+//    public Message(int id, int senderId, int receiverId, String message, String picture, Date publicationDate,
+//                   boolean edited, MessageType messageType, Account account) {
+//        this.id = id;
+//        this.senderId = senderId;
+//        this.receiverId = receiverId;
+//        this.message = message;
+//        this.picture = picture;
+//        this.publicationDate = publicationDate;
+//        this.edited = edited;
+//        this.usernameSender = usernameSender;
+//        this.usernameReceiving = usernameReceiving;
+//        this.messageType = messageType;
+//        this.account = account;
+//    }
 
-    public Account getAccount() {
-        return account;
-    }
-
-    public void setAccount(Account account) {
-        this.account = account;
-    }
+//    public Account getAccount() {
+//        return account;
+//    }
+//
+//    public void setAccount(Account account) {
+//        this.account = account;
+//    }
 
     public int getMessageType() {
         return messageType.getStatus();

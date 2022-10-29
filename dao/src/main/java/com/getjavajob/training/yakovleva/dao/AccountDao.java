@@ -188,10 +188,13 @@ public class AccountDao {
         return friends;
     }
 
+    @Transactional
     public void createAccounts(List<Account> accounts) {
         logger.info("AccountDao.createAccounts(accounts.size() = {})", accounts.size());
         logger.debug("AccountDao.createAccounts(accounts.size() = {}", accounts.size());
-        sessionFactory.getCurrentSession().save(accounts);
+        for (Account a : accounts) {
+            sessionFactory.getCurrentSession().save(a);
+        }
     }
 
 }

@@ -43,9 +43,9 @@ public class testController {
         long start = System.currentTimeMillis();
         System.out.println("sql, time start - " + new Date());
         ModelAndView modelAndView = new ModelAndView("all-accounts");
-        String[] name = {"Зоя", "Даша", "Зина", "Нина", "Люба", "Ира", "Инна", "Наталья", "Саша", "Таня"};
-        String[] surname = {"Любимова", "Фатыхова", "Назаренко", "Комарова", "Воронина"};
-        String[] lastName = {"Игоревна", "Николаевна", "Александровна", "Андреевна", "Викторовна"};
+        String[] name = {"Александр", "Николай", "Василий", "Алексей", "Никита", "Иван", "Андрей", "Костя", "Витя", "Егор"};
+        String[] surname = {"Любимов", "Фатыхов", "Назаренко", "Комаров", "Воронин"};
+        String[] lastName = {"Александров", "Николаевич", "Александрович", "Андреевич", "Викторович"};
         String[] username = {"bobs", "Jonson", "Beap", "Bell", "Bold", "alex", "titer", "beep", "jost", "wolt"};
         List<Account> accounts = generateAccounts(name, surname, lastName, username);
         System.out.println("sql, time start insert into DB - " + new Date());
@@ -242,19 +242,5 @@ public class testController {
         System.out.println("modelAndView" + modelAndView);
         return modelAndView;
     }
-
-//    @InitBinder
-//    void initBinder(WebDataBinder binder) {
-//        binder.setAllowedFields("id", "name", "surname", "username");
-//    }
-
-//    @ModelAttribute("account")
-//    public Account addAttributes(@RequestParam String username, @RequestParam int id) {
-//        Account account = new Account();
-//        account.setId(id);
-//        account.setUsername(username);
-//        System.out.println("addAttributes - " + account);
-//        return account;
-//    }
 
 }

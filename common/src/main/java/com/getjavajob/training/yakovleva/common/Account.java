@@ -32,16 +32,8 @@ public class Account implements Serializable {
     private String lastName;
     @Column(name = "date")
     private Date date;
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    @Fetch(value = FetchMode.SUBSELECT)
-    @JoinColumn(name = "account_id", nullable = false)
-    private List<Phone> phones;
     @Column(name = "icq")
     private int icq;
-    @Column(name = "photo_file_name")
-    private String photoFileName;
-    @Column(name = "photo")
-    private byte[] photo;
     @Column(name = "address_home")
     private String addressHome;
     @Column(name = "address_job")
@@ -56,6 +48,14 @@ public class Account implements Serializable {
     private String password;
     @Column(name = "role")
     private Role role;
+    @Column(name = "photo")
+    private byte[] photo;
+    @Column(name = "photo_file_name")
+    private String photoFileName;
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @Fetch(value = FetchMode.SUBSELECT)
+    @JoinColumn(name = "account_id", nullable = false)
+    private List<Phone> phones;
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @Fetch(value = FetchMode.SUBSELECT)
     @JoinColumn(name = "account_id", nullable = false)

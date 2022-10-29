@@ -77,7 +77,7 @@ public class MessageController {
             message.setMessage(newMessage);
             message.setPublicationDate(new Date());
             message.setMessageType(1);
-            message.setAccount(account);
+//            message.setAccount(account);
             messageService.createMassage(message);
         } catch (Exception e) {
             logger.error("Exception = {}", e);

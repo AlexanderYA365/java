@@ -17,10 +17,6 @@ public class Phone implements Serializable {
     private String phoneNumber;
     @Column(name = "phone_type")
     private PhoneType phoneType;
-//    @ManyToOne(targetEntity = Account.class, fetch = FetchType.EAGER)
-//    @JsonIgnore
-//    @JoinColumn(updatable = false, insertable = false, name = "account_id", referencedColumnName = "account_id")
-//    private Account account;
 
     public Phone() {
     }
