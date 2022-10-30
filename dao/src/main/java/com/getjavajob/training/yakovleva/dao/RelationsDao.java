@@ -3,12 +3,11 @@ package com.getjavajob.training.yakovleva.dao;
 import com.getjavajob.training.yakovleva.common.Relations;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.TypedQuery;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -20,11 +19,11 @@ import java.util.List;
 @Transactional
 public class RelationsDao {
     private static final Logger logger = LogManager.getLogger();
-    private SessionFactory sessionFactory;
+    private EntityManagerFactory entityManagerFactory;
 
-    public RelationsDao(SessionFactory sessionFactory) {
+    public RelationsDao(EntityManagerFactory entityManagerFactory) {
         logger.info("RelationsDao(sessionFactory)");
-        this.sessionFactory = sessionFactory;
+        this.entityManagerFactory = entityManagerFactory;
     }
 
     public RelationsDao() {
@@ -33,46 +32,74 @@ public class RelationsDao {
     public boolean create(Relations relations) {
         logger.info("RelationsDao.create(relations)");
         logger.debug("RelationsDao.create(relations = {})", relations);
-        sessionFactory.getCurrentSession().save(relations);
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        entityManager.getTransaction().begin();
+        try {
+            entityManager.persist(relations);
+            entityManager.getTransaction().commit();
+        } catch (Exception ex) {
+            entityManager.getTransaction().rollback();
+        }
+        entityManager.close();
         return true;
     }
 
     public List<Relations> getByAccountID(Relations relations) {
         logger.info("RelationsDao.getByAccountID(relations)");
         logger.debug("RelationsDao.getByAccountID(relations = {})", relations);
-        Session session = sessionFactory.getCurrentSession();
-        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Relations> criteriaQuery = criteriaBuilder.createQuery(Relations.class);
         Root<Relations> from = criteriaQuery.from(Relations.class);
         CriteriaQuery<Relations> nameQuery = criteriaQuery.select(from).where(
                 criteriaBuilder.equal(from.get("accountId"), relations.getAccountId()));
-        return session.createQuery(nameQuery).getResultList();
+        List<Relations> relationsAccount = entityManager.createQuery(nameQuery).getResultList();
+        entityManager.close();
+        return relationsAccount;
     }
 
     public Relations getByFriendId(Relations relations) {
         logger.info("RelationsDao.getByFriendId(relations)");
         logger.debug("RelationsDao.getByFriendId(relations = {})", relations);
-        Session session = sessionFactory.getCurrentSession();
-        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Relations> criteriaQuery = criteriaBuilder.createQuery(Relations.class);
         Root<Relations> from = criteriaQuery.from(Relations.class);
         List<Predicate> conditions = new ArrayList<>();
         conditions.add(criteriaBuilder.equal(from.get("accountId"), relations.getAccountId()));
         conditions.add(criteriaBuilder.equal(from.get("friendId"), relations.getFriendId()));
         criteriaQuery.where(conditions.toArray(new Predicate[0]));
-        TypedQuery<Relations> query = session.createQuery(criteriaQuery);
-        return query.getSingleResult();
+        Relations friendRelations = entityManager.createQuery(criteriaQuery).getSingleResult();
+        entityManager.close();
+        return friendRelations;
     }
 
     public boolean update(Relations relations) {
         logger.info("RelationsDao.update(relations)");
         logger.debug("RelationsDao.update(relations = {})", relations);
-        return sessionFactory.getCurrentSession().save(relations) != null;
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        entityManager.getTransaction().begin();
+        try {
+            entityManager.merge(relations);
+            entityManager.getTransaction().commit();
+        } catch (Exception ex) {
+            entityManager.getTransaction().rollback();
+        }
+        entityManager.close();
+        return true;
     }
 
     public boolean deleteByAccountId(Relations relations) {
         System.out.println("RelationsDao.deleteByAccountId()");
-        sessionFactory.getCurrentSession().delete(relations);
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        entityManager.getTransaction().begin();
+        try {
+            entityManager.remove(relations);
+            entityManager.getTransaction().commit();
+        } catch (Exception ex) {
+            entityManager.getTransaction().rollback();
+        }
+        entityManager.close();
         return true;
     }
 

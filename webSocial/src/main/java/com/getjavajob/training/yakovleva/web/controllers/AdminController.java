@@ -14,8 +14,8 @@ import java.util.List;
 @Controller
 @ControllerAdvice
 public class AdminController {
-    private AccountService accountService;
     private static final Logger logger = LogManager.getLogger();
+    private AccountService accountService;
 
     @Autowired
     public AdminController(AccountService accountService) {
@@ -38,18 +38,18 @@ public class AdminController {
                                    final @RequestParam("length") int length) {
         logger.info("updateTable(draw = {}, start = {}, length = {})", draw, start, length);
         List<Account> accounts = accountService.getAllAccountsLimit(start, length);
-        int max = accountService.getSizeRecords();
+        long max = accountService.getSizeRecords();
         TableResult tableResult = new TableResult(draw, max, max, accounts);
         return tableResult;
     }
 
     class TableResult {
         private int draw;
-        private int recordsTotal;
-        private int recordsFiltered;
+        private long recordsTotal;
+        private long recordsFiltered;
         private List<Account> data;
 
-        public TableResult(int draw, int recordsTotal, int recordsFiltered, List<Account> data) {
+        public TableResult(int draw, long recordsTotal, long recordsFiltered, List<Account> data) {
             this.draw = draw;
             this.recordsTotal = recordsTotal;
             this.recordsFiltered = recordsFiltered;
@@ -64,7 +64,7 @@ public class AdminController {
             this.draw = draw;
         }
 
-        public int getRecordsTotal() {
+        public long getRecordsTotal() {
             return recordsTotal;
         }
 
@@ -72,7 +72,7 @@ public class AdminController {
             this.recordsTotal = recordsTotal;
         }
 
-        public int getRecordsFiltered() {
+        public long getRecordsFiltered() {
             return recordsFiltered;
         }
 

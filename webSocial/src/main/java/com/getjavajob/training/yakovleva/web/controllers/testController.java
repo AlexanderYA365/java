@@ -1,5 +1,6 @@
 package com.getjavajob.training.yakovleva.web.controllers;
 
+import Repository.GroupRepository;
 import com.getjavajob.training.yakovleva.common.Account;
 import com.getjavajob.training.yakovleva.common.Phone;
 import com.getjavajob.training.yakovleva.service.*;
@@ -27,15 +28,18 @@ public class testController {
     private GroupService groupService;
     private MessageService messageService;
     private ApplicationService applicationService;
+    private GroupRepository groupRepository;
 
     @Autowired
     public testController(MessageService messageService, ApplicationService applicationService,
-                          GroupService groupService, AccountService accountService, PhoneService phoneService) {
+                          GroupService groupService, AccountService accountService,
+                          PhoneService phoneService, GroupRepository groupRepository) {
         this.groupService = groupService;
         this.accountService = accountService;
         this.phoneService = phoneService;
         this.messageService = messageService;
         this.applicationService = applicationService;
+        this.groupRepository = groupRepository;
     }
 
     @RequestMapping(value = "/createBD", method = RequestMethod.GET)
@@ -90,7 +94,8 @@ public class testController {
         try {
             Account account = new Account();
             account.setId(1);
-            System.out.println(messageService.getUniqueMessages(account));
+//            System.out.println(messageService.getUniqueMessages(account));
+            System.out.println(accountService.get(1));
         } catch (Exception ex) {
             System.out.println(ex);
         }

@@ -5,7 +5,7 @@
        xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:aop="http://www.springframework.org/schema/aop"
-       xmlns="http://www.springframework.org/schema/beans"
+       xmlns:jpa="http://www.springframework.org/schema/data/jpa" xmlns="http://www.springframework.org/schema/beans"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                              http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
                              http://www.springframework.org/schema/tx
@@ -17,7 +17,9 @@
                              http://www.springframework.org/schema/aop
                              http://www.springframework.org/schema/aop/spring-aop.xsd
                              http://www.springframework.org/schema/jee
-                             http://www.springframework.org/schema/jee/spring-jee.xsd">
+                             http://www.springframework.org/schema/jee/spring-jee.xsd
+                             http://www.springframework.org/schema/data/jpa
+                             https://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
 
     <mvc:annotation-driven/>
     <mvc:default-servlet-handler/>
@@ -29,7 +31,6 @@
 
     <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
-        <!--        <property name="order" value="1"/>-->
         <property name="prefix" value="/jsp/"/>
         <property name="suffix" value=".jsp"/>
     </bean>
@@ -42,11 +43,12 @@
         </mvc:interceptor>
     </mvc:interceptors>
 
-    <bean id="txManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
-        <property name="sessionFactory" ref="sessionFactory"/>
+    <bean class="org.springframework.orm.jpa.JpaTransactionManager" id="transactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+        <qualifier value="pagTransactionManager"/>
     </bean>
 
-    <tx:annotation-driven transaction-manager="txManager"/>
+    <tx:annotation-driven transaction-manager="transactionManager"/>
 
     <jee:jndi-lookup id="dataSource" jndi-name="jdbc/socnetwork" expected-type="javax.sql.DataSource"/>
 
@@ -59,23 +61,21 @@
     com.getjavajob.training.yakovleva.service,
     com.getjavajob.training.yakovleva.web"/>
 
-    <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
         <property name="dataSource" ref="dataSource"/>
-        <property name="hibernateProperties">
-            <props>
-                <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
-                <prop key="hibernate.hbm2ddl.auto">update</prop>
-                <prop key="hibernate.format_sql">true</prop>
-                <prop key="hibernate.show_sql">true</prop>
-                <prop key="hibernate.id.new_generator_mappings">false</prop>
-            </props>
+        <property name="packagesToScan" value="com.getjavajob.training.yakovleva.common"/>
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
         </property>
-        <property name="packagesToScan">
-            <list>
-                <value>com.getjavajob.training.yakovleva.common</value>
-            </list>
+        <property name="jpaProperties">
+            <props>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
+                <prop key="hibernate.show_sql">false</prop>
+            </props>
         </property>
     </bean>
 
+    <jpa:repositories base-package="Repository"/>
 
 </beans>

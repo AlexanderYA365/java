@@ -33,10 +33,10 @@ import java.util.List;
 @SessionAttributes("account")
 public class AccountController {
     private static final Logger logger = LogManager.getLogger();
+    private static final int BUFFER_SIZE = 4096;
     private AccountService accountService;
     private MessageService messageService;
     private PhoneService phoneService;
-    private static final int BUFFER_SIZE = 4096;
 
     @Autowired
     public AccountController(AccountService accountService,

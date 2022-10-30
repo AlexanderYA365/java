@@ -20,9 +20,9 @@ import java.util.List;
 @Controller
 @SessionAttributes("account")
 public class GroupController {
+    private static final Logger logger = LogManager.getLogger();
     private GroupService groupService;
     private ApplicationService applicationService;
-    private static final Logger logger = LogManager.getLogger();
 
     public GroupController(GroupService groupService, ApplicationService applicationService) {
         this.groupService = groupService;

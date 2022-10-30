@@ -32,7 +32,7 @@ public class GroupService {
         return groupDao.getGroupsAccount(account.getId());
     }
 
-    public int getSizeRecords() {
+    public long getSizeRecords() {
         logger.info("getSizeRecords()");
         return groupDao.getSizeRecords();
     }

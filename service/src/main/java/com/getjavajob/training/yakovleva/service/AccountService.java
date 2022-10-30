@@ -123,7 +123,7 @@ public class AccountService {
         return accountDao.getAccountsLimit(start, end);
     }
 
-    public int getSizeRecords() {
+    public long getSizeRecords() {
         logger.info("getSizeRecords()");
         return accountDao.getSizeRecords();
     }
