@@ -19,7 +19,7 @@ import java.util.List;
 
 @Controller
 public class SearchController {
-    private static final Logger logger = LogManager.getLogger();
+    private static final Logger logger = LogManager.getLogger(SearchController.class);
     private final AccountService accountService;
     private final GroupService groupService;
     private String searchParameter;
@@ -51,8 +51,7 @@ public class SearchController {
         List<SearchResult> searchResults = searchCriteria(searchParameter, start, length);
         long size = accountService.getSizeRecords(searchParameter) + groupService.getSizeRecords(searchParameter);
         logger.info("records size = {}", size);
-        TableResult tableResult = new TableResult(draw, size, size, searchResults);
-        return tableResult;
+        return new TableResult(draw, size, size, searchResults);
     }
 
     private List<SearchResult> searchCriteria(String criteria, int start, int end) {
@@ -60,12 +59,12 @@ public class SearchController {
         List<Account> accounts = accountService.getAccountsCriteriaLimit(start, end, criteria);
         List<Group> groups = groupService.getCriteriaLimit(start, end, criteria);
         List<SearchResult> searchResults = new ArrayList<>();
-        for (int i = 0; i < accounts.size(); i++) {
-            searchResults.add(new SearchResult(accounts.get(i).getId(), accounts.get(i).getName(),
-                    accounts.get(i).getSurname(), accounts.get(i).getLastName(), false));
+        for (Account account : accounts) {
+            searchResults.add(new SearchResult(account.getId(), account.getName(),
+                    account.getSurname(), account.getLastName(), false));
         }
-        for (int i = 0; i < groups.size(); i++) {
-            searchResults.add(new SearchResult(groups.get(i).getGroupId(), groups.get(i).getGroupName(),
+        for (Group group : groups) {
+            searchResults.add(new SearchResult(group.getGroupId(), group.getGroupName(),
                     "", "", true));
         }
         logger.info("searchResults = {}", searchResults);
@@ -76,12 +75,39 @@ public class SearchController {
     @ResponseBody
     public List<SearchResult> search(final @RequestParam("filter") String filter) {
         logger.info("search (filter - {})", filter);
-        List<SearchResult> searchResults = getSearchResults(filter);
-        return searchResults;
+        return getSearchResults(filter);
     }
 
     private List<SearchResult> getSearchResults(String filter) {
         return searchCriteria(filter, 0, 5);
+    }
+
+    static class SearchResult {
+        public int id;
+        public String name;
+        public String surname;
+        public String lastName;
+        public boolean isGroup;
+
+        public SearchResult(int id, String name, String surname, String lastName, boolean isGroup) {
+            this.id = id;
+            this.name = name;
+            this.surname = surname;
+            this.lastName = lastName;
+            this.isGroup = isGroup;
+        }
+
+        @Override
+        public String toString() {
+            return "SearchResult{" +
+                    "id=" + id +
+                    ", name='" + name + '\'' +
+                    ", surname='" + surname + '\'' +
+                    ", lastName='" + lastName + '\'' +
+                    ", isGroup=" + isGroup +
+                    '}';
+        }
+
     }
 
     class TableResult {
@@ -138,34 +164,6 @@ public class SearchController {
                     ", searchResults=" + searchResults +
                     '}';
         }
-    }
-
-    class SearchResult {
-        public int id;
-        public String name;
-        public String surname;
-        public String lastName;
-        public boolean isGroup;
-
-        public SearchResult(int id, String name, String surname, String lastName, boolean isGroup) {
-            this.id = id;
-            this.name = name;
-            this.surname = surname;
-            this.lastName = lastName;
-            this.isGroup = isGroup;
-        }
-
-        @Override
-        public String toString() {
-            return "SearchResult{" +
-                    "id=" + id +
-                    ", name='" + name + '\'' +
-                    ", surname='" + surname + '\'' +
-                    ", lastName='" + lastName + '\'' +
-                    ", isGroup=" + isGroup +
-                    '}';
-        }
-
     }
 
 }

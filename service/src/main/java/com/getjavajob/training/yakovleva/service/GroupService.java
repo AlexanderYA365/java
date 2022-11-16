@@ -12,9 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Repository
-@Transactional
 public class GroupService {
-    private static final Logger logger = LogManager.getLogger();
+    private static final Logger logger = LogManager.getLogger(GroupService.class);
     private GroupDao groupDao;
 
     @Autowired
@@ -42,6 +41,7 @@ public class GroupService {
         return groupDao.getSizeRecords(search);
     }
 
+    @Transactional
     public boolean createAccountGroups(Group group) {
         logger.info("createAccountGroups(Group group)");
         logger.debug("createAccountGroups(group = {})", group);
@@ -53,12 +53,14 @@ public class GroupService {
         return false;
     }
 
+    @Transactional
     public boolean update(Group group) {
         logger.info("update(Group group)");
         logger.debug("update(group = {})", group);
         return groupDao.update(group);
     }
 
+    @Transactional
     public boolean delete(Group group) {
         logger.info("delete(Group group)");
         logger.debug("delete(group = {})", group);
@@ -89,6 +91,7 @@ public class GroupService {
         return groupDao.getGroup(idGroup);
     }
 
+    @Transactional
     public boolean insertAccountGroup(Group group, int accountId) {
         logger.info("insertAccountGroup(Group group, int accountId)");
         logger.debug("insertAccountGroup(group = {}, accountId = {})", group, accountId);

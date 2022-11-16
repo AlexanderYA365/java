@@ -11,7 +11,7 @@ import java.util.Objects;
 @Table(name = "message")
 public class Message implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue
     private int id;
     @Column(name = "sender_id")
     private int senderId;
@@ -34,7 +34,6 @@ public class Message implements Serializable {
     @ManyToOne(targetEntity = Account.class, fetch = FetchType.LAZY)
     @JoinColumn(updatable = false, insertable = false, name = "receiver_id", referencedColumnName = "account_id")
     @JsonIgnore
-//    @JoinColumn(updatable = false, insertable = false, name = "sender_id", referencedColumnName = "account_id")
     private Account account;
 
     public Message() {

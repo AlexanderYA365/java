@@ -11,9 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Repository
-@Transactional
 public class RelationsService {
-    private static final Logger logger = LogManager.getLogger();
+    private static final Logger logger = LogManager.getLogger(RelationsService.class);
     private RelationsDao relationsDao;
 
     @Autowired
@@ -25,6 +24,7 @@ public class RelationsService {
     public RelationsService() {
     }
 
+    @Transactional
     public boolean create(Relations relations) {
         logger.info("create(Relations relations)");
         logger.debug("create(relations = {})", relations);
@@ -43,12 +43,14 @@ public class RelationsService {
         return relationsDao.getByFriendId(relations);
     }
 
+    @Transactional
     public boolean update(Relations relations) {
         logger.info("update(Relations relations)");
         logger.debug("update(relations = {})", relations);
         return relationsDao.update(relations);
     }
 
+    @Transactional
     public boolean deleteByAccountId(Relations relations) {
         logger.info("deleteByAccountId(Relations relations)");
         logger.debug("deleteByAccountId(relations = {})", relations);

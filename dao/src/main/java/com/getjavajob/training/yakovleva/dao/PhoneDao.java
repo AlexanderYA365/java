@@ -8,82 +8,52 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
 @Repository
-@Transactional
 public class PhoneDao {
-    private static final Logger logger = LogManager.getLogger();
-    private EntityManagerFactory entityManagerFactory;
+    private static final Logger logger = LogManager.getLogger(PhoneDao.class);
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Autowired
-    public PhoneDao(EntityManagerFactory entityManagerFactory) {
-        logger.info("PhoneDao(sessionFactory)");
-        this.entityManagerFactory = entityManagerFactory;
-    }
-
     public PhoneDao() {
+        logger.info("PhoneDao()");
     }
 
-    public boolean create(Phone phone) {
-        logger.info("PhoneDao.create(phone)");
-        logger.debug("PhoneDao.create(phone = {})", phone);
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        entityManager.getTransaction().begin();
-        try {
-            entityManager.persist(phone);
-            entityManager.getTransaction().commit();
-        } catch (Exception ex) {
-            entityManager.getTransaction().rollback();
-        }
-        entityManager.close();
+    @Transactional
+    public boolean create(final Phone phone) {
+        logger.info("PhoneDao.create(phone = {})", phone);
+        entityManager.merge(phone);
         return true;
     }
 
     public List<Phone> get(int accountId) {
-        logger.info("PhoneDao.get(accountId)");
-        logger.debug("PhoneDao.get(accountId = {})", accountId);
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        logger.info("PhoneDao.get(accountId = {})", accountId);
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Phone> criteriaQuery = criteriaBuilder.createQuery(Phone.class);
         Root<Phone> from = criteriaQuery.from(Phone.class);
         CriteriaQuery<Phone> selectAccountId = criteriaQuery.select(from).where(
                 criteriaBuilder.equal(from.get("accountId"), accountId));
-        List<Phone> phones = entityManager.createQuery(selectAccountId).getResultList();
-        entityManager.close();
-        return phones;
+        return entityManager.createQuery(selectAccountId).getResultList();
     }
 
+    @Transactional
     public boolean update(Phone phone) {
-        logger.info("PhoneDao.update(phone)");
-        logger.debug("PhoneDao.update(phone = {})", phone);
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        try {
-            entityManager.getTransaction().begin();
-            entityManager.merge(phone);
-        } catch (Exception ex) {
-            entityManager.getTransaction().rollback();
-        }
-        entityManager.close();
+        logger.info("PhoneDao.update(phone = {})", phone);
+        entityManager.merge(phone);
         return true;
     }
 
+    @Transactional
     public boolean delete(Phone phone) {
-        logger.info("PhoneDao.delete(phone)");
-        logger.debug("PhoneDao.delete(phone = {})", phone);
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        try {
-            entityManager.getTransaction().begin();
-            Phone deletePhone = entityManager.find(Phone.class, phone.getId());
-            entityManager.remove(deletePhone);
-        } catch (Exception ex) {
-            entityManager.getTransaction().rollback();
-        }
-        entityManager.close();
+        logger.info("PhoneDao.delete(phone = {})", phone);
+        Phone deletePhone = entityManager.find(Phone.class, phone.getId());
+        entityManager.remove(deletePhone);
         return true;
     }
 

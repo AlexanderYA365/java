@@ -20,7 +20,7 @@ import java.util.List;
 @Controller
 @SessionAttributes("account")
 public class GroupController {
-    private static final Logger logger = LogManager.getLogger();
+    private static final Logger logger = LogManager.getLogger(GroupController.class);
     private GroupService groupService;
     private ApplicationService applicationService;
 

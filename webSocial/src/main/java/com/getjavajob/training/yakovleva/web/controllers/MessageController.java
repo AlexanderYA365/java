@@ -17,7 +17,7 @@ import java.util.List;
 @ControllerAdvice
 @SessionAttributes({"account", "friend", "selectUser"})
 public class MessageController {
-    private static final Logger logger = LogManager.getLogger();
+    private static final Logger logger = LogManager.getLogger(MessageController.class);
     private MessageService messageService;
 
     @Autowired

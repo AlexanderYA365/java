@@ -4,58 +4,45 @@ import com.getjavajob.training.yakovleva.common.Account;
 import com.getjavajob.training.yakovleva.common.Message;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.*;
 import java.util.List;
 
 @Repository
-@Transactional
 public class MessageDao {
-    private static final Logger logger = LogManager.getLogger();
-    private EntityManagerFactory entityManagerFactory;
+    private static final Logger logger = LogManager.getLogger(MessageDao.class);
+    @PersistenceContext
+    private EntityManager entityManager;
 
-    public MessageDao(EntityManagerFactory entityManagerFactory) {
+    @Autowired
+    public MessageDao() {
         logger.info("MessageDao(sessionFactory)");
-        this.entityManagerFactory = entityManagerFactory;
     }
 
+    @Transactional
     public boolean create(Message message) {
-        logger.info("MessageDao.create(message)");
         logger.info("MessageDao.create(message = {})", message);
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        entityManager.getTransaction().begin();
-        try {
-            entityManager.persist(message);
-            entityManager.getTransaction().commit();
-        } catch (Exception ex) {
-            entityManager.getTransaction().rollback();
-        }
-        entityManager.close();
+        entityManager.merge(message);
         return true;
     }
 
     public List<Message> getMessageUserId(int id) {
-        logger.info("MessageDao.getMessageUserId(id)");
-        logger.debug("MessageDao.getMessageUserId(id = {})", id);
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        logger.info("MessageDao.getMessageUserId(id = {})", id);
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Message> criteriaQuery = criteriaBuilder.createQuery(Message.class);
         Root<Message> from = criteriaQuery.from(Message.class);
         CriteriaQuery<Message> selectMessage = criteriaQuery.select(from).where(
                 criteriaBuilder.equal(from.get("receiverId"), id));
-        List<Message> messages = entityManager.createQuery(selectMessage).getResultList();
-        entityManager.close();
-        return messages;
+        return entityManager.createQuery(selectMessage).getResultList();
     }
 
     public List<Message> getMessageUserIdNameSender(int receiverId) {
-        logger.info("MessageDao.getMessageUserIdNameSender(receiverId)");
-        logger.debug("MessageDao.getMessageUserIdNameSender(receiverId = {})", receiverId);
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        logger.info("MessageDao.getMessageUserIdNameSender(receiverId = {})", receiverId);
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Account> query = criteriaBuilder.createQuery(Account.class);
         Root<Account> fromAccount = query.from(Account.class);
@@ -65,15 +52,11 @@ public class MessageDao {
                 criteriaBuilder.equal(messages.get("senderId"), receiverId));
         Predicate andMessageType = criteriaBuilder.and(criteriaBuilder.equal(messages.get("messageType"), 1));
         query.where(criteriaBuilder.and(andMessageType, receiverIdOrSenderId));
-        List<Message> userMessage = entityManager.createQuery(query).getSingleResult().getMessage();
-        entityManager.close();
-        return userMessage;
+        return entityManager.createQuery(query).getSingleResult().getMessage();
     }
 
     public List<Message> getUniqueMessagesForUser(int receiverId) {
-        logger.info("MessageDao.getUniqueMessagesForUser(receiverId)");
         logger.info("MessageDao.getUniqueMessagesForUser(receiverId = {})", receiverId);
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Message> query = criteriaBuilder.createQuery(Message.class);
         Root<Message> from = query.from(Message.class);
@@ -84,15 +67,11 @@ public class MessageDao {
                 criteriaBuilder.equal(from.get("messageType"), 1),
                 receiverIdOrSenderId);
         query.where(andMessageType).groupBy(from.get("receiverId"));
-        List<Message> messages = entityManager.createQuery(query).getResultList();
-        entityManager.close();
-        return messages;
+        return entityManager.createQuery(query).getResultList();
     }
 
     public List<Message> getMessageAccounts(int senderId, int receiverId) {
-        logger.info("MessageDao.getMessageAccounts(senderId, receiverId)");
         logger.info("MessageDao.getMessageAccounts(senderId = {}, receiverId = {})", senderId, receiverId);
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Message> query = criteriaBuilder.createQuery(Message.class);
         Root<Message> root = query.from(Message.class);
@@ -108,15 +87,11 @@ public class MessageDao {
         Predicate all = criteriaBuilder.and(criteriaBuilder.equal(root.get("messageType"), 1),
                 or);
         query.where(all);
-        List<Message> messages = entityManager.createQuery(query).getResultList();
-        entityManager.close();
-        return messages;
+        return entityManager.createQuery(query).getResultList();
     }
 
     public List<Message> getWallMessage(int receiverId) {
-        logger.info("MessageDao.getWallMessage(receiverId)");
-        logger.debug("MessageDao.getWallMessage(receiverId = {})", receiverId);
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        logger.info("MessageDao.getWallMessage(receiverId = {})", receiverId);
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Message> query = criteriaBuilder.createQuery(Message.class);
         Root<Message> root = query.from(Message.class);
@@ -126,24 +101,14 @@ public class MessageDao {
                 criteriaBuilder.equal(root.get("receiverId"), receiverId),
                 criteriaBuilder.equal(root.get("messageType"), 0));
         query.where(and);
-        List<Message> messages = entityManager.createQuery(query).getResultList();
-        entityManager.close();
-        return messages;
+        return entityManager.createQuery(query).getResultList();
     }
 
+    @Transactional
     public boolean delete(int id) {
-        logger.info("MessageDao.delete(receiverId)");
-        logger.debug("MessageDao.delete(id = {})", id);
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        entityManager.getTransaction().begin();
-        try {
-            Message deleteMessage = entityManager.find(Message.class, id);
-            entityManager.remove(deleteMessage);
-            entityManager.getTransaction().commit();
-        } catch (Exception ex) {
-            entityManager.getTransaction().rollback();
-        }
-        entityManager.close();
+        logger.info("MessageDao.delete(id = {})", id);
+        Message deleteMessage = entityManager.find(Message.class, id);
+        entityManager.remove(deleteMessage);
         return true;
     }
 

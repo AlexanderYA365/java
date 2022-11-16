@@ -13,8 +13,9 @@ import java.util.List;
 
 @Controller
 @ControllerAdvice
+@RequestMapping("/admin")
 public class AdminController {
-    private static final Logger logger = LogManager.getLogger();
+    private static final Logger logger = LogManager.getLogger(AdminController.class);
     private AccountService accountService;
 
     @Autowired
@@ -23,10 +24,18 @@ public class AdminController {
         logger.info("AdminController");
     }
 
+    @RequestMapping(value = "/delete/{id}",
+            produces = "application/json",
+            method = {RequestMethod.DELETE, RequestMethod.GET})
+    @ResponseBody
+    public void deleteAccount(@PathVariable String id) {
+        logger.info("deleteAccount(id = {})", id);
+        accountService.deleteById(Integer.valueOf(id));
+    }
 
     @RequestMapping(value = "/admin-panel", method = RequestMethod.GET)
     public ModelAndView admin() {
-        logger.info("admin");
+        logger.info("admin()");
         ModelAndView modelAndView = new ModelAndView("admin-panel");
         return modelAndView;
     }

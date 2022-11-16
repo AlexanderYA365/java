@@ -1,5 +1,7 @@
 package com.getjavajob.training.yakovleva.common;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
@@ -8,15 +10,19 @@ import java.util.Objects;
 @Table(name = "phone")
 public class Phone implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     @Column(name = "id")
     private int id;
-    @Column(name = "account_id", insertable = false, updatable = false)
+    @Column(name = "account_id")
     private int accountId;
     @Column(name = "phone_number")
     private String phoneNumber;
     @Column(name = "phone_type")
     private PhoneType phoneType;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(updatable = false, insertable = false, name = "account_id", referencedColumnName = "account_id")
+    @JsonIgnore
+    private Account account;
 
     public Phone() {
     }

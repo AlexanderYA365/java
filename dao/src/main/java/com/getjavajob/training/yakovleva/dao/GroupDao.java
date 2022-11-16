@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -17,165 +17,106 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-@Transactional
 public class GroupDao {
-    private static final Logger logger = LogManager.getLogger();
-    private EntityManagerFactory entityManagerFactory;
+    private static final Logger logger = LogManager.getLogger(GroupDao.class);
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Autowired
-    public GroupDao(EntityManagerFactory entityManagerFactory) {
-        logger.info("GroupDao(sessionFactory)");
-        this.entityManagerFactory = entityManagerFactory;
-    }
-
     public GroupDao() {
+        logger.info("GroupDao(sessionFactory)");
     }
 
+    @Transactional
     public boolean create(Group group) {
-        logger.info("GroupDao.create(group)");
-        logger.debug("GroupDao.create(group = {})", group);
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        entityManager.getTransaction().begin();
-        try {
-            entityManager.persist(group);
-            entityManager.getTransaction().commit();
-        } catch (Exception ex) {
-            entityManager.getTransaction().rollback();
-        }
-        entityManager.close();
+        logger.info("GroupDao.create(group = {})", group);
+        entityManager.merge(group);
         return true;
     }
 
     public Group getGroup(int groupId) {
-        logger.info("GroupDao.getGroup(group)");
-        logger.debug("GroupDao.getGroup(group_id = {})", groupId);
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        logger.info("GroupDao.getGroup(group_id = {})", groupId);
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Group> criteriaQuery = criteriaBuilder.createQuery(Group.class);
         Root<Group> from = criteriaQuery.from(Group.class);
         criteriaQuery.select(from);
         criteriaQuery.where(criteriaBuilder.equal(from.get("groupId"), groupId));
-        Group group = entityManager.createQuery(criteriaQuery).getSingleResult();
-        entityManager.close();
-        return group;
+        return entityManager.createQuery(criteriaQuery).getSingleResult();
     }
 
     public List<Group> getAllGroups(String groupName) {
-        logger.info("GroupDao.getGroups(groupName)");
-        logger.debug("GroupDao.getGroups(groupName = {})", groupName);
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        logger.info("GroupDao.getGroups(groupName = {})", groupName);
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Group> criteriaQuery = criteriaBuilder.createQuery(Group.class);
         Root<Group> from = criteriaQuery.from(Group.class);
         CriteriaQuery<Group> selectGroupName = criteriaQuery.select(from).where(
                 criteriaBuilder.like(from.get("groupName"), groupName));
-        List<Group> groups = entityManager.createQuery(selectGroupName).getResultList();
-        entityManager.close();
-        return groups;
+        return entityManager.createQuery(selectGroupName).getResultList();
     }
 
     public List<Group> getCriteriaLimit(int start, int end, String criteriaName) {
-        logger.info("AccountDao.getAccountsLimit(start, end, criteriaName)");
-        logger.debug("AccountDao.getAccountsCriteriaLimit(start = {}, end = {}, criteriaName = {})",
+        logger.info("AccountDao.getAccountsCriteriaLimit(start = {}, end = {}, criteriaName = {})",
                 start, end, criteriaName);
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Group> cr = cb.createQuery(Group.class);
         Root<Group> from = cr.from(Group.class);
         cr.select(from);
         CriteriaQuery<Group> nameQuery = cr.select(from).where(cb.like(from.get("groupName"), criteriaName));
-        List<Group> groups = entityManager.createQuery(nameQuery).setFirstResult(start).setMaxResults(end).getResultList();
-        entityManager.close();
-        return groups;
+        return entityManager.createQuery(nameQuery).setFirstResult(start).setMaxResults(end).getResultList();
     }
 
     public List<Group> getAllGroups() {
         logger.info("GroupDao.getGroups()");
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Group> cr = cb.createQuery(Group.class);
         Root<Group> root = cr.from(Group.class);
         cr.select(root);
-        List<Group> groups = entityManager.createQuery(cr).getResultList();
-        entityManager.close();
-        return groups;
+        return entityManager.createQuery(cr).getResultList();
     }
 
     public List<Group> getGroupsAccount(int account_id) {
-        logger.info("GroupDao.getGroupsAccount(account_id)");
-        logger.debug("GroupDao.getGroupsAccount(account_id = {})", account_id);
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        logger.info("GroupDao.getGroupsAccount(account_id = {})", account_id);
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Group> criteriaQuery = criteriaBuilder.createQuery(Group.class);
         Root<Group> from = criteriaQuery.from(Group.class);
         criteriaQuery.select(from);
         criteriaQuery.where(criteriaBuilder.equal(from.get("accountId"), account_id));
-        List<Group> groups = entityManager.createQuery(criteriaQuery).getResultList();
-        entityManager.close();
-        return groups;
+        return entityManager.createQuery(criteriaQuery).getResultList();
     }
 
+    @Transactional
     public boolean update(Group group) {
-        logger.info("GroupDao.update(group)");
-        logger.debug("GroupDao.update(group = {})", group);
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        entityManager.getTransaction().begin();
-        try {
-            entityManager.merge(group);
-            entityManager.getTransaction().commit();
-        } catch (Exception ex) {
-            entityManager.getTransaction().rollback();
-        }
-        entityManager.close();
+        logger.info("GroupDao.update(group = {})", group);
+        entityManager.merge(group);
         return true;
     }
 
+    @Transactional
     public boolean delete(Group group) {
-        logger.info("GroupDao.delete(group)");
-        logger.debug("GroupDao.delete(group = {})", group);
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        entityManager.getTransaction().begin();
-        try {
-            entityManager.remove(group);
-            entityManager.getTransaction().commit();
-        } catch (Exception ex) {
-            entityManager.getTransaction().rollback();
-        }
-        entityManager.close();
+        logger.info("GroupDao.delete(group = {})", group);
+        entityManager.remove(group);
         return true;
     }
 
+    @Transactional
     public boolean insertAccount(Group group, int accountId) {
         logger.info("GroupDao.insertAccount(group = {}, accountId = {})", group, accountId);
-        logger.debug("GroupDao.insertAccount(group = {}, accountId = {})", group, accountId);
         group.setAccountId(accountId);
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        entityManager.getTransaction().begin();
-        try {
-            entityManager.merge(group);
-            entityManager.getTransaction().commit();
-        } catch (Exception ex) {
-            entityManager.getTransaction().rollback();
-        }
-        entityManager.close();
+        entityManager.merge(group);
         return true;
     }
 
     public long getSizeRecords() {
-        logger.info("getSizeRecords");
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        logger.info("getSizeRecords()");
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Long> cq = cb.createQuery(Long.class);
         Root<Group> from = cq.from(Group.class);
         cq.select(cb.count(from));
-        long size = entityManager.createQuery(cq).getSingleResult();
-        entityManager.close();
-        return size;
+        return entityManager.createQuery(cq).getSingleResult();
     }
 
     public long getSizeRecords(String search) {
         logger.info("GroupDao.getSizeRecords(search = {})", search);
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Long> cq = cb.createQuery(Long.class);
         Root<Group> from = cq.from(Group.class);
@@ -183,9 +124,7 @@ public class GroupDao {
         conditions.add(cb.like(from.get("groupName"), search));
         cq.where(conditions.toArray(new Predicate[0]));
         cq.select(cb.count(from));
-        long size = entityManager.createQuery(cq).getSingleResult();
-        entityManager.close();
-        return size;
+        return entityManager.createQuery(cq).getSingleResult();
     }
 
 }

@@ -21,7 +21,7 @@ import java.util.Objects;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Account implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "native")
     @Column(name = "account_id")
     private int id;
     @Column(name = "name")
@@ -52,9 +52,8 @@ public class Account implements Serializable {
     private byte[] photo;
     @Column(name = "photo_file_name")
     private String photoFileName;
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "account")
     @Fetch(value = FetchMode.SUBSELECT)
-    @JoinColumn(name = "account_id", nullable = false)
     private List<Phone> phones;
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @Fetch(value = FetchMode.SUBSELECT)
@@ -121,14 +120,6 @@ public class Account implements Serializable {
     public void setMessage(List<Message> messages) {
         this.message = message;
     }
-
-//    public List<Relations> getRelationsFriends() {
-//        return relationsFriends;
-//    }
-//
-//    public void setRelationsFriends(List<Relations> relationsFriends) {
-//        this.relationsFriends = relationsFriends;
-//    }
 
     public List<Relations> getRelations() {
         return relations;

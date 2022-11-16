@@ -14,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.UnsupportedEncodingException;
+import java.security.Principal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -40,6 +41,28 @@ public class testController {
         this.messageService = messageService;
         this.applicationService = applicationService;
         this.groupRepository = groupRepository;
+    }
+
+    @RequestMapping(value = "/403", method = RequestMethod.GET)
+    public ModelAndView acceessDenied(Principal user) {
+
+        ModelAndView model = new ModelAndView();
+
+        if (user != null) {
+            model.addObject("msg", "Hi " + user.getName()
+                    + ", you do not have permission to access this page!");
+            System.out.println("==========");
+            System.out.println(user);
+            System.out.println("++++++++");
+        } else {
+            model.addObject("msg",
+                    "You do not have permission to access this page!");
+            System.out.println("else..........");
+        }
+
+        model.setViewName("403");
+        return model;
+
     }
 
     @RequestMapping(value = "/createBD", method = RequestMethod.GET)
@@ -94,8 +117,11 @@ public class testController {
         try {
             Account account = new Account();
             account.setId(1);
-//            System.out.println(messageService.getUniqueMessages(account));
-            System.out.println(accountService.get(1));
+            Phone phone = new Phone();
+            phone.setAccountId(1);
+            phone.setPhoneNumber("777777777");
+            phone.setPhoneType(0);
+            System.out.println(phoneService.create(phone));
         } catch (Exception ex) {
             System.out.println(ex);
         }

@@ -11,7 +11,6 @@
 <head>
     <title>All Accounts</title>
     <link href="${pageContext.request.contextPath}/resources/css/style.css" rel="stylesheet">
-    <%--    <link href="${pageContext.request.contextPath}/resources/css/bootstrap.css" rel="stylesheet">--%>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/datatables.min.css"/>
 </head>
 <body>
@@ -33,6 +32,7 @@
         <th>Отчество</th>
         <th>Дата рождения</th>
         <th>icq</th>
+        <th>удалить</th>
     </tr>
     </thead>
 </table>
@@ -41,11 +41,11 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/datatables.min.js"></script>
 <script>
     $(document).ready(function () {
-        $('#admin').dataTable({
+        const table = $('#admin').DataTable({
             processing: true,
             serverSide: true,
             ajax: {
-                url: '/socnet/getAccounts',
+                url: '/socnet/admin/getAccounts',
             },
             columns: [
                 {data: 'id'},
@@ -57,10 +57,22 @@
                     render: DataTable.render.date(),
                 },
                 {data: 'icq'},
+                {defaultContent: '<button>удалить</button>'},
             ],
+        });
+
+        $('#admin tbody').on('click', 'button', function () {
+            const data = table.row($(this).parents('tr')).data();
+            var id = data.id
+            $.ajax({
+                type: "DELETE",
+                url: '/socnet/admin/delete/' + id
+            });
+            table.ajax.reload(function (json) {
+                $('#myInput').val(json.lastInput);
+            });
         });
     });
 </script>
-
 </body>
 </html>

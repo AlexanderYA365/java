@@ -22,7 +22,7 @@ import java.util.List;
 @ControllerAdvice
 @SessionAttributes({"account", "friend"})
 public class FriendController {
-    private static final Logger logger = LogManager.getLogger();
+    private static final Logger logger = LogManager.getLogger(FriendController.class);
     private RelationsService relationsService;
     private ApplicationService applicationService;
     private AccountService accountService;

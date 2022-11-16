@@ -6,6 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <html>
 <head>
@@ -20,10 +21,10 @@
 </p>
 
 <div class="form">
-    <form class="modal" modelAttribute="account" action="${pageContext.request.contextPath}/index" method="GET">
+    <form class="modal" modelAttribute="account" action="${pageContext.request.contextPath}/index.jsp" method="POST">
         <fieldset>
             <legend>Введите данные:</legend>
-            <c:if test="${errorLogin == 1}">
+            <c:if test="${param.error == true}">
                 <label class="error">
                     Ошибка при вводе логина или пароль
                 </label>
@@ -49,5 +50,3 @@
 
 </body>
 </html>
-
-

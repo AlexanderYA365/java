@@ -13,9 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Repository
-@Transactional
 public class AccountService {
-    private static final Logger logger = LogManager.getLogger();
+    private static final Logger logger = LogManager.getLogger(AccountService.class);
     private AccountDao accountDao;
     private PhoneDao phoneDao;
 
@@ -29,6 +28,7 @@ public class AccountService {
     public AccountService() {
     }
 
+    @Transactional
     public boolean create(Account account) {
         logger.info("create(Account account)");
         logger.debug("create(account - {})", account);
@@ -47,6 +47,7 @@ public class AccountService {
         }
     }
 
+    @Transactional
     public void createAccounts(List<Account> accounts) {
         logger.info("createAccounts(List<Account> accounts)");
         logger.debug("createAccounts(accounts - {})", accounts);
@@ -63,6 +64,7 @@ public class AccountService {
         return accountDao.getIdAccount(account);
     }
 
+    @Transactional
     public boolean update(Account account) {
         logger.info("update(Account account)");
         logger.debug("update(account - {})", account);
@@ -82,11 +84,29 @@ public class AccountService {
         }
     }
 
+    @Transactional
     public boolean delete(Account account) {
         logger.info("delete(Account account)");
         logger.debug("delete(account - {})", account);
         try {
             int id = accountDao.getIdAccount(account);
+            boolean result = false;
+            for (Phone phone : account.getPhones()) {
+                phone.setAccountId(id);
+                result = phoneDao.delete(phone);
+            }
+            return accountDao.deleteAccount(account) || result;
+        } catch (Exception e) {
+            logger.error("create Exception - {}", e);
+            return false;
+        }
+    }
+
+    @Transactional
+    public boolean deleteById(int id) {
+        logger.info("deleteById(id = {})", id);
+        try {
+            Account account = accountDao.getAccount(id);
             boolean result = false;
             for (Phone phone : account.getPhones()) {
                 phone.setAccountId(id);
@@ -139,11 +159,16 @@ public class AccountService {
         return accountDao.getAccountsName(name);
     }
 
+    public Account getByUsername(String username) {
+        logger.info("getAccountName(String name)");
+        logger.debug("getAccountName(name = {})", username);
+        return accountDao.getByUsername(username);
+    }
+
     public Account getAccount(String username, String password) {
         logger.info("getAccount(String username, String password)");
         logger.debug("getAccount(username = {}, password = {})", username, password);
-        Account account = accountDao.getAccount(username, password);
-        return account;
+        return accountDao.getAccount(username, password);
     }
 
     public List<Account> getFriendsAccount(int accountId) {

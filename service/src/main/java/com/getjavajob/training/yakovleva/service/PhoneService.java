@@ -11,9 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Repository
-@Transactional
 public class PhoneService {
-    private static final Logger logger = LogManager.getLogger();
+    private static final Logger logger = LogManager.getLogger(PhoneService.class);
     private PhoneDao phoneDao;
 
     @Autowired
@@ -25,6 +24,7 @@ public class PhoneService {
     public PhoneService() {
     }
 
+    @Transactional
     public boolean create(Phone phone) {
         logger.info("create(Phone phone)");
         logger.debug("create(phone = {})", phone);
@@ -42,12 +42,14 @@ public class PhoneService {
         return phoneDao.get(idPhone);
     }
 
+    @Transactional
     public boolean update(Phone phone) {
         logger.info("update(Phone phone)");
         logger.debug("update(phone = {})", phone);
         return phoneDao.update(phone);
     }
 
+    @Transactional
     public boolean delete(Phone phone) {
         logger.info("delete(Phone phone)");
         logger.debug("delete(phone = {})", phone);

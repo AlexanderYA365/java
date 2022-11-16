@@ -13,9 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Repository
-@Transactional
 public class ApplicationService {
-    private static final Logger logger = LogManager.getLogger();
+    private static final Logger logger = LogManager.getLogger(ApplicationService.class);
     private ApplicationDao applicationDao;
 
     @Autowired
@@ -27,6 +26,7 @@ public class ApplicationService {
     public ApplicationService() {
     }
 
+    @Transactional
     public boolean create(Application application) {
         logger.info("create(Application application)");
         logger.debug("create(application - {})", application);
@@ -38,6 +38,7 @@ public class ApplicationService {
         return false;
     }
 
+    @Transactional
     public boolean update(Application application) {
         logger.info("update(Application application)");
         logger.debug("update(application - {})", application);
@@ -50,6 +51,7 @@ public class ApplicationService {
         return false;
     }
 
+    @Transactional
     public boolean delete(Application application) {
         logger.info("delete(Application application)");
         logger.debug("delete(application - {})", application);

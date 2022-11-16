@@ -13,9 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Repository
-@Transactional
 public class MessageService {
-    private static final Logger logger = LogManager.getLogger();
+    private static final Logger logger = LogManager.getLogger(MessageService.class);
     private MessageDao messageDao;
     private AccountDao accountDao;
 
@@ -53,6 +52,7 @@ public class MessageService {
         return setUsernames(messageDao.getMessageAccounts(senderId, receiverId));
     }
 
+    @Transactional
     public boolean createMassage(Message message) {
         logger.info("createMassage(Message message)");
         logger.debug("createMassage(message = {})", message);
@@ -64,6 +64,7 @@ public class MessageService {
         }
     }
 
+    @Transactional
     public boolean delete(int id) {
         logger.info("delete(int id)");
         logger.debug("delete(id = {})", id);

@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -27,16 +26,17 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 @ControllerAdvice
 @SessionAttributes("account")
 public class AccountController {
-    private static final Logger logger = LogManager.getLogger();
+    private static final Logger logger = LogManager.getLogger(AccountController.class);
     private static final int BUFFER_SIZE = 4096;
-    private AccountService accountService;
-    private MessageService messageService;
-    private PhoneService phoneService;
+    private final AccountService accountService;
+    private final MessageService messageService;
+    private final PhoneService phoneService;
 
     @Autowired
     public AccountController(AccountService accountService,
@@ -53,8 +53,7 @@ public class AccountController {
                                      String replyAccount,
                                      String deleteText,
                                      MessageService messageService) {
-        logger.info("AccountController.createMessage()");
-        logger.debug("AccountController.createMessage(account = {}, newMessage ={}, replyAccount ={}," +
+        logger.info("AccountController.createMessage(account = {}, newMessage ={}, replyAccount ={}," +
                 "deleteText = {}, messageService = {})", account, newMessage, replyAccount, deleteText, messageService);
         try {
             if (newMessage != null) {
@@ -83,50 +82,29 @@ public class AccountController {
     @RequestMapping(value = "/edit-account-settings", method = RequestMethod.POST)
     public @ResponseBody
     ModelAndView saveSettings(HttpSession session, HttpServletRequest request,
-                              @RequestParam("file-name") String name,
+                              @RequestParam("file-name") String fileName,
                               @RequestParam("file") MultipartFile file) {
-        logger.info("AccountController.saveSettings()");
+        logger.info("AccountController.saveSettings(file name - {}, file - {})", fileName, file);
         ModelAndView modelAndView = new ModelAndView("/account/my-account");
         try {
-            logger.debug("name = {}", name);
-            logger.debug("file = {}", file);
             Account editAccount = (Account) session.getAttribute("account");
-            Account account = setDataForm(request, editAccount, name, file);
+            Account account = setDataForm(request, editAccount, fileName, file);
             try {
                 accountService.update(account);
                 modelAndView.addObject("account", account);
             } catch (Exception ex) {
                 logger.error(ex);
             }
-            logger.debug("account = {}", account);
+            logger.info("account = {}", account);
         } catch (Exception ex) {
             logger.error(ex);
         }
         return modelAndView;
     }
 
-    @RequestMapping(value = "/account-logout", method = RequestMethod.GET)
-    public ModelAndView logout(HttpSession session, HttpServletResponse response) {
-        logger.info("logout");
-        session.invalidate();
-        Cookie cookieUsername = new Cookie("username", null);
-        cookieUsername.setMaxAge(0);
-        cookieUsername.setPath("/");
-        Cookie cookiePassword = new Cookie("password", null);
-        cookiePassword.setMaxAge(0);
-        cookiePassword.setPath("/");
-        Cookie cookieId = new Cookie("id", null);
-        cookieId.setMaxAge(0);
-        cookieId.setPath("/");
-        response.addCookie(cookieUsername);
-        response.addCookie(cookiePassword);
-        response.addCookie(cookieId);
-        return new ModelAndView("redirect:/");
-    }
-
     @RequestMapping(value = "/registration-account", method = RequestMethod.GET)
     public ModelAndView registration() {
-        logger.info("registration");
+        logger.info("registration()");
         return new ModelAndView("account/registration-account");
     }
 
@@ -135,9 +113,7 @@ public class AccountController {
     ModelAndView createNewAccount(HttpSession session, HttpServletRequest request,
                                   @RequestParam("name") String name,
                                   @RequestParam("file") MultipartFile file) {
-        logger.info("createNewAccount");
-        logger.debug("name = {}", name);
-        logger.debug("file = {}", file);
+        logger.info("createNewAccount(name - {}, file - {})", name, file);
         ModelAndView modelAndView = new ModelAndView("redirect:main");
         Account account = new Account();
         account.setUsername(request.getParameter("username"));
@@ -167,14 +143,13 @@ public class AccountController {
     }
 
     @RequestMapping(value = "/update-account-settings", method = RequestMethod.POST)
-    //@RequestParam("file") MultipartFile file
     public ModelAndView update(@RequestParam("uploadXml") MultipartFile file) {
-        logger.info("load");
+        logger.info("update");
         Account account = new Account();
         try {
             JAXBContext jaxbContext = JAXBContext.newInstance(Account.class);
             Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-            File fileToUpdate = new File(file.getOriginalFilename());
+            File fileToUpdate = new File(Objects.requireNonNull(file.getOriginalFilename()));
             file.transferTo(fileToUpdate);
             account = (Account) unmarshaller.unmarshal(fileToUpdate);
             logger.info("account = {}", account);
@@ -228,61 +203,40 @@ public class AccountController {
         return new Account();
     }
 
-    @RequestMapping(value = "/index", method = RequestMethod.GET)
-    //TODO RequestParam - заменить на ModelAttribute
-    public ModelAndView login(@ModelAttribute("account") final Account account,
-                              @RequestParam(value = "checkbox", required = false) String checkbox) {
-        logger.info("login, username = {}, password = {} ", account.getUsername(), account.getPassword());
-        return userValidation(checkbox, account);
-    }
-
-    @RequestMapping(value = "/main", method = RequestMethod.POST)
-    public ModelAndView accountPageSandWallMessage(@RequestParam(value = "NewWallMessage",
+    @RequestMapping(value = "/sendWallMessage", method = RequestMethod.POST)
+    public ModelAndView accountPageSendWallMessage(@RequestParam(value = "NewWallMessage",
             required = false) String newMessage, @RequestParam(value = "replyAccount",
             required = false) String replyAccount, @RequestParam(value = "deleteText",
             required = false) String deleteText, @ModelAttribute("account") Account account) {
-        logger.info("accountPageSandWallMessage");
+        logger.info("sendWallMessage:");
+        logger.info("newMessage - {}", newMessage);
+        logger.info("replyAccount - {}", replyAccount);
+        logger.info("deleteText - {}", deleteText);
+        logger.info("account - {}", account);
         ModelAndView modelAndView = new ModelAndView("redirect:main");
         createMessage(account, newMessage, replyAccount, deleteText, messageService);
         return modelAndView;
     }
 
     @RequestMapping(value = "/main", method = RequestMethod.GET)
-    public ModelAndView accountPage(@ModelAttribute("account") Account account) {
-        logger.info("public ModelAndView accountPage()");
+    public ModelAndView main(@ModelAttribute("account") Account account) {
+        logger.info("public main(account = {})", account);
+        Account registeredAccount = accountService.getAccount(account.getUsername(), account.getPassword());
         ModelAndView modelAndView = new ModelAndView("main");
-        logger.debug("account = {}", account);
+        logger.debug("account = {}", registeredAccount);
         SocialNetworkUtils socialNetworkUtils = new SocialNetworkUtils();
-        String encodedPhoto = socialNetworkUtils.loadPhoto(account);
+        String encodedPhoto = socialNetworkUtils.loadPhoto(registeredAccount);
         modelAndView.addObject("encodedPhoto", encodedPhoto);
-        List<Message> messages = messageService.getWallMassageAccount(account);
+        List<Message> messages = messageService.getWallMassageAccount(registeredAccount);
         modelAndView.addObject("messages", messages);
+        modelAndView.addObject("account", registeredAccount);
         return modelAndView;
     }
 
-    private ModelAndView userValidation(String cookies,
-                                        Account account) {
-        logger.info("ModelAndView userValidation(cookies = {}," +
-                        "account.username = {}, account.password = {})",
-                cookies, account.getUsername(), account.getPassword());
-        ModelAndView modelAndView = new ModelAndView();
-        if (account.getUsername() == null || account.getPassword() == null) {
-            logger.info("userValidation, redirect to index");
-            modelAndView.setViewName("redirect:index");
-        } else {
-            Account registeredAccount = accountService.getAccount(account.getUsername(), account.getPassword());
-            System.out.println("registeredAccount - " + registeredAccount);
-            if (registeredAccount.getId() != 0) {
-                modelAndView.addObject("account", registeredAccount);
-                modelAndView.setViewName("redirect:main");
-            } else {
-                logger.info("userValidation -> else");
-                int errorLogin = 1;
-                modelAndView.addObject("errorLogin", errorLogin);
-                modelAndView.setViewName("redirect:index");
-            }
-        }
-        return modelAndView;
+    @RequestMapping(value = "/main", method = RequestMethod.POST)
+    public ModelAndView accountPage(@ModelAttribute("account") Account account) {
+        logger.info("public accountPage(account = {})", account);
+        return main(account);
     }
 
     private Account setDataForm(HttpServletRequest request, Account editAccount, String name, MultipartFile file) {
@@ -304,7 +258,7 @@ public class AccountController {
             account.setRole(getRoleFromForm(request));
             account.setPhones(getPhonesFromForm(request, editAccount));
         } catch (Exception ex) {
-            logger.error("setDataForm exception = {}", ex);
+            logger.error("setDataForm exception = " + ex);
         }
         try {
             if (!file.isEmpty()) {
@@ -324,12 +278,12 @@ public class AccountController {
         Date date = new Date();
         try {
             String dateFromForm = request.getParameter("date");
-            logger.debug("dateFromForm = {%d}", dateFromForm);
+            logger.info("dateFromForm = {}", dateFromForm);
             SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
             date = format.parse(dateFromForm);
-            logger.debug("date = {%d}", date);
+            logger.info("date = {}", date);
         } catch (ParseException e) {
-            logger.error("getDateFromForm exception = {}", e);
+            logger.error("getDateFromForm exception = " + e);
         }
         return date;
     }
@@ -353,7 +307,7 @@ public class AccountController {
                 phone.setPhoneType(PhoneType.valueOf(requestPhoneType[i]).getStatus());
                 phone.setAccountId(account.getId());
                 phone.setId(Integer.parseInt(requestPhoneId[i]));
-                logger.debug("update phone - " + phone);
+                logger.info("update phone - {}", phone);
                 phones.add(phone);
             }
             if (account.getPhones().size() != phones.size()) {
@@ -375,7 +329,7 @@ public class AccountController {
                 phones.add(phone);
             }
         } catch (Exception ex) {
-            logger.error("no new phone = {}", ex);
+            logger.error("no new phone = " + ex);
         }
         logger.info("phones = {}", phones);
         return phones;
@@ -383,8 +337,7 @@ public class AccountController {
 
     private void removePhone(List<Phone> phones, Account account) {
         logger.info("removePhone");
-        List<Phone> phonesDelete = new ArrayList<>();
-        phonesDelete.addAll(account.getPhones());
+        List<Phone> phonesDelete = new ArrayList<>(account.getPhones());
         phonesDelete.removeAll(phones);
         logger.debug("phonesDelete = {}", phonesDelete);
         for (Phone phone : phonesDelete) {

@@ -19,7 +19,7 @@
 <br>
 <c:if test="${account.role == 1}">
     <br>
-    <button onclick="location.href='${pageContext.request.contextPath}/admin-panel'">панель администратра</button>
+    <button onclick="location.href='${pageContext.request.contextPath}/admin/admin-panel'">панель администратра</button>
 </c:if>
 <div align="center">
     <img src="data:image/jpg;base64, ${encodedPhoto}"
@@ -29,14 +29,14 @@
 </div>
 <br>
 <main role="main" class="modal">
-    <form method="post" class="modal">
+    <form method="post" class="modal" action="${pageContext.request.contextPath}/sendWallMessage">
         Сообщение
         <textarea name="NewWallMessage" cols="40" rows="3"></textarea>
         <input type="submit" value="отправить"/>
     </form>
 
     <div>
-        <form method="post" class="modal">
+        <form method="post" class="modal" action="${pageContext.request.contextPath}/sendWallMessage">
             <table>
                 <tr>
                     <th>Имя пользователя</th>
