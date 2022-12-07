@@ -36,9 +36,9 @@ import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TE
 public class AccountDaoTestSQL {
 
     @Autowired
-    private AccountDao accountDao;
-    @Autowired
     private static final Logger logger = LogManager.getLogger(AccountDaoTestSQL.class);
+    @Autowired
+    private AccountDao accountDao;
 
     @Test
     public void create() {

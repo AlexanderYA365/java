@@ -1,46 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:jpa="http://www.springframework.org/schema/data/jpa" xmlns="http://www.springframework.org/schema/beans"
+       xmlns="http://www.springframework.org/schema/beans"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-                             http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
-                             http://www.springframework.org/schema/context
-                             http://www.springframework.org/schema/context/spring-context-3.0.xsd
-                             http://www.springframework.org/schema/data/jpa
-                             https://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+                             http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
 
     <!--    <bean id="accountDao" class="com.getjavajob.training.yakovleva.dao.AccountDao">-->
     <!--    </bean>-->
 
-    <context:component-scan base-package="com.getjavajob.training.yakovleva.dao,
-    com.getjavajob.training.yakovleva.common"/>
+    <!--    <context:component-scan base-package="com.getjavajob.training.yakovleva.dao,-->
+    <!--    com.getjavajob.training.yakovleva.common"/>-->
 
-    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-        <property name="dataSource" ref="dataSource"/>
-        <property name="packagesToScan" value="com.getjavajob.training.yakovleva.common"/>
-        <property name="jpaVendorAdapter">
-            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
-        </property>
-        <property name="jpaProperties">
-            <props>
-                <prop key="hibernate.hbm2ddl.auto">update</prop>
-                <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
-                <prop key="hibernate.show_sql">false</prop>
-            </props>
-        </property>
-    </bean>
+    <!--    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">-->
+    <!--        <property name="dataSource" ref="dataSource"/>-->
+    <!--        <property name="packagesToScan" value="com.getjavajob.training.yakovleva.common"/>-->
+    <!--        <property name="jpaVendorAdapter">-->
+    <!--            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>-->
+    <!--        </property>-->
+    <!--        <property name="jpaProperties">-->
+    <!--            <props>-->
+    <!--                <prop key="hibernate.hbm2ddl.auto">update</prop>-->
+    <!--                <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>-->
+    <!--                <prop key="hibernate.show_sql">false</prop>-->
+    <!--            </props>-->
+    <!--        </property>-->
+    <!--    </bean>-->
 
-    <jpa:repositories base-package="Repository"/>
+    <!--    <jpa:repositories base-package="Repository"/>-->
 
-    <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
-        <property name="driverClassName" value="${database.driver}"/>
-        <property name="url" value="${database.url}"/>
-        <property name="username" value="${database.user}"/>
-        <property name="password" value="${database.password}"/>
-    </bean>
+    <!--    <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">-->
+    <!--        <property name="driverClassName" value="${database.driver}"/>-->
+    <!--        <property name="url" value="${database.url}"/>-->
+    <!--        <property name="username" value="${database.user}"/>-->
+    <!--        <property name="password" value="${database.password}"/>-->
+    <!--    </bean>-->
 
-    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
-        <constructor-arg ref="dataSource"/>
-    </bean>
+    <!--    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">-->
+    <!--        <constructor-arg ref="dataSource"/>-->
+    <!--    </bean>-->
 
 </beans>

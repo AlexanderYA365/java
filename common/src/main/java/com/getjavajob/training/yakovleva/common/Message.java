@@ -48,33 +48,8 @@ public class Message implements Serializable {
         this.picture = picture;
         this.publicationDate = publicationDate;
         this.edited = edited;
-        this.usernameSender = usernameSender;
-        this.usernameReceiving = usernameReceiving;
         this.messageType = messageType;
     }
-
-//    public Message(int id, int senderId, int receiverId, String message, String picture, Date publicationDate,
-//                   boolean edited, MessageType messageType, Account account) {
-//        this.id = id;
-//        this.senderId = senderId;
-//        this.receiverId = receiverId;
-//        this.message = message;
-//        this.picture = picture;
-//        this.publicationDate = publicationDate;
-//        this.edited = edited;
-//        this.usernameSender = usernameSender;
-//        this.usernameReceiving = usernameReceiving;
-//        this.messageType = messageType;
-//        this.account = account;
-//    }
-
-//    public Account getAccount() {
-//        return account;
-//    }
-//
-//    public void setAccount(Account account) {
-//        this.account = account;
-//    }
 
     public int getMessageType() {
         return messageType.getStatus();
