@@ -23,7 +23,7 @@ import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TE
 //@Transactional
 
 //@ExtendWith(SpringExtension.class)
-//@ContextConfiguration(classes = {DaoConfig.class, DaoConfigTest.class})
+//@ContextConfiguration(classes = {DaoConfig.class, DaoConfig.class})
 //@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 //@Transactional
 

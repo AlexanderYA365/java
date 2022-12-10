@@ -1,6 +1,6 @@
 package com.getjavajob.training.yakovleva.web.security;
 
-import com.getjavajob.training.yakovleva.service.MyUserDetailsService;
+import com.getjavajob.training.yakovleva.service.DetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,11 +11,11 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-    private final MyUserDetailsService myUserDetailsService;
+    private final DetailsService detailsService;
 
     @Autowired
-    public SecurityConfig(MyUserDetailsService myUserDetailsService) {
-        this.myUserDetailsService = myUserDetailsService;
+    public SecurityConfig(DetailsService detailsService) {
+        this.detailsService = detailsService;
     }
 
     @Bean
@@ -45,7 +45,7 @@ public class SecurityConfig {
                         .successForwardUrl("/main")
                         .permitAll()
                 )
-                .userDetailsService(myUserDetailsService)
+                .userDetailsService(detailsService)
                 .logout((logout) -> logout
                         .logoutUrl("/account-logout")
                         .permitAll())

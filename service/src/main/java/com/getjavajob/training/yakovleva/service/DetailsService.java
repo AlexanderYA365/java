@@ -13,13 +13,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class MyUserDetailsService implements UserDetailsService {
-    private static final Logger logger = LogManager.getLogger(MyUserDetailsService.class);
+public class DetailsService implements UserDetailsService {
+    private static final Logger logger = LogManager.getLogger(DetailsService.class);
     private AccountService accountService;
     private BCryptPasswordEncoder encoder;
 
     @Autowired
-    public MyUserDetailsService(AccountService accountService, BCryptPasswordEncoder encoder) {
+    public DetailsService(AccountService accountService, BCryptPasswordEncoder encoder) {
         this.accountService = accountService;
         this.encoder = encoder;
         logger.info("UserDetailService");

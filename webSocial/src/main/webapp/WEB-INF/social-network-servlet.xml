@@ -17,6 +17,8 @@
                              http://www.springframework.org/schema/data/jpa
                              https://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
 
+    <import resource="classpath:social-network-context.xml"/>
+
     <mvc:annotation-driven/>
     <mvc:default-servlet-handler/>
     <context:component-scan base-package="com.getjavajob.training.yakovleva.web.controllers"/>
@@ -43,11 +45,6 @@
     <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
         <constructor-arg ref="dataSource"/>
     </bean>
-
-    <context:component-scan base-package="com.getjavajob.training.yakovleva.dao,
-    com.getjavajob.training.yakovleva.common,
-    com.getjavajob.training.yakovleva.service,
-    com.getjavajob.training.yakovleva.web"/>
 
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
         <property name="dataSource" ref="dataSource"/>

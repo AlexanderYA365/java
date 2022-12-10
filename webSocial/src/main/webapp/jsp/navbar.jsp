@@ -26,6 +26,8 @@
     <input id="search" name="search"/>
     <button type="submit" onclick="location.href='${pageContext.request.contextPath}/result-search'">поиск</button>
 </form>
+
+
 <script src="${pageContext.request.contextPath}/resources/js/jquery-3.6.0.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/jquery-ui.js"></script>
 <script>

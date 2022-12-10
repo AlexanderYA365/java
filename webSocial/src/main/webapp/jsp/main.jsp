@@ -21,7 +21,6 @@
     <br>
     <button onclick="location.href='${pageContext.request.contextPath}/admin/admin-panel'">панель администратра</button>
 </c:if>
-<button onclick="location.href='${pageContext.request.contextPath}/goChat'">Чат</button>
 
 <div align="center">
     <img src="data:image/jpg;base64, ${encodedPhoto}"
