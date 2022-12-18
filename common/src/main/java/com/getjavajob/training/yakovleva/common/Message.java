@@ -39,6 +39,18 @@ public class Message implements Serializable {
     public Message() {
     }
 
+    public Message(int senderId, int receiverId, String message, String picture, Date publicationDate,
+                   boolean edited, MessageType messageType) {
+        this.id = id;
+        this.senderId = senderId;
+        this.receiverId = receiverId;
+        this.message = message;
+        this.picture = picture;
+        this.publicationDate = publicationDate;
+        this.edited = edited;
+        this.messageType = messageType;
+    }
+
     public Message(int id, int senderId, int receiverId, String message, String picture, Date publicationDate,
                    boolean edited, MessageType messageType) {
         this.id = id;

@@ -22,7 +22,8 @@
         <br>Фамилия: <input name="surname" id="surname" class="field" title='укажите фамилию'
                             value="${account.surname}"/>
         <br>Отчество: <input name="lastName" id="lastName" class="field" value="${account.lastName}"/>
-        <br>Дата рождения: <input name="date" type="date" value="${account.date}"/>
+        <br>Дата рождения: <input name="date" type="date" data-date="" data-date-format="DD MMMM YYYY"
+                                  value="${account.date}"/>
         <br>icq: <input name="icq" id="icq" title='укажите icq' class="field" value="${account.icq}"/>
         <span class="check-icq" hidden="hidden">Обязательно для заполнения</span>
         <br>Домашний адресс: <input name="addressHome" value="${account.addressHome}"/>

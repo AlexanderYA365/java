@@ -77,16 +77,16 @@ public class MessageDao {
         Root<Message> root = query.from(Message.class);
         Join<Account, Message> accounts = root.join("account", JoinType.INNER);
         Join<Account, Message> accounts1 = root.join("account", JoinType.INNER);
-        Predicate and1 = criteriaBuilder.and(
+        Predicate andSenderReceiverById = criteriaBuilder.and(
                 criteriaBuilder.equal(root.get("senderId"), senderId),
                 criteriaBuilder.equal(root.get("receiverId"), receiverId));
-        Predicate and2 = criteriaBuilder.and(
+        Predicate andReceiverSenderById = criteriaBuilder.and(
                 criteriaBuilder.equal(root.get("senderId"), receiverId),
                 criteriaBuilder.equal(root.get("receiverId"), senderId));
-        Predicate or = criteriaBuilder.or(and1, and2);
-        Predicate all = criteriaBuilder.and(criteriaBuilder.equal(root.get("messageType"), 1),
-                or);
-        query.where(all);
+        Predicate orSenderOrReceiver = criteriaBuilder.or(andSenderReceiverById, andReceiverSenderById);
+        Predicate allCriteria = criteriaBuilder.and(criteriaBuilder.equal(root.get("messageType"), 1),
+                orSenderOrReceiver);
+        query.where(allCriteria);
         return entityManager.createQuery(query).getResultList();
     }
 

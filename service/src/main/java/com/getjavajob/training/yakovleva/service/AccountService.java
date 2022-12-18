@@ -66,10 +66,9 @@ public class AccountService {
 
     @Transactional
     public boolean update(Account account) {
-        logger.info("update(Account account)");
-        logger.debug("update(account - {})", account);
+        logger.info("update(account - {})", account);
         try {
-            int id = accountDao.getIdAccount(account);
+            int id = account.getId() == 0 ? accountDao.getIdAccount(account) : account.getId();
             boolean result = false;
             if (account.getPhones().size() != 0) {
                 for (Phone phone : account.getPhones()) {
@@ -79,7 +78,7 @@ public class AccountService {
             }
             return accountDao.updateAccount(account) || result;
         } catch (Exception e) {
-            logger.error("create exception - {}", e);
+            logger.error("create exception =" + e);
             return false;
         }
     }
@@ -120,8 +119,7 @@ public class AccountService {
     }
 
     public Account get(int accountId) {
-        logger.info("get(int accountId)");
-        logger.debug("get(accountId = {})", accountId);
+        logger.info("get(accountId = {})", accountId);
         Account account = accountDao.getAccount(accountId);
         return account;
     }

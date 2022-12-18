@@ -48,37 +48,6 @@ public class AccountController {
         logger.info("AccountController");
     }
 
-    public static void createMessage(Account account,
-                                     String newMessage,
-                                     String replyAccount,
-                                     String deleteText,
-                                     MessageService messageService) {
-        logger.info("AccountController.createMessage(account = {}, newMessage ={}, replyAccount ={}," +
-                "deleteText = {}, messageService = {})", account, newMessage, replyAccount, deleteText, messageService);
-        try {
-            if (newMessage != null) {
-                logger.info("create new message");
-                Message message = new Message();
-                message.setReceiverId(account.getId());
-                message.setSenderId(account.getId());
-                message.setMessage(newMessage);
-                message.setMessageType(0);
-                logger.debug("message = {}", message);
-                messageService.createMassage(message);
-            } else if (replyAccount != null) {
-                logger.info("select replyAccount");
-                logger.info(Integer.parseInt(replyAccount));
-            } else if (deleteText != null) {
-                logger.info("select deleteAccount");
-                int messageId = Integer.parseInt(deleteText);
-                logger.debug("messageId = {} ", messageId);
-                messageService.delete(messageId);
-            }
-        } catch (Exception e) {
-            logger.error(e);
-        }
-    }
-
     @RequestMapping(value = "/edit-account-settings", method = RequestMethod.POST)
     public @ResponseBody
     ModelAndView saveSettings(HttpSession session, HttpServletRequest request,
@@ -138,7 +107,7 @@ public class AccountController {
 
     @RequestMapping(value = "/my-account", method = RequestMethod.GET)
     public ModelAndView settings(@ModelAttribute("account") Account account) {
-        logger.info("settings");
+        logger.info("settings(account - {})", account);
         return new ModelAndView("/account/my-account");
     }
 
@@ -214,14 +183,45 @@ public class AccountController {
         logger.info("deleteText - {}", deleteText);
         logger.info("account - {}", account);
         ModelAndView modelAndView = new ModelAndView("redirect:main");
-        createMessage(account, newMessage, replyAccount, deleteText, messageService);
+        createMessage(account, newMessage, replyAccount, deleteText);
         return modelAndView;
+    }
+
+    public void createMessage(Account account,
+                              String newMessage,
+                              String replyAccount,
+                              String deleteText) {
+        logger.info("AccountController.createMessage(account = {}, newMessage ={}, replyAccount ={}," +
+                "deleteText = {}, messageService = {})", account, newMessage, replyAccount, deleteText);
+        try {
+            if (newMessage != null) {
+                logger.info("create new message");
+                Message message = new Message();
+                message.setReceiverId(account.getId());
+                message.setSenderId(account.getId());
+                message.setMessage(newMessage);
+                message.setPublicationDate(new Date());
+                message.setMessageType(0);
+                logger.info("message = {}", message);
+                messageService.createMassage(message);
+            } else if (replyAccount != null) {
+                logger.info("select replyAccount");
+                logger.info(Integer.parseInt(replyAccount));
+            } else if (deleteText != null) {
+                logger.info("select deleteAccount");
+                int messageId = Integer.parseInt(deleteText);
+                logger.info("messageId = {} ", messageId);
+                messageService.delete(messageId);
+            }
+        } catch (Exception e) {
+            logger.error(e);
+        }
     }
 
     @RequestMapping(value = "/main", method = RequestMethod.GET)
     public ModelAndView main(@ModelAttribute("account") Account account) {
         logger.info("public main(account = {})", account);
-        Account registeredAccount = accountService.getAccount(account.getUsername(), account.getPassword());
+        Account registeredAccount = accountService.getByUsername(account.getUsername());
         ModelAndView modelAndView = new ModelAndView("main");
         logger.debug("account = {}", registeredAccount);
         SocialNetworkUtils socialNetworkUtils = new SocialNetworkUtils();
@@ -256,6 +256,7 @@ public class AccountController {
             account.setEmail(request.getParameter("email"));
             account.setAboutMe(request.getParameter("aboutMe"));
             account.setRole(getRoleFromForm(request));
+            account.setRelations(editAccount.getRelations());
             account.setPhones(getPhonesFromForm(request, editAccount));
         } catch (Exception ex) {
             logger.error("setDataForm exception = " + ex);
@@ -278,10 +279,14 @@ public class AccountController {
         Date date = new Date();
         try {
             String dateFromForm = request.getParameter("date");
-            logger.info("dateFromForm = {}", dateFromForm);
-            SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
-            date = format.parse(dateFromForm);
-            logger.info("date = {}", date);
+            if (dateFromForm == null) {
+                logger.info("Error dateFromForm = {}", dateFromForm);
+            } else {
+                logger.info("dateFromForm = {}", dateFromForm);
+                SimpleDateFormat format = new SimpleDateFormat("yyyyy-MM-dd");
+                date = format.parse(dateFromForm);
+                logger.info("date = {}", date);
+            }
         } catch (ParseException e) {
             logger.error("getDateFromForm exception = " + e);
         }

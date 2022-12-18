@@ -1,8 +1,8 @@
 package com.getjavajob.training.yakovleva.common;
 
 public enum Role {
-    USER(0),
-    ADMIN(1);
+    ROLE_USER(0),
+    ROLE_ADMIN(1);
 
     private int status;
 

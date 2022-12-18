@@ -36,8 +36,8 @@ public class AccountDao {
     }
 
     public int getIdAccount(Account account) {
-        logger.info("AccountDao.getIdAccount(account.username = {) , account.password = {)",
-                account.getUsername(), account.getPassword());
+        logger.info("AccountDao.getIdAccount(account = {})",
+                account);
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Account> criteriaQuery = criteriaBuilder.createQuery(Account.class);
         Root<Account> from = criteriaQuery.from(Account.class);

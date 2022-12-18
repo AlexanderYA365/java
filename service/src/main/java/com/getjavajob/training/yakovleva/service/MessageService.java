@@ -29,33 +29,28 @@ public class MessageService {
     }
 
     public List<Message> getWallMassageAccount(Account account) {
-        logger.info("getWallMassageAccount(Account account)");
-        logger.debug("getWallMassageAccount(account = {})", account);
+        logger.info("getWallMassageAccount(account = {})", account);
         return setUsernames(messageDao.getWallMessage(account.getId()));
     }
 
     public List<Message> getMessages(Account account) {
-        logger.info("getMessages(Account account)");
-        logger.debug("getMessages(account = {})", account);
+        logger.info("getMessages(account = {})", account);
         return setUsernames(messageDao.getMessageUserIdNameSender(account.getId()));
     }
 
     public List<Message> getUniqueMessages(Account account) {
-        logger.info("getUniqueMessages(Account account)");
-        logger.debug("getUniqueMessages(account = {})", account);
+        logger.info("getUniqueMessages(account = {})", account);
         return setUsernames(messageDao.getUniqueMessagesForUser(account.getId()));
     }
 
     public List<Message> getAccountMessages(int senderId, int receiverId) {
-        logger.info("getAccountMessages(int senderId, int receiverId)");
-        logger.debug("getAccountMessages(senderId = {}, receiverId = {})", senderId, receiverId);
+        logger.info("getAccountMessages(senderId = {}, receiverId = {})", senderId, receiverId);
         return setUsernames(messageDao.getMessageAccounts(senderId, receiverId));
     }
 
     @Transactional
     public boolean createMassage(Message message) {
-        logger.info("createMassage(Message message)");
-        logger.debug("createMassage(message = {})", message);
+        logger.info("createMassage(message = {})", message);
         try {
             return messageDao.create(message);
         } catch (Exception ex) {
@@ -66,8 +61,7 @@ public class MessageService {
 
     @Transactional
     public boolean delete(int id) {
-        logger.info("delete(int id)");
-        logger.debug("delete(id = {})", id);
+        logger.info("delete(id = {})", id);
         return messageDao.delete(id);
     }
 

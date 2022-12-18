@@ -37,7 +37,7 @@
             </div>
             <div class="checkbox">
                 <label>
-                    <input id="checkbox" type="checkbox" name="checkbox"> Запомнить меня
+                    <input type="checkbox" name="remember-me"> Запомнить меня
                 </label>
             </div>
             <div class="field">

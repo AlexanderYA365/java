@@ -38,7 +38,7 @@ public class AccountDaoTest {
         phones.add(phone);
         Account account = new Account(0, "Alex", "Yyy", "uuuu", new Date(), phones, 1, "photo",
                 new byte[]{01, 02}, "home", "job", "email", "about", "username",
-                "password", Role.USER);
+                "password", Role.ROLE_USER);
         boolean result = accountDao.create(account);
         String expectedResultNewAccount = "Account{id=4, email='kolya1@mail', password='123', firstName='Nikolay', " +
                 "lastName='Malcev', middleName='Nikolaevich', birthday='1982-12-13', photo=null, skype='dddd', " +
