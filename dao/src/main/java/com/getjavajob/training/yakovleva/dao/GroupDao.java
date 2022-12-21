@@ -3,7 +3,6 @@ package com.getjavajob.training.yakovleva.dao;
 import com.getjavajob.training.yakovleva.common.Group;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,7 +21,6 @@ public class GroupDao {
     @PersistenceContext
     private EntityManager entityManager;
 
-    @Autowired
     public GroupDao() {
         logger.info("GroupDao(sessionFactory)");
     }
@@ -34,13 +32,33 @@ public class GroupDao {
         return true;
     }
 
-    public Group getGroup(int groupId) {
+    public List<Group> getGroups(int groupId) {
+        logger.info("GroupDao.getGroups(groupId = {})", groupId);
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Group> criteriaQuery = criteriaBuilder.createQuery(Group.class);
+        Root<Group> from = criteriaQuery.from(Group.class);
+        criteriaQuery.select(from);
+        criteriaQuery.where(criteriaBuilder.equal(from.get("groupId"), groupId));
+        return entityManager.createQuery(criteriaQuery).getResultList();
+    }
+
+    public Group get(int groupId) {
         logger.info("GroupDao.getGroup(group_id = {})", groupId);
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Group> criteriaQuery = criteriaBuilder.createQuery(Group.class);
         Root<Group> from = criteriaQuery.from(Group.class);
         criteriaQuery.select(from);
         criteriaQuery.where(criteriaBuilder.equal(from.get("groupId"), groupId));
+        return entityManager.createQuery(criteriaQuery).getSingleResult();
+    }
+
+    public Group get(String groupName) {
+        logger.info("GroupDao.getGroupByGroupName(groupName = {})", groupName);
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Group> criteriaQuery = criteriaBuilder.createQuery(Group.class);
+        Root<Group> from = criteriaQuery.from(Group.class);
+        criteriaQuery.select(from);
+        criteriaQuery.where(criteriaBuilder.equal(from.get("groupName"), groupName));
         return entityManager.createQuery(criteriaQuery).getSingleResult();
     }
 
@@ -101,7 +119,7 @@ public class GroupDao {
     @Transactional
     public boolean insertAccount(Group group, int accountId) {
         logger.info("GroupDao.insertAccount(group = {}, accountId = {})", group, accountId);
-        group.setAccountId(accountId);
+        group.setIdGroupCreator(accountId);
         entityManager.merge(group);
         return true;
     }

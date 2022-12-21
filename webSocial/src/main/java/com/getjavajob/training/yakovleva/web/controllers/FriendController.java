@@ -1,6 +1,10 @@
 package com.getjavajob.training.yakovleva.web.controllers;
 
-import com.getjavajob.training.yakovleva.common.*;
+import com.getjavajob.training.yakovleva.common.Account;
+import com.getjavajob.training.yakovleva.common.Application;
+import com.getjavajob.training.yakovleva.common.Enum.MessageType;
+import com.getjavajob.training.yakovleva.common.Message;
+import com.getjavajob.training.yakovleva.common.Relations;
 import com.getjavajob.training.yakovleva.service.AccountService;
 import com.getjavajob.training.yakovleva.service.ApplicationService;
 import com.getjavajob.training.yakovleva.service.MessageService;

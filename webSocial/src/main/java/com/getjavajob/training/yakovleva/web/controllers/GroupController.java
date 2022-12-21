@@ -1,53 +1,63 @@
 package com.getjavajob.training.yakovleva.web.controllers;
 
-import com.getjavajob.training.yakovleva.common.Account;
-import com.getjavajob.training.yakovleva.common.Application;
-import com.getjavajob.training.yakovleva.common.Group;
+import Repository.GroupMembersRepository;
+import com.getjavajob.training.yakovleva.common.*;
+import com.getjavajob.training.yakovleva.common.Enum.ApplicationStatusType;
+import com.getjavajob.training.yakovleva.common.Enum.ApplicationType;
+import com.getjavajob.training.yakovleva.common.Enum.MessageType;
 import com.getjavajob.training.yakovleva.service.ApplicationService;
 import com.getjavajob.training.yakovleva.service.GroupService;
+import com.getjavajob.training.yakovleva.service.MessageService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Date;
 import java.util.List;
 
 @Controller
+@ControllerAdvice
 @SessionAttributes("account")
 public class GroupController {
     private static final Logger logger = LogManager.getLogger(GroupController.class);
-    private GroupService groupService;
-    private ApplicationService applicationService;
+    private final GroupService groupService;
+    private final ApplicationService applicationService;
+    private final MessageService messageService;
+    private final GroupMembersRepository groupMembersRepository;
 
-    public GroupController(GroupService groupService, ApplicationService applicationService) {
+    @Autowired
+    public GroupController(GroupService groupService, ApplicationService applicationService,
+                           MessageService messageService, GroupMembersRepository groupMembersRepository) {
         this.groupService = groupService;
         this.applicationService = applicationService;
+        this.messageService = messageService;
+        this.groupMembersRepository = groupMembersRepository;
         logger.info("GroupController");
     }
 
     @RequestMapping(value = "/account-find-group", method = RequestMethod.GET)
     public ModelAndView findGroupView() {
         logger.info("findGroupView()");
-        ModelAndView modelAndView = new ModelAndView("/group/account-find-group");
-        return modelAndView;
+        return new ModelAndView("/group/account-find-group");
     }
 
     @RequestMapping(value = "/account-find-group", method = RequestMethod.POST)
-    public ModelAndView addFindGroupView(HttpSession session, HttpServletRequest request) {
-        logger.info("addFindGroupView()");
+    public ModelAndView addFindGroupView(@RequestParam("groupId") int groupId,
+                                         HttpSession session, HttpServletRequest request) {
+        logger.info("addFindGroupView(groupId = {})", groupId);
         ModelAndView modelAndView = new ModelAndView("/group/account-find-group");
-        String groupId = request.getParameter("groupId");
+        String groupId2 = request.getParameter("groupId");
         logger.info("groupId = {}", groupId);
         String groupName = request.getParameter("GroupName");
         try {
-            if (groupId == null) {
+            if (groupId2 == null) {
                 try {
-                    List<Group> groups = groupService.getGroupName(groupName);
+                    List<Group> groups = groupService.getByGroupName(groupName);
                     logger.info("groups = {}", groups);
                     request.setAttribute("findGroups", groups);
                 } catch (Exception e) {
@@ -55,14 +65,14 @@ public class GroupController {
                     logger.info("Exception = {}", e);
                 }
             }
-            if (groupId != null) {
+            if (groupId2 != null) {
                 Account account = (Account) session.getAttribute("account");
-                Group addGroup = groupService.getGroupID(Integer.parseInt(groupId));
+                Group addGroup = groupService.get(Integer.parseInt(groupId2));
                 logger.info("account = {}, addGroup = {}", account, addGroup);
                 groupService.insertAccountGroup(addGroup, account.getId());
             }
         } catch (Exception e) {
-            logger.error("Exception = {}", e);
+            logger.error("Exception - " + e);
         }
         return modelAndView;
     }
@@ -76,15 +86,22 @@ public class GroupController {
         try {
             if (createNewGroup(groups, request.getParameter("name"))) {
                 Group group = new Group();
-                group.setAdministratorId(account.getId());
-                group.setAccountId(account.getId());
+                group.setIdGroupCreator(account.getId());
+//                group.setAccountId(account.getId());
                 group.setGroupName(request.getParameter("name"));
                 group.setLogo(request.getParameter("logo"));
                 logger.info("group = {}", group);
-                groupService.createAccountGroups(group);
+                boolean isGroupCreate = groupService.createAccountGroups(group);
+                if (isGroupCreate) {
+                    Group newGroup = groupService.get(group.getGroupName());
+                    Application application = new Application(ApplicationType.GROUP, account.getId(),
+                            newGroup.getGroupId(), ApplicationStatusType.CONFIRMATION);
+                    boolean isApplication = applicationService.create(application);
+                    logger.info("create application isApplication = {}", isApplication);
+                }
             }
         } catch (Exception e) {
-            logger.error("Exception = {}", e);
+            logger.error("Exception - " + e);
         }
         return modelAndView;
     }
@@ -95,6 +112,7 @@ public class GroupController {
         for (Group group : groups) {
             if (!group.getGroupName().equals(groupName)) {
                 flag = true;
+                break;
             }
         }
         logger.info("createNewGroup(flag = {})", flag);
@@ -107,45 +125,62 @@ public class GroupController {
         return new ModelAndView("/group/create-group");
     }
 
+    @RequestMapping(value = "/group-add-message", method = RequestMethod.POST)
+    public ModelAndView addMessage(@ModelAttribute("account") Account account,
+                                   @ModelAttribute("group") Group group,
+                                   @RequestParam("NewWallMessage") String message) {
+        logger.info("addMessage(account = {}, group = {}, message = {})",
+                account, group, message);
+        Message wallMessage = new Message();
+        wallMessage.setMessageType(MessageType.WALL);
+        wallMessage.setMessage(message);
+        wallMessage.setPublicationDate(new Date());
+        wallMessage.setEdited(false);
+        wallMessage.setUsernameSender(account.getUsername());
+        wallMessage.setUsernameReceiving(group.getGroupName());
+        wallMessage.setPicture("");
+        wallMessage.setReceiverId(group.getGroupId());
+        wallMessage.setSenderId(account.getId());
+        logger.info("message - {}", wallMessage);
+//        messageService.createMassage(wallMessage);
+        ModelAndView modelAndView = new ModelAndView("redirect:/show-group");
+        modelAndView.addObject("id", group.getGroupId());
+        return modelAndView;
+    }
+
     @RequestMapping(value = "/show-group", method = RequestMethod.GET)
-    public ModelAndView viewGroup(HttpSession session, HttpServletRequest request) {
-        logger.info("viewGroup()");
+    public ModelAndView viewGroup(@ModelAttribute("account") Account account,
+                                  @ModelAttribute("id") int idGroup) {
+        logger.info("viewGroup(account - {}, idGroup - {})", account, idGroup);
         ModelAndView modelAndView = new ModelAndView("/group/show-group");
         try {
-            Group group = groupService.getGroupID(Integer.parseInt(request.getParameter("id")));
-            Account account = (Account) session.getAttribute("account");
+            Group group = groupService.get(idGroup);
             Application application = applicationService.getGroupAccount(group, account.getId());
-            logger.info("application = {}", application);
-            if (application != null) {
-                request.setAttribute("application", application);
-                modelAndView.addObject("application", application);
-                int newUserGroup = application.getStatus();
-                modelAndView.addObject("newUserGroup", newUserGroup);
-                request.setAttribute("newUserGroup", newUserGroup);
-            }
-            logger.info("group = {}", group);
-            request.setAttribute("group", group);
+            int statusAccount = application.getId() != 0 ? application.getStatus() : 1;
+            List<GroupMembers> members = groupMembersRepository.getMembersByGroup(group);
+            List<Message> groupMessages = messageService.getMessages(group);
             modelAndView.addObject("group", group);
+            modelAndView.addObject("groupMessages", groupMessages);
+            modelAndView.addObject("members", members);
+            modelAndView.addObject("application", application);
+            logger.info("groupMessages - {}", groupMessages);
+            logger.info("groups = {}", group);
+            logger.info("members - {}", members);
+            logger.info("application = {}", application);
+            logger.info("statusAccount = {}", statusAccount);
         } catch (Exception e) {
-            logger.error("Exception = {}", e);
+            logger.error("Exception - " + e);
         }
         return modelAndView;
     }
 
     @RequestMapping(value = "/account-group", method = RequestMethod.GET)
-    public ModelAndView accountGroup(HttpSession session) {
-        logger.info("accountGroup()");
+    public ModelAndView accountGroup(@ModelAttribute("account") Account account) {
+        logger.info("accountGroup(account = {})", account);
         ModelAndView modelAndView = new ModelAndView("/group/account-group");
-        Account account = (Account) session.getAttribute("account");
-        logger.info("account = {}", account);
-        try {
-            List<Group> groups = groupService.getAccountGroups(account);
-            logger.info("groups = {}", groups);
-            session.setAttribute("groups", groups);
-            modelAndView.addObject("groups", groups);
-        } catch (Exception e) {
-            logger.error("Exception = {}", e);
-        }
+        List<GroupMembers> groupMembers = groupMembersRepository.getGroupByMember_Id(account.getId());
+        modelAndView.addObject("groupMembers", groupMembers);
+        logger.info("groupMembers - {}", groupMembers);
         return modelAndView;
     }
 

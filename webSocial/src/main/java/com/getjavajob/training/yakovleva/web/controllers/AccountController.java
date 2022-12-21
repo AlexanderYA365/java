@@ -1,6 +1,10 @@
 package com.getjavajob.training.yakovleva.web.controllers;
 
-import com.getjavajob.training.yakovleva.common.*;
+import com.getjavajob.training.yakovleva.common.Account;
+import com.getjavajob.training.yakovleva.common.Enum.PhoneType;
+import com.getjavajob.training.yakovleva.common.Message;
+import com.getjavajob.training.yakovleva.common.Phone;
+import com.getjavajob.training.yakovleva.common.Role;
 import com.getjavajob.training.yakovleva.service.AccountService;
 import com.getjavajob.training.yakovleva.service.MessageService;
 import com.getjavajob.training.yakovleva.service.PhoneService;

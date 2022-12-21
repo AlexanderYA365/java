@@ -1,5 +1,8 @@
 package com.getjavajob.training.yakovleva.common;
 
+import com.getjavajob.training.yakovleva.common.Enum.ApplicationStatusType;
+import com.getjavajob.training.yakovleva.common.Enum.ApplicationType;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
@@ -24,6 +27,13 @@ public class Application implements Serializable {
 
     public Application(int id, ApplicationType applicationType, int applicantId, int recipientId, ApplicationStatusType status) {
         this.id = id;
+        this.applicationType = applicationType;
+        this.applicantId = applicantId;
+        this.recipientId = recipientId;
+        this.status = status;
+    }
+
+    public Application(ApplicationType applicationType, int applicantId, int recipientId, ApplicationStatusType status) {
         this.applicationType = applicationType;
         this.applicantId = applicantId;
         this.recipientId = recipientId;

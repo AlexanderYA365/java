@@ -84,6 +84,8 @@
                 this.sendMessage(sending);
             },
             onMessage(message) {
+                console.log("message.usernameSender - " + message.usernameSender)
+                console.log("message.usernameReceiving - " + message.usernameReceiving)
                 let name = (message.usernameSender == username) ? "Я" : message.usernameSender;
                 let messageDate = new Date(message.publicationDate);
                 let msgBlock = document.createElement("div");
@@ -136,7 +138,8 @@
                 </c:forEach>
                 for (let i = 0; i < listForJavascript.length; i++) {
                     this.onMessage({
-                        usernameSender: listForJavascript[i][7],
+                        usernameSender: listForJavascript[i][6],
+                        usernameReceiving: listForJavascript[i][7],
                         message: listForJavascript[i][2],
                         publicationDate: listForJavascript[i][4]
                     });

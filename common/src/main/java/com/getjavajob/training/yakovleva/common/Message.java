@@ -1,6 +1,7 @@
 package com.getjavajob.training.yakovleva.common;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.getjavajob.training.yakovleva.common.Enum.MessageType;
 
 import javax.persistence.*;
 import java.io.Serializable;

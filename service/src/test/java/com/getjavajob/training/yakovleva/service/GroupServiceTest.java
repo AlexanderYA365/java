@@ -47,16 +47,16 @@ class GroupServiceTest {
     void getGroupName() {
         List<Group> groups = Mockito.mock(List.class);
         GroupService groupService = Mockito.mock(GroupService.class);
-        Mockito.when(groupService.getGroupName("1")).thenReturn(groups);
-        Assert.assertEquals(groups, groupService.getGroupName("1"));
+        Mockito.when(groupService.getByGroupName("1")).thenReturn(groups);
+        Assert.assertEquals(groups, groupService.getByGroupName("1"));
     }
 
     @Test
     void getGroupID() {
         Group group = Mockito.mock(Group.class);
         GroupService groupService = Mockito.mock(GroupService.class);
-        Mockito.when(groupService.getGroupID(1)).thenReturn(group);
-        Assert.assertEquals(group, groupService.getGroupID(1));
+        Mockito.when(groupService.get(1)).thenReturn(group);
+        Assert.assertEquals(group, groupService.get(1));
     }
 
     @Test

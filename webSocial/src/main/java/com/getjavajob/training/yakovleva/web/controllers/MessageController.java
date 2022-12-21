@@ -52,9 +52,10 @@ public class MessageController {
         logger.info("goChat(account = {}, idFriend = {})", account, idFriend);
         ModelAndView modelAndView = new ModelAndView("/chat");
         Account friendId = accountService.get(idFriend);
-        List<Message> personalMail = messageService.getAccountMessages(1, 3);
+        List<Message> personalMail = messageService.getAccountMessages(account.getId(), idFriend);
         modelAndView.addObject("username", account.getUsername());
         modelAndView.addObject("usernameReceiving", friendId.getUsername());
+        modelAndView.addObject("usernameSender", account.getUsername());
         modelAndView.addObject("receiverId", friendId.getId());
         modelAndView.addObject("senderId", account.getId());
         modelAndView.addObject("personalMail", personalMail);

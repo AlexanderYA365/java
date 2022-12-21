@@ -1,6 +1,6 @@
 import com.getjavajob.training.yakovleva.common.Account;
+import com.getjavajob.training.yakovleva.common.Enum.PhoneType;
 import com.getjavajob.training.yakovleva.common.Phone;
-import com.getjavajob.training.yakovleva.common.PhoneType;
 import com.getjavajob.training.yakovleva.common.Role;
 import com.getjavajob.training.yakovleva.dao.AccountDao;
 import org.junit.jupiter.api.Test;

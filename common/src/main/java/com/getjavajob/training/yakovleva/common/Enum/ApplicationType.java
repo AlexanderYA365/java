@@ -1,4 +1,4 @@
-package com.getjavajob.training.yakovleva.common;
+package com.getjavajob.training.yakovleva.common.Enum;
 
 public enum ApplicationType {
     GROUP(0),

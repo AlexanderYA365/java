@@ -26,10 +26,12 @@
                     <th>Имя группы</th>
                     <th>картинка</th>
                 </tr>
-                <c:forEach var="group" items="${groups}">
+                <c:forEach var="groupMember" items="${groupMembers}">
                     <tr>
-                        <td><a href='<c:url value = "show-group?id=${group.groupId}" />'>${group.groupName}</a></td>
-                        <td><c:out value="${group.logo}"/></td>
+                        <td>
+                            <a href='<c:url value = "show-group?id=${groupMember.group.groupId}" />'>${groupMember.group.groupName}</a>
+                        </td>
+                        <td><c:out value="${groupMember.group.logo}"/></td>
                     </tr>
                 </c:forEach>
             </table>

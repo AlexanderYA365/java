@@ -26,8 +26,7 @@ public class GroupService {
     }
 
     public List<Group> getAccountGroups(Account account) {
-        logger.info("getAccountGroups(Account account)");
-        logger.debug("getAccountGroups(account = {})", account);
+        logger.info("getAccountGroups(account = {})", account);
         return groupDao.getGroupsAccount(account.getId());
     }
 
@@ -41,60 +40,58 @@ public class GroupService {
         return groupDao.getSizeRecords(search);
     }
 
-    @Transactional
     public boolean createAccountGroups(Group group) {
-        logger.info("createAccountGroups(Group group)");
-        logger.debug("createAccountGroups(group = {})", group);
-        try {
-            return groupDao.create(group);
-        } catch (Exception ex) {
-            logger.error("createAccountGroups exception - {}", ex);
-        }
-        return false;
+        logger.info("createAccountGroups(group = {})", group);
+        return groupDao.create(group);
+
+
     }
 
     @Transactional
     public boolean update(Group group) {
-        logger.info("update(Group group)");
-        logger.debug("update(group = {})", group);
+        logger.info("update(group = {})", group);
         return groupDao.update(group);
     }
 
     @Transactional
     public boolean delete(Group group) {
-        logger.info("delete(Group group)");
-        logger.debug("delete(group = {})", group);
+        logger.info("delete(group = {})", group);
         return groupDao.delete(group);
     }
 
     public List<Group> getCriteriaLimit(int start, int end, String criteriaName) {
-        logger.info("getCriteriaLimit(int start, int end, String criteriaName)");
-        logger.debug("getCriteriaLimit(start = {}, end = {}, criteriaName = {})", start, end, criteriaName);
+        logger.info("getCriteriaLimit(start = {}, end = {}, criteriaName = {})", start, end, criteriaName);
         return groupDao.getCriteriaLimit(start, end, criteriaName);
     }
 
     public List<Group> getAllGroups() {
         logger.info("getAllGroups()");
-        logger.debug("getAllGroups()");
         return groupDao.getAllGroups();
     }
 
-    public List<Group> getGroupName(String groupName) {
-        logger.info("getGroupName(String groupName)");
-        logger.debug("getGroupName(groupName = {})", groupName);
+    public List<Group> getByGroupName(String groupName) {
+        logger.info("get(groupName = {})", groupName);
         return groupDao.getAllGroups(groupName);
     }
 
-    public Group getGroupID(int idGroup) {
-        logger.info("getGroupID(int idGroup)");
-        logger.debug("getGroupID(idGroup = {})", idGroup);
-        return groupDao.getGroup(idGroup);
+    public Group get(String groupName) {
+        logger.info("get(groupName = {})", groupName);
+        return groupDao.get(groupName);
+    }
+
+    public List<Group> getGroups(int idGroup) {
+        logger.info("get(idGroup = {})", idGroup);
+        return groupDao.getGroups(idGroup);
+    }
+
+    public Group get(int idGroup) {
+        logger.info("get(idGroup = {})", idGroup);
+        return groupDao.get(idGroup);
     }
 
     @Transactional
     public boolean insertAccountGroup(Group group, int accountId) {
-        logger.info("insertAccountGroup(Group group, int accountId)");
-        logger.debug("insertAccountGroup(group = {}, accountId = {})", group, accountId);
+        logger.info("insertAccountGroup(group = {}, accountId = {})", group, accountId);
         return groupDao.insertAccount(group, accountId);
     }
 

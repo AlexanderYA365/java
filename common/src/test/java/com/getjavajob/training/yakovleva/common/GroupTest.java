@@ -8,8 +8,8 @@ class GroupTest {
     @Test
     void getIdAccount() {
         Group group = new Group();
-        group.setAccountId(1);
-        Assert.assertEquals(1, group.getAccountId());
+        group.setIdGroupCreator(1);
+        Assert.assertEquals(1, group.getIdGroupCreator());
     }
 
     @Test
@@ -29,8 +29,8 @@ class GroupTest {
     @Test
     void getIdAdministrator() {
         Group group = new Group();
-        group.setAdministratorId(1);
-        Assert.assertEquals(1, group.getAdministratorId());
+        group.setIdGroupCreator(1);
+        Assert.assertEquals(1, group.getIdGroupCreator());
     }
 
     @Test
@@ -50,8 +50,8 @@ class GroupTest {
     @Test
     void setIdAccount() {
         Group group = new Group();
-        group.setAccountId(1);
-        Assert.assertEquals(1, group.getAccountId());
+        group.setIdGroupCreator(1);
+        Assert.assertEquals(1, group.getIdGroupCreator());
     }
 
     @Test
@@ -71,8 +71,8 @@ class GroupTest {
     @Test
     void setIdAdministrator() {
         Group group = new Group();
-        group.setAdministratorId(1);
-        Assert.assertEquals(1, group.getAdministratorId());
+        group.setIdGroupCreator(1);
+        Assert.assertEquals(1, group.getIdGroupCreator());
     }
 
     @Test

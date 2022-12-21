@@ -4,7 +4,6 @@ import com.getjavajob.training.yakovleva.common.Account;
 import com.getjavajob.training.yakovleva.common.Relations;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,7 +22,6 @@ public class AccountDao {
     @PersistenceContext
     private EntityManager entityManager;
 
-    @Autowired
     public AccountDao() {
         logger.info("create accountDao");
     }

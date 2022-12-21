@@ -4,7 +4,6 @@ import com.getjavajob.training.yakovleva.common.Account;
 import com.getjavajob.training.yakovleva.common.Message;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +18,6 @@ public class MessageDao {
     @PersistenceContext
     private EntityManager entityManager;
 
-    @Autowired
     public MessageDao() {
         logger.info("MessageDao(sessionFactory)");
     }
@@ -63,10 +61,29 @@ public class MessageDao {
         Predicate receiverIdOrSenderId = criteriaBuilder.or(
                 criteriaBuilder.equal(from.get("receiverId"), receiverId),
                 criteriaBuilder.equal(from.get("senderId"), receiverId));
+        Subquery<Number> subQuery = query.subquery(Number.class);
+        Root maxTime = subQuery.from(Message.class);
+        subQuery.select(criteriaBuilder.max(maxTime.get("publicationDate")));
+        Predicate andMaxDate = criteriaBuilder.equal(from.get("publicationDate"), subQuery);
         Predicate andMessageType = criteriaBuilder.and(
                 criteriaBuilder.equal(from.get("messageType"), 1),
+                andMaxDate,
                 receiverIdOrSenderId);
         query.where(andMessageType).groupBy(from.get("receiverId"));
+        return entityManager.createQuery(query).getResultList();
+    }
+
+    public List<Message> getGroupMessage(int idGroup) {
+        logger.info("MessageDao.getWallMessage(idGroup = {})", idGroup);
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Message> query = criteriaBuilder.createQuery(Message.class);
+        Root<Message> root = query.from(Message.class);
+        Join<Account, Message> accounts = root.join("account", JoinType.INNER);
+        Join<Account, Message> accounts1 = root.join("account", JoinType.INNER);
+        Predicate and = criteriaBuilder.and(
+                criteriaBuilder.equal(root.get("receiverId"), idGroup),
+                criteriaBuilder.equal(root.get("messageType"), 2));
+        query.where(and);
         return entityManager.createQuery(query).getResultList();
     }
 

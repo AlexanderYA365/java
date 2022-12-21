@@ -3,7 +3,6 @@ package com.getjavajob.training.yakovleva.dao;
 import com.getjavajob.training.yakovleva.common.Phone;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +19,6 @@ public class PhoneDao {
     @PersistenceContext
     private EntityManager entityManager;
 
-    @Autowired
     public PhoneDao() {
         logger.info("PhoneDao()");
     }

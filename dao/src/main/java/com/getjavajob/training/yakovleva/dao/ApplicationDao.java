@@ -1,9 +1,12 @@
 package com.getjavajob.training.yakovleva.dao;
 
-import com.getjavajob.training.yakovleva.common.*;
+import com.getjavajob.training.yakovleva.common.Application;
+import com.getjavajob.training.yakovleva.common.Enum.ApplicationStatusType;
+import com.getjavajob.training.yakovleva.common.Enum.ApplicationType;
+import com.getjavajob.training.yakovleva.common.Group;
+import com.getjavajob.training.yakovleva.common.Relations;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +23,6 @@ public class ApplicationDao {
     @PersistenceContext
     private EntityManager entityManager;
 
-    @Autowired
     public ApplicationDao() {
         logger.info("create ApplicationDao");
     }

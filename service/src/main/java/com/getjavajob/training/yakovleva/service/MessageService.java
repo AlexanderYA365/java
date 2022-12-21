@@ -1,6 +1,7 @@
 package com.getjavajob.training.yakovleva.service;
 
 import com.getjavajob.training.yakovleva.common.Account;
+import com.getjavajob.training.yakovleva.common.Group;
 import com.getjavajob.training.yakovleva.common.Message;
 import com.getjavajob.training.yakovleva.dao.AccountDao;
 import com.getjavajob.training.yakovleva.dao.MessageDao;
@@ -36,6 +37,11 @@ public class MessageService {
     public List<Message> getMessages(Account account) {
         logger.info("getMessages(account = {})", account);
         return setUsernames(messageDao.getMessageUserIdNameSender(account.getId()));
+    }
+
+    public List<Message> getMessages(Group group) {
+        logger.info("getMessages(group = {})", group);
+        return setUsernames(messageDao.getGroupMessage(group.getGroupId()));
     }
 
     public List<Message> getUniqueMessages(Account account) {

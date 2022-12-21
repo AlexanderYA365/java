@@ -2,7 +2,6 @@ package com.getjavajob.training.yakovleva.common;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
 import java.util.Objects;
 
 @Entity
@@ -12,32 +11,21 @@ public class Group implements Serializable {
     @GeneratedValue
     @Column(name = "group_id")
     private int groupId;
-    @Column(name = "account_id")
-    private int accountId;
     @Column(name = "group_name")
     private String groupName;
     @Column(name = "logo")
     private String logo;
-    @Column(name = "administrator_id")
-    private int administratorId;
+    @Column(name = "info")
+    private String info;
+    @Column(name = "id_group_creator")
+    private int idGroupCreator;
 
-    public Group(String groupName, String logo, int administratorId, int accountId, Date dateCreateGroup) {
-        this.groupName = groupName;
-        this.logo = logo;
-        this.administratorId = administratorId;
-        this.accountId = accountId;
+    public int getGroupId() {
+        return groupId;
     }
 
-    public Group() {
-
-    }
-
-    public int getAccountId() {
-        return accountId;
-    }
-
-    public void setAccountId(int accountId) {
-        this.accountId = accountId;
+    public void setGroupId(int groupId) {
+        this.groupId = groupId;
     }
 
     public String getGroupName() {
@@ -56,31 +44,20 @@ public class Group implements Serializable {
         this.logo = logo;
     }
 
-    public int getAdministratorId() {
-        return administratorId;
+    public String getInfo() {
+        return info;
     }
 
-    public void setAdministratorId(int administratorId) {
-        this.administratorId = administratorId;
+    public void setInfo(String info) {
+        this.info = info;
     }
 
-    public int getGroupId() {
-        return groupId;
+    public int getIdGroupCreator() {
+        return idGroupCreator;
     }
 
-    public void setGroupId(int groupId) {
-        this.groupId = groupId;
-    }
-
-    @Override
-    public String toString() {
-        return "Group{" +
-                "groupId=" + groupId +
-                ", accountId=" + accountId +
-                ", groupName='" + groupName + '\'' +
-                ", logo='" + logo + '\'' +
-                ", administratorId=" + administratorId +
-                '}';
+    public void setIdGroupCreator(int idGroupCreator) {
+        this.idGroupCreator = idGroupCreator;
     }
 
     @Override
@@ -89,15 +66,25 @@ public class Group implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
         Group group = (Group) o;
         return groupId == group.groupId &&
-                accountId == group.accountId &&
-                administratorId == group.administratorId &&
-                Objects.equals(groupName, group.groupName) &&
-                Objects.equals(logo, group.logo);
+                idGroupCreator == group.idGroupCreator &&
+                groupName.equals(group.groupName) &&
+                logo.equals(group.logo) &&
+                info.equals(group.info);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(groupId, accountId, groupName, logo, administratorId);
+        return Objects.hash(groupId, groupName, logo, info, idGroupCreator);
     }
 
+    @Override
+    public String toString() {
+        return "Group{" +
+                "groupId=" + groupId +
+                ", groupName='" + groupName + '\'' +
+                ", logo='" + logo + '\'' +
+                ", info='" + info + '\'' +
+                ", idGroupCreator=" + idGroupCreator +
+                '}';
+    }
 }
