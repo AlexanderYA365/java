@@ -28,7 +28,7 @@
                 </tr>
                 <c:forEach var="group" items="${findGroups}">
                     <input type="hidden" name="groupId"
-                           value="${group.groupId}"/>//TODO сделать уникальным имя, при внесении в имя, значение groupId
+                           value="${group.groupId}"/>
                     <tr>
                         <td><c:out value="${group.groupName}"/></td>
                         <td><input type="submit" name="button1" value="добавить"/></td>

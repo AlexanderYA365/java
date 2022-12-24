@@ -29,7 +29,8 @@
                 <c:forEach var="groupMember" items="${groupMembers}">
                     <tr>
                         <td>
-                            <a href='<c:url value = "show-group?id=${groupMember.group.groupId}" />'>${groupMember.group.groupName}</a>
+
+                            <a href='<c:url value ="show-group?groupId=${groupMember.group.groupId}"/>'>${groupMember.group.groupName}</a>
                         </td>
                         <td><c:out value="${groupMember.group.logo}"/></td>
                     </tr>

@@ -28,8 +28,7 @@ public class ApplicationService {
 
     @Transactional
     public boolean create(Application application) {
-        logger.info("create(Application application)");
-        logger.debug("create(application - {})", application);
+        logger.info("create(application - {})", application);
         try {
             return applicationDao.create(application);
         } catch (Exception ex) {
@@ -40,8 +39,7 @@ public class ApplicationService {
 
     @Transactional
     public boolean update(Application application) {
-        logger.info("update(Application application)");
-        logger.debug("update(application - {})", application);
+        logger.info("update(application - {})", application);
         try {
             applicationDao.update(application);
             return true;
@@ -53,31 +51,22 @@ public class ApplicationService {
 
     @Transactional
     public boolean delete(Application application) {
-        logger.info("delete(Application application)");
-        logger.debug("delete(application - {})", application);
-        try {
-            return applicationDao.delete(application);
-        } catch (Exception ex) {
-            logger.error("delete Exception - {}", ex);
-        }
-        return false;
+        logger.info("delete(application - {})", application);
+        return applicationDao.delete(application);
     }
 
     public Application get(int idApplication) {
-        logger.info("get(int idApplication)");
-        logger.debug("get(idApplication - {})", idApplication);
+        logger.info("get(idApplication - {})", idApplication);
         return applicationDao.get(idApplication);
     }
 
     public Application getGroupAccount(Group group, int recipientId) {
-        logger.info("getGroupAccount(Group group, int recipientId)");
-        logger.debug("getGroupAccount(group = {}, recipientId = {})", group, recipientId);
+        logger.info("getGroupAccount(group = {}, recipientId = {})", group, recipientId);
         return applicationDao.get(group, recipientId);
     }
 
     public Application getAccount(Relations relations) {
-        logger.info("getAccount(Relations relations)");
-        logger.debug("getAccount(relations = {})", relations);
+        logger.info("getAccount(relations = {})", relations);
         return applicationDao.get(relations);
     }
 

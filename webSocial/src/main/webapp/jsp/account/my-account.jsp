@@ -37,15 +37,15 @@
         <br>Рабочий адрес: ${account.addressJob}
         <br>email: ${account.email}
         <br>Обо мне: ${account.aboutMe}
-    </form>
-    <br/>
-    <button onclick="location.href='edit-account-settings'">Изменить данные пользователя</button>
-    <br/>
-    <button onclick="location.href='save-account-settings'">Сохранить профиль</button>
-    <br/>
-    <form method="POST" enctype="multipart/form-data" action="update-account-settings">
-        Выберите файл для загрузки: <input type="file" name="uploadXml">
-        <br><input type="submit" value="сохранить"/>
+        <br/>
+        <button onclick="location.href='edit-account-settings'">Изменить данные пользователя</button>
+        <br/>
+        <button onclick="location.href='save-account-settings'">Сохранить профиль</button>
+        <br/>
+        <form method="POST" enctype="multipart/form-data" action="update-account-settings">
+            Выберите файл для загрузки: <input type="file" name="uploadXml">
+            <br><input type="submit" value="сохранить"/>
+        </form>
     </form>
 </main>
 </body>

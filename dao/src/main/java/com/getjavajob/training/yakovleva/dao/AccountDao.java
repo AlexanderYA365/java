@@ -148,6 +148,7 @@ public class AccountDao {
     @Transactional
     public boolean deleteAccount(Account account) {
         logger.info("AccountDao.getFriendsAccount(account.id = {})", account.getId());
+        account = entityManager.find(Account.class, account.getId());
         entityManager.remove(account);
         return true;
     }

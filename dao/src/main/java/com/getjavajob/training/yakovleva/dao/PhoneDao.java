@@ -50,8 +50,8 @@ public class PhoneDao {
     @Transactional
     public boolean delete(Phone phone) {
         logger.info("PhoneDao.delete(phone = {})", phone);
-        Phone deletePhone = entityManager.find(Phone.class, phone.getId());
-        entityManager.remove(deletePhone);
+        phone = entityManager.find(Phone.class, phone.getId());
+        entityManager.remove(phone);
         return true;
     }
 

@@ -49,11 +49,9 @@
                     <c:if test="${member.groupRole == 'MEMBER'}">
                         <td>Участник</td>
                     </c:if>
-
                     <c:if test="${member.groupRole == 'ADMIN'}">
                         <td>Администратор</td>
                     </c:if>
-
                     <c:if test="${member.groupRole == 'MODER'}">
                         <td>Модератор</td>
                     </c:if>
@@ -70,7 +68,7 @@
                 <th>дата сообщения</th>
                 <th>сообщение</th>
             </tr>
-            <c:forEach var="message" items="${messages}">
+            <c:forEach var="message" items="${groupMessages}">
                 <tr>
                     <td><c:out value="${message.usernameSender}"/></td>
                     <td><c:out value="${message.publicationDate}"/></td>
@@ -83,6 +81,10 @@
     <form:form action="group-add-message" class="modal" method="post">
         <textarea name="NewWallMessage" cols="40" rows="3"></textarea>
         <button type="submit">отправить</button>
+    </form:form>
+
+    <form:form action="delete-group" class="modal" method="post">
+        <button type="submit" value="${members.get(0).group.groupId}" name="groupId">Удалить группу</button>
     </form:form>
 
 </main>

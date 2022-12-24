@@ -45,7 +45,6 @@ public class ApplicationDao {
     }
 
     public Application get(Group group, int recipientId) {
-        logger.info("ApplicationDao.get(group, recipientId)");
         logger.info("ApplicationDao.get(group.id = {}, recipientId = {})", group.getGroupId(), recipientId);
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Application> criteriaQuery = criteriaBuilder.createQuery(Application.class);
@@ -98,6 +97,7 @@ public class ApplicationDao {
     @Transactional
     public boolean delete(Application application) {
         logger.info("ApplicationDao.delete(application = {})", application);
+        application = entityManager.find(Application.class, application.getId());
         entityManager.remove(application);
         return true;
     }

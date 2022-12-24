@@ -112,6 +112,7 @@ public class GroupDao {
     @Transactional
     public boolean delete(Group group) {
         logger.info("GroupDao.delete(group = {})", group);
+        group = entityManager.find(Group.class, group.getGroupId());
         entityManager.remove(group);
         return true;
     }

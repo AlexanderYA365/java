@@ -74,7 +74,7 @@ public class MessageDao {
     }
 
     public List<Message> getGroupMessage(int idGroup) {
-        logger.info("MessageDao.getWallMessage(idGroup = {})", idGroup);
+        logger.info("MessageDao.getGroupMessage(idGroup = {})", idGroup);
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Message> query = criteriaBuilder.createQuery(Message.class);
         Root<Message> root = query.from(Message.class);
