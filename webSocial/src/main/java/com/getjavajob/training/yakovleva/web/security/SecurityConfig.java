@@ -41,6 +41,7 @@ public class SecurityConfig {
                 .antMatchers("/account-group").hasAnyRole("USER", "ADMIN")
                 .antMatchers("/**").permitAll()
                 .antMatchers("/aaa").permitAll()
+                .antMatchers("/registration-account").permitAll()
                 .and()
                 .formLogin()
                 .loginPage("/index.jsp").permitAll()

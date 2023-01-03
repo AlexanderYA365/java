@@ -3,6 +3,7 @@ package com.getjavajob.training.yakovleva.common;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -31,6 +32,7 @@ public class Account implements Serializable {
     @Column(name = "lastname")
     private String lastName;
     @Column(name = "date")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date date;
     @Column(name = "icq")
     private int icq;

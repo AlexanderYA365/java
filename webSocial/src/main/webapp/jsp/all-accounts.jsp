@@ -27,10 +27,7 @@ tttttttttyta
 
 <%--@elvariable id="Account" type="com.getjavajob.training.yakovleva.common.Account"--%>
 <form:form action="test5" method="post">
-    <c:forEach items="${friends}" var="friend">
-        <button type="submit" name="id" value="${friend.id}">
-                ${friend.id}</button>
-    </c:forEach>
+    <button type="submit" name="id">fffffff</button>
 </form:form>
 
 

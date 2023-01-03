@@ -91,8 +91,8 @@
         </button>
         <br>
         <br>
-        Выберите аватар для загрузки: <input type="file" name="file"><br/>
-        Name: <input type="text" name="file-name">
+        Выберите аватар для загрузки: <input type="file" name="file"/><br/>
+        Name: <input type="text" name="file-name"/>
         <br><input type="submit" value="сохранить"/>
     </form>
 </main>

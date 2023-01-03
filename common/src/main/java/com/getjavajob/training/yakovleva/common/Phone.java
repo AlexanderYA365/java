@@ -11,7 +11,7 @@ import java.util.Objects;
 @Table(name = "phone")
 public class Phone implements Serializable {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "native")
     @Column(name = "id")
     private int id;
     @Column(name = "account_id")
@@ -49,6 +49,10 @@ public class Phone implements Serializable {
 
     public void setPhoneType(int status) {
         this.phoneType = PhoneType.values()[status];
+    }
+
+    public void setPhoneType(PhoneType phoneType) {
+        this.phoneType = phoneType;
     }
 
     public int getAccountId() {

@@ -36,4 +36,11 @@ public class TestController {
         return modelAndView;
     }
 
+    @RequestMapping(value = "/test5", method = RequestMethod.POST)
+    public ModelAndView au() {
+        logger.info("au()");
+        ModelAndView modelAndView = new ModelAndView("all-accounts");
+        return modelAndView;
+    }
+
 }

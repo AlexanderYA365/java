@@ -19,6 +19,9 @@ function createNewPhone() {
 
 $(document).ready(function () {
     $body = $('body');
+    $body.find('#phone').each(function () {
+        $(this).mask("+7 (999) 99-99-999", {autoclear: false});
+    });
     $body.find('.phone').each(function () {
         $(this).mask("+7 (999) 99-99-999", {autoclear: false});
     });

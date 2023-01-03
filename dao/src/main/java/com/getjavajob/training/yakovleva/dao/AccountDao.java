@@ -28,7 +28,7 @@ public class AccountDao {
 
     @Transactional
     public boolean create(Account account) {
-        logger.info("AccountDao.create(Account account)");
+        logger.info("AccountDao.create(account = {})", account);
         entityManager.merge(account);
         return true;
     }

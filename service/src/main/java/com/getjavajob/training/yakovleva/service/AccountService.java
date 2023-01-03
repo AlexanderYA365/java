@@ -28,21 +28,20 @@ public class AccountService {
     public AccountService() {
     }
 
-    @Transactional
-    public boolean create(Account account) {
-        logger.info("create(Account account)");
-        logger.debug("create(account - {})", account);
+    public boolean create(Account account, List<Phone> phones) {
+        logger.info("create(account = {})", account);
         try {
-            accountDao.create(account);
+            boolean result = accountDao.create(account);
+            logger.info("result = {}", result);
             int id = accountDao.getIdAccount(account);
-            boolean result = false;
-            for (Phone phone : account.getPhones()) {
+            logger.info("id = {}", id);
+            for (Phone phone : phones) {
                 phone.setAccountId(id);
                 phoneDao.create(phone);
             }
             return id > 0 || result;
         } catch (Exception e) {
-            logger.error("AccountService.create Exception - {}", e);
+            logger.info("AccountService.create Exception - {}", e.toString());
             return false;
         }
     }
@@ -161,12 +160,6 @@ public class AccountService {
         logger.info("getAccountName(String name)");
         logger.debug("getAccountName(name = {})", username);
         return accountDao.getByUsername(username);
-    }
-
-    public Account getAccount(String username, String password) {
-        logger.info("getAccount(String username, String password)");
-        logger.debug("getAccount(username = {}, password = {})", username, password);
-        return accountDao.getAccount(username, password);
     }
 
     public List<Account> getFriendsAccount(int accountId) {

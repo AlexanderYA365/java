@@ -12,6 +12,7 @@ import com.getjavajob.training.yakovleva.web.controllers.utils.SocialNetworkUtil
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -41,14 +42,17 @@ public class AccountController {
     private final AccountService accountService;
     private final MessageService messageService;
     private final PhoneService phoneService;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     public AccountController(AccountService accountService,
                              MessageService messageService,
-                             PhoneService phoneService) {
+                             PhoneService phoneService,
+                             PasswordEncoder passwordEncoder) {
         this.accountService = accountService;
         this.messageService = messageService;
         this.phoneService = phoneService;
+        this.passwordEncoder = passwordEncoder;
         logger.info("AccountController");
     }
 
@@ -83,19 +87,30 @@ public class AccountController {
 
     @RequestMapping(value = "/registration-account", method = RequestMethod.POST)
     public @ResponseBody
-    ModelAndView createNewAccount(HttpSession session, HttpServletRequest request,
-                                  @RequestParam("name") String name,
-                                  @RequestParam("file") MultipartFile file) {
-        logger.info("createNewAccount(name - {}, file - {})", name, file);
-        ModelAndView modelAndView = new ModelAndView("redirect:main");
-        Account account = new Account();
-        account.setUsername(request.getParameter("username"));
-        account.setPassword(request.getParameter("password"));
-        account.setId(0);
-        Account registeredAccount = setDataForm(request, account, name, file);
-        if (accountService.create(registeredAccount)) {
-            Account accountInBase = accountService.get(registeredAccount.getId());
-            session.setAttribute("account", accountInBase);
+    ModelAndView
+    createNewAccount(@ModelAttribute("account") Account account, @RequestParam("file") MultipartFile file,
+                     @ModelAttribute("phone") String phone, @ModelAttribute("typePhone") String typePhone) {
+        logger.info("createNewAccount(account - {}, file - {})", account, file);
+        try {
+            if (!file.isEmpty()) {
+                byte[] bytes = file.getBytes();
+                account.setPhoto(bytes);
+                account.setPhotoFileName(file.getName());
+            }
+        } catch (Exception ex) {
+            logger.error("failed load photo");
+            logger.error(ex);
+        }
+        account.setPassword(passwordEncoder.encode(account.getPassword()));
+        account.setRole(Role.ROLE_USER);
+        SocialNetworkUtils utils = new SocialNetworkUtils();
+        List<Phone> phones = utils.convertPhones(phone, typePhone, account);
+        logger.info("account - {}", account);
+        ModelAndView modelAndView = new ModelAndView("redirect:/");
+        if (accountService.create(account, phones)) {
+            Account accountFromBase = accountService.getByUsername(account.getUsername());
+            logger.info("accountFromBase - {}", accountFromBase);
+            modelAndView.addObject("account", accountFromBase);
         } else {
             logger.error("registration exception");
             modelAndView.setViewName("/account/registration-account");
@@ -283,9 +298,7 @@ public class AccountController {
         Date date = new Date();
         try {
             String dateFromForm = request.getParameter("date");
-            if (dateFromForm == null) {
-                logger.info("Error dateFromForm = {}", dateFromForm);
-            } else {
+            if (dateFromForm != null) {
                 logger.info("dateFromForm = {}", dateFromForm);
                 SimpleDateFormat format = new SimpleDateFormat("yyyyy-MM-dd");
                 date = format.parse(dateFromForm);

@@ -5,13 +5,14 @@
          http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>socialNetwork</artifactId>
-        <groupId>org.example</groupId>
+        <groupId>com.getjavajob.training.yakovleva</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>webapp</artifactId>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.getjavajob.training.yakovleva.web</groupId>
     <packaging>war</packaging>
+    <artifactId>webapp</artifactId>
 
     <name>socnet</name>
     <url>http://localhost:8085/socnet</url>
@@ -24,6 +25,11 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
     <dependencies>
+        <dependency>
+            <groupId>com.getjavajob.training.yakovleva.service</groupId>
+            <artifactId>service</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>

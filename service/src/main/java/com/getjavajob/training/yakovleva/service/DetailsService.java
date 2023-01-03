@@ -21,7 +21,6 @@ import java.util.List;
 public class DetailsService implements UserDetailsService {
     private static final Logger logger = LogManager.getLogger(DetailsService.class);
     private AccountService accountService;
-//    private BCryptPasswordEncoder encoder;
 
     @Autowired
     public DetailsService(AccountService accountService) {
