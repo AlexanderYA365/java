@@ -60,7 +60,7 @@ public class MessageService {
         try {
             return messageDao.create(message);
         } catch (Exception ex) {
-            logger.debug("createMessage exception - {}", ex);
+            logger.info("createMessage exception - {}", ex);
             return false;
         }
     }

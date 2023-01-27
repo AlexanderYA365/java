@@ -38,6 +38,8 @@ public class DetailsService implements UserDetailsService {
         } catch (Exception e) {
             throw new UsernameNotFoundException("Username " + username + " not found.");
         }
+//        UserDetails user = User.withUsername(account.getUsername()).password(account.getPassword()).authorities("ROLE_USER").build();
+//        return user;
         return new User(account.getUsername(), account.getPassword(), true, true, true,
                 true, getGrantedAuthorities(account));
     }

@@ -61,13 +61,13 @@ public class MessageDao {
         Predicate receiverIdOrSenderId = criteriaBuilder.or(
                 criteriaBuilder.equal(from.get("receiverId"), receiverId),
                 criteriaBuilder.equal(from.get("senderId"), receiverId));
-        Subquery<Number> subQuery = query.subquery(Number.class);
-        Root maxTime = subQuery.from(Message.class);
-        subQuery.select(criteriaBuilder.max(maxTime.get("publicationDate")));
-        Predicate andMaxDate = criteriaBuilder.equal(from.get("publicationDate"), subQuery);
+//        Subquery<Number> subQuery = query.subquery(Number.class);
+//        Root maxTime = subQuery.from(Message.class);
+//        subQuery.select(criteriaBuilder.max(maxTime.get("publicationDate")));
+//        Predicate andMaxDate = criteriaBuilder.equal(from.get("publicationDate"), subQuery);
         Predicate andMessageType = criteriaBuilder.and(
                 criteriaBuilder.equal(from.get("messageType"), 1),
-                andMaxDate,
+//                andMaxDate,
                 receiverIdOrSenderId);
         query.where(andMessageType).groupBy(from.get("receiverId"));
         return entityManager.createQuery(query).getResultList();

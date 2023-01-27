@@ -182,7 +182,7 @@ public class AccountDao {
             try {
                 entityManager.merge(a);
             } catch (Exception ex) {
-                logger.error("exeption - {}", ex);
+                logger.error("exception - " + ex);
             }
         }
     }

@@ -32,6 +32,7 @@
     <option name="excludeFilter" value="" />
   </component>
   <component name="FrameworkDetectionExcludesConfiguration">
+    <file type="web" url="file://$PROJECT_DIR$/web" />
     <file type="web" url="file://$PROJECT_DIR$/webSocial" />
   </component>
   <component name="JavaScriptSettings">

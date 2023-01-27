@@ -29,7 +29,7 @@ public class AccountService {
     }
 
     public boolean create(Account account, List<Phone> phones) {
-        logger.info("create(account = {})", account);
+        logger.info("create(account = {}, phones = {})", account, phones);
         try {
             boolean result = accountDao.create(account);
             logger.info("result = {}", result);
@@ -101,13 +101,13 @@ public class AccountService {
     }
 
     @Transactional
-    public boolean deleteById(int id) {
-        logger.info("deleteById(id = {})", id);
+    public boolean deleteById(int accountId) {
+        logger.info("deleteById(accountId = {})", accountId);
         try {
-            Account account = accountDao.getAccount(id);
+            Account account = accountDao.getAccount(accountId);
             boolean result = false;
             for (Phone phone : account.getPhones()) {
-                phone.setAccountId(id);
+                phone.setAccountId(accountId);
                 result = phoneDao.delete(phone);
             }
             return accountDao.deleteAccount(account) || result;

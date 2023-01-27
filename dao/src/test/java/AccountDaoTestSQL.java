@@ -3,15 +3,7 @@ import com.getjavajob.training.yakovleva.dao.AccountDao;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.jdbc.SqlGroup;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
-import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
 
 //@RunWith(SpringJUnit4ClassRunner.class)
 //@ContextConfiguration(locations = "classpath:socnet-context-test.xml")
@@ -27,12 +19,6 @@ import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TE
 //@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 //@Transactional
 
-@ContextConfiguration(locations = {"classpath:socnet-context-test.xml", "log4j2.xml"})
-@SqlGroup({
-        @Sql(executionPhase = BEFORE_TEST_METHOD, scripts = {"classpath:create-data-model.sql", "classpath:fillDB.sql"}),
-        @Sql(executionPhase = AFTER_TEST_METHOD, scripts = "classpath:remove.sql")
-})
-@RunWith(SpringJUnit4ClassRunner.class)
 public class AccountDaoTestSQL {
 
     @Autowired

@@ -2,10 +2,10 @@
   <artifact type="exploded-war" name="webSocial:Web exploded">
     <output-path>$PROJECT_DIR$/out/artifacts/webSocial_Web_exploded</output-path>
     <root id="root">
-      <element id="javaee-facet-resources" facet="webSocial/web/Web" />
+      <element id="javaee-facet-resources" facet="web/web/Web" />
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
-          <element id="module-output" name="webSocial" />
+          <element id="module-output" name="web" />
         </element>
       </element>
     </root>

@@ -1,0 +1,15 @@
+com\getjavajob\training\yakovleva\web\controllers\MessageController.class
+com\getjavajob\training\yakovleva\web\controllers\SearchController$SearchResult.class
+com\getjavajob\training\yakovleva\web\controllers\AdminController$TableResult.class
+com\getjavajob\training\yakovleva\web\controllers\AccountController.class
+com\getjavajob\training\yakovleva\web\controllers\GroupController.class
+com\getjavajob\training\yakovleva\web\controllers\TestController.class
+com\getjavajob\training\yakovleva\web\config\WebConfig.class
+com\getjavajob\training\yakovleva\web\config\ChatEndpoint.class
+com\getjavajob\training\yakovleva\web\controllers\SearchController.class
+com\getjavajob\training\yakovleva\web\controllers\AdminController.class
+com\getjavajob\training\yakovleva\web\controllers\utils\SocialNetworkUtils.class
+com\getjavajob\training\yakovleva\web\controllers\FriendController.class
+com\getjavajob\training\yakovleva\web\security\SecurityConfig.class
+com\getjavajob\training\yakovleva\web\controllers\SearchController$TableResult.class
+com\getjavajob\training\yakovleva\web\WebappApplication.class
