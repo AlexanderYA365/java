@@ -196,15 +196,6 @@ public class AccountController {
         return new Account();
     }
 
-//    @InitBinder
-//    public void initBinder(WebDataBinder binder){
-//        binder.setDisallowedFields("lastName");
-//        binder.setDisallowedFields("username");
-//        binder.setDisallowedFields("password");
-//        binder.setDisallowedFields("role");
-//        logger.info("initBinder");
-//    }
-
     @RequestMapping(value = "/sendWallMessage", method = RequestMethod.POST)
     public ModelAndView accountPageSendWallMessage(@RequestParam(value = "NewWallMessage",
             required = false) String newMessage, @RequestParam(value = "replyAccount",

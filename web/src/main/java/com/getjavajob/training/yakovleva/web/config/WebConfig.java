@@ -10,7 +10,6 @@ import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
@@ -54,16 +53,6 @@ public class WebConfig implements WebMvcConfigurer {
         StringHttpMessageConverter stringHttpMessageConverter = new StringHttpMessageConverter(StandardCharsets.UTF_8);
         stringHttpMessageConverter.setWriteAcceptCharset(false);
         return stringHttpMessageConverter;
-    }
-
-    @Bean
-    public CharacterEncodingFilter characterEncodingFilter() {
-        CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
-        characterEncodingFilter.setForceEncoding(true);
-        characterEncodingFilter.setEncoding("UTF-8");
-        characterEncodingFilter.setForceRequestEncoding(true);
-        characterEncodingFilter.setForceRequestEncoding(true);
-        return characterEncodingFilter;
     }
 
     @Override

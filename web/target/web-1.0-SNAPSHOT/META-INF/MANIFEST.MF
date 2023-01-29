@@ -2,4 +2,8 @@ Manifest-Version: 1.0
 Created-By: IntelliJ IDEA
 Built-By: Александр
 Build-Jdk: 1.8.0_251
+Implementation-Title: socnet
+Implementation-Version: 1.0-SNAPSHOT
+Implementation-Vendor-Id: com.getjavajob.training.yakovleva.webSocial
+Main-Class: ${start-class}
 

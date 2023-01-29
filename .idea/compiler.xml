@@ -8,13 +8,21 @@
         <outputRelativeToContentRoot value="true" />
         <module name="webSocial" />
         <module name="domain" />
-        <module name="service" />
-        <module name="webapp" />
         <module name="dao" />
+        <module name="webapp" />
+        <module name="service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="8">
       <module name="web" target="1.8" />
     </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="dao" options="-parameters" />
+      <module name="domain" options="-parameters" />
+      <module name="service" options="-parameters" />
+      <module name="webSocial" options="-parameters" />
+    </option>
   </component>
 </project>
