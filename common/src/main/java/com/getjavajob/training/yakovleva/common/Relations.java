@@ -7,7 +7,7 @@ import java.util.Objects;
 @Entity
 @IdClass(RelationId.class)
 @Table(name = "relations")
-public class Relations {
+public class Relations implements Serializable {
     @Id
     @Column(name = "account_id", insertable = false, updatable = false)
     private int accountId;
@@ -60,6 +60,7 @@ public class Relations {
     public int hashCode() {
         return Objects.hash(accountId, friendId);
     }
+
 }
 
 @Embeddable

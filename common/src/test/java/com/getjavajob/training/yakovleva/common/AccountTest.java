@@ -1,7 +1,7 @@
 package com.getjavajob.training.yakovleva.common;
 
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 class AccountTest {
     private String expectedString = "test";

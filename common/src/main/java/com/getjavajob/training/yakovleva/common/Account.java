@@ -1,6 +1,7 @@
 package com.getjavajob.training.yakovleva.common;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.getjavajob.training.yakovleva.common.Enum.Role;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -274,7 +275,6 @@ public class Account implements Serializable {
                 ", phones=" + phones +
                 ", icq=" + icq +
                 ", photoFileName='" + photoFileName + '\'' +
-//                ", photo=" + photo.length +
                 ", addressHome='" + addressHome + '\'' +
                 ", addressJob='" + addressJob + '\'' +
                 ", email='" + email + '\'' +

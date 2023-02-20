@@ -17,8 +17,8 @@
 <%@ include file="../navbar.jsp" %>
 <main role="main">
     <form method="post" class="modal">
-        <br>name: <input name="name"/>
-        <br><input type="submit" value="Submit"/>
+        <br>Имя: <input name="name"/>
+        <br><input type="submit" value="Поиск"/>
     </form>
     <form method="post" class="modal">
         <div>
@@ -35,7 +35,6 @@
                             <button type="submit" name="friendId" value="${account.id}"/>
                             добавить
                         </td>
-                            <%--                        <td><input type="submit" name="button1" value="да"/></td>--%>
                     </tr>
                 </c:forEach>
             </table>

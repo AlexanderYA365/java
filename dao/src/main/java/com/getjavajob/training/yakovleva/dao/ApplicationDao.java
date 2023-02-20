@@ -54,7 +54,14 @@ public class ApplicationDao {
                 criteriaBuilder.equal(from.get("applicantId"), group.getGroupId()),
                 criteriaBuilder.equal(from.get("recipientId"), recipientId),
                 criteriaBuilder.equal(from.get("applicationType"), 0)));
-        return entityManager.createQuery(criteriaQuery).getSingleResult();
+        List<Application> application = entityManager.createQuery(criteriaQuery).getResultList();
+        if (application.size() != 0) {
+            logger.info("application = {}", application);
+            return application.get(0);
+        } else {
+            logger.info("application == null");
+            return new Application(0, ApplicationType.GROUP, 0, 0, ApplicationStatusType.REJECTED);
+        }
     }
 
     public Application get(Relations relations) {
@@ -74,7 +81,7 @@ public class ApplicationDao {
             return application.get(0);
         } else {
             logger.info("application.size() =>else = {}", application.size());
-            return new Application(0, ApplicationType.GROUP, 0, 0, ApplicationStatusType.REJECTED);
+            return new Application(0, ApplicationType.USER, 0, 0, ApplicationStatusType.REJECTED);
         }
     }
 

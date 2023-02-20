@@ -41,8 +41,10 @@
     </div>
     <br>
 
-    <form method="post">
-        <button type="submit" name="write-message">Написать сообщение</button>
+    <form action="account-message" method="POST">
+        <button type="submit" name="selectUser" value=${friendAccount.id}>
+            Написать сообщение
+        </button>
     </form>
 
     <c:if test="${friendFlag == 1}">
@@ -60,11 +62,7 @@
     </form>
     </c:if>
     <c:if test="${friendFlag == 0}">
-        <%--    Вы можете просматривать страницу, оставлять сообщения на стене--%>
-
-    <!------страница видна пользователю-->
     <br>
-
     </c:if>
     <br>
     <div class="modal">

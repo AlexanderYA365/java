@@ -92,7 +92,7 @@ public class GroupService {
     @Transactional
     public boolean insertAccountGroup(Group group, int accountId) {
         logger.info("insertAccountGroup(group = {}, accountId = {})", group, accountId);
-        return groupDao.insertAccount(group, accountId);
+        return groupDao.insertIdGroupCreator(group, accountId);
     }
 
 }

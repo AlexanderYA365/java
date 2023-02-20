@@ -39,9 +39,13 @@
         <br>email: ${account.email}
         <br>Обо мне: ${account.aboutMe}
         <br/>
-        <button onclick="location.href='edit-account-settings'">Изменить данные пользователя</button>
+        <form method="GET" action="edit-account-settings">
+            <button>Изменить данные пользователя</button>
+        </form>
         <br/>
-        <button onclick="location.href='save-account-settings'">Сохранить профиль</button>
+        <form method="GET" action="save-account-settings">
+            <button>Сохранить профиль</button>
+        </form>
         <br/>
         <form method="POST" enctype="multipart/form-data" action="update-account-settings">
             Выберите файл для загрузки: <input type="file" name="uploadXml">

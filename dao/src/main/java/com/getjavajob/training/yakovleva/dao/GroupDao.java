@@ -98,7 +98,7 @@ public class GroupDao {
         CriteriaQuery<Group> criteriaQuery = criteriaBuilder.createQuery(Group.class);
         Root<Group> from = criteriaQuery.from(Group.class);
         criteriaQuery.select(from);
-        criteriaQuery.where(criteriaBuilder.equal(from.get("accountId"), account_id));
+        criteriaQuery.where(criteriaBuilder.equal(from.get("idGroupCreator"), account_id));
         return entityManager.createQuery(criteriaQuery).getResultList();
     }
 
@@ -118,7 +118,7 @@ public class GroupDao {
     }
 
     @Transactional
-    public boolean insertAccount(Group group, int accountId) {
+    public boolean insertIdGroupCreator(Group group, int accountId) {
         logger.info("GroupDao.insertAccount(group = {}, accountId = {})", group, accountId);
         group.setIdGroupCreator(accountId);
         entityManager.merge(group);

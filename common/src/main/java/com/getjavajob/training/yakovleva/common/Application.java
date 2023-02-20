@@ -64,6 +64,10 @@ public class Application implements Serializable {
         this.applicationType = ApplicationType.values()[status];
     }
 
+    public void setApplicationType(ApplicationType applicationType) {
+        this.applicationType = applicationType;
+    }
+
     public int getApplicantId() {
         return applicantId;
     }
@@ -78,6 +82,10 @@ public class Application implements Serializable {
 
     public void setStatus(int status) {
         this.status = ApplicationStatusType.values()[status];
+    }
+
+    public void setStatus(ApplicationStatusType applicationStatusType) {
+        this.status = applicationStatusType;
     }
 
     @Override

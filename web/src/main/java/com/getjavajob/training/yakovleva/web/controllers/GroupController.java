@@ -41,6 +41,47 @@ public class GroupController {
         logger.info("GroupController");
     }
 
+    @RequestMapping(value = "/group-admin-panel", method = RequestMethod.GET)
+    public ModelAndView groupAdminPanel(@ModelAttribute("members") GroupMembers members) {
+        logger.info("groupAdminPanel(members = {})", members);
+        ModelAndView modelAndView = new ModelAndView("/group/group-admin-panel");
+        modelAndView.addObject("members", members);
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/getGroupMembers", method = RequestMethod.GET)
+    @ResponseBody
+    public TableResult updateTable(final @RequestParam("draw") int draw,
+                                   final @RequestParam("start") int start,
+                                   final @RequestParam("length") int length,
+                                   @SessionAttribute("members") GroupMembers members) {
+        logger.info("updateTable(draw = {}, start = {}, length = {})", draw, start, length, members);
+        List<GroupMembers> groupMembers = groupMembersRepository.getMembersByGroup(members.getGroup());
+        long max = groupMembers.size();
+        TableResult tableResult = new TableResult(draw, max, max, groupMembers);
+        return tableResult;
+    }
+
+    @RequestMapping(value = "/update-role-member/{id}/{role}",
+            produces = "application/json",
+            method = RequestMethod.GET)
+    public void updateRole(@PathVariable String id, @PathVariable String role,
+                           @SessionAttribute("members") GroupMembers members) {
+        logger.info("updateRole(id = {}, role = {}, members = {})", id, role, members.getGroup());
+        GroupRole groupRole = GroupRole.valueOf(role);
+        groupMembersRepository.updateRoleGroupMembers(groupRole, Integer.valueOf(id));
+    }
+
+    @RequestMapping(value = "/delete-member/{id}",
+            produces = "application/json",
+            method = {RequestMethod.DELETE, RequestMethod.GET})
+    public void deleteMember(@PathVariable String id,
+                             @SessionAttribute("members") GroupMembers members) {
+        logger.info("deleteMember(id = {}, members = {})", id, members.getGroup());
+        groupMembersRepository.deleteMemberFromGroupMembers(Integer.valueOf(id), members.getGroup().getGroupId());
+
+    }
+
     @RequestMapping(value = "/account-find-group", method = RequestMethod.GET)
     public ModelAndView findGroupView() {
         logger.info("findGroupView()");
@@ -124,6 +165,32 @@ public class GroupController {
         return flag;
     }
 
+    @RequestMapping(value = "/group-add-members", method = RequestMethod.POST)
+    public ModelAndView addMembers(@ModelAttribute("account") Account account,
+                                   @ModelAttribute("members") GroupMembers groupMembers) {
+        logger.info("addMembers(account = {}, groupMembers = {})", account, groupMembers);
+        try {
+            GroupMembers newMember = new GroupMembers();
+            Application application = new Application();
+            application.setApplicantId(groupMembers.getGroup().getGroupId());
+            application.setRecipientId(account.getId());
+            application.setApplicationType(ApplicationType.GROUP);
+            application.setStatus(ApplicationStatusType.CONFIRMATION);
+            applicationService.create(application);
+            newMember.setMember(account);
+            newMember.setGroup(groupService.get(groupMembers.getGroup().getGroupId()));
+            logger.info("groupMembers.getGroup() = {}", groupMembers.getGroup());
+            newMember.setGroupRole(GroupRole.SUBSCRIBER);
+            logger.info("newMember = {}", newMember);
+            groupMembersRepository.save(newMember);
+            logger.info("application = {}", application);
+            logger.info("newMember = {}", newMember);
+        } catch (Exception ex) {
+            logger.info("Exception - " + ex);
+        }
+        return new ModelAndView("main");
+    }
+
     @RequestMapping(value = "/create-group", method = RequestMethod.GET)
     public ModelAndView createGroup() {
         logger.info("createGroup()");
@@ -168,23 +235,27 @@ public class GroupController {
     }
 
     @RequestMapping(value = "/show-group", method = RequestMethod.GET)
-    public ModelAndView viewGroup(@ModelAttribute("account") Account account,
+    public ModelAndView viewGroup(@SessionAttribute("account") Account account,
                                   @ModelAttribute("groupId") int idGroup) {
         logger.info("viewGroup(accountId - {}, idGroup - {})", account.getId(), idGroup);
         ModelAndView modelAndView = new ModelAndView("/group/show-group");
         try {
             Group group = groupService.get(idGroup);
             Application application = applicationService.getGroupAccount(group, account.getId());
+            int groupFlag = application.getId() != 0 ? application.getStatus() : 3;
             List<GroupMembers> members = groupMembersRepository.getMembersByGroup(group);
             List<Message> groupMessages = messageService.getMessages(group);
             modelAndView.addObject("group", group);
+            modelAndView.addObject("account", account);
             modelAndView.addObject("groupMessages", groupMessages);
             modelAndView.addObject("members", members);
             modelAndView.addObject("application", application);
+            modelAndView.addObject("groupFlag", groupFlag);
             logger.info("groupMessages - {}", groupMessages);
             logger.info("groups = {}", group);
             logger.info("members - {}", members);
             logger.info("application = {}", application);
+            logger.info("groupFlag = {}", groupFlag);
         } catch (Exception e) {
             logger.error("Exception - " + e);
         }
@@ -201,6 +272,62 @@ public class GroupController {
         logger.info("groupMembers - {}", groupMembers);
         logger.info("accountId - {}", account.getId());
         return modelAndView;
+    }
+
+    class TableResult {
+        private int draw;
+        private long recordsTotal;
+        private long recordsFiltered;
+        private List<GroupMembers> data;
+
+        public TableResult(int draw, long recordsTotal, long recordsFiltered, List<GroupMembers> data) {
+            this.draw = draw;
+            this.recordsTotal = recordsTotal;
+            this.recordsFiltered = recordsFiltered;
+            this.data = data;
+        }
+
+        public int getDraw() {
+            return draw;
+        }
+
+        public void setDraw(int draw) {
+            this.draw = draw;
+        }
+
+        public long getRecordsTotal() {
+            return recordsTotal;
+        }
+
+        public void setRecordsTotal(int recordsTotal) {
+            this.recordsTotal = recordsTotal;
+        }
+
+        public long getRecordsFiltered() {
+            return recordsFiltered;
+        }
+
+        public void setRecordsFiltered(int recordsFiltered) {
+            this.recordsFiltered = recordsFiltered;
+        }
+
+        public List<GroupMembers> getData() {
+            return data;
+        }
+
+        public void setData(List<GroupMembers> data) {
+            this.data = data;
+        }
+
+        @Override
+        public String toString() {
+            return "TableResult{" +
+                    "draw=" + draw +
+                    ", recordsTotal=" + recordsTotal +
+                    ", recordsFiltered=" + recordsFiltered +
+                    ", data=" + data +
+                    '}';
+        }
     }
 
 }

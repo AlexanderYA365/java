@@ -1,6 +1,7 @@
 package com.getjavajob.training.yakovleva.web.controllers;
 
 import com.getjavajob.training.yakovleva.Repository.GroupMembersRepository;
+import com.getjavajob.training.yakovleva.common.Enum.GroupRole;
 import com.getjavajob.training.yakovleva.service.AccountService;
 import com.getjavajob.training.yakovleva.service.ApplicationService;
 import com.getjavajob.training.yakovleva.service.GroupService;
@@ -32,6 +33,8 @@ public class TestController {
     @RequestMapping(value = "/aaa", method = RequestMethod.GET)
     public ModelAndView a() {
         logger.info("a()");
+        GroupRole role = GroupRole.valueOf("MEMBER");
+        groupMembersRepository.updateRoleGroupMembers(role, 17);
         ModelAndView modelAndView = new ModelAndView("all-accounts");
         return modelAndView;
     }

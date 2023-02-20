@@ -1,7 +1,7 @@
 package com.getjavajob.training.yakovleva.service;
 
 import com.getjavajob.training.yakovleva.common.Account;
-import com.getjavajob.training.yakovleva.common.Role;
+import com.getjavajob.training.yakovleva.common.Enum.Role;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

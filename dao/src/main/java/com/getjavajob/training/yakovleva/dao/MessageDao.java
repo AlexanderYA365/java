@@ -121,6 +121,15 @@ public class MessageDao {
         return entityManager.createQuery(query).getResultList();
     }
 
+    public List<Message> getAllMessages() {
+        logger.info("MessageDao.getAllMessages()");
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Message> query = criteriaBuilder.createQuery(Message.class);
+        Root<Message> root = query.from(Message.class);
+        query.select(root);
+        return entityManager.createQuery(query).getResultList();
+    }
+
     @Transactional
     public boolean delete(int id) {
         logger.info("MessageDao.delete(id = {})", id);

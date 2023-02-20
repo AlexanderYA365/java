@@ -3,11 +3,12 @@ package com.getjavajob.training.yakovleva.common;
 import com.getjavajob.training.yakovleva.common.Enum.GroupRole;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
 @Table(name = "group_members")
-public class GroupMembers {
+public class GroupMembers implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, updatable = false)

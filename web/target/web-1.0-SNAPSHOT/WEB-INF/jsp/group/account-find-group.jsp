@@ -17,8 +17,8 @@
 <%@ include file="../navbar.jsp" %>
 <main role="main">
     <form method="post">
-        <br>GroupName: <input name="GroupName"/>
-        <br><input type="submit" value="Submit"/>
+        <br>Имя группы: <input name="GroupName"/>
+        <br><input type="submit" value="Поиск"/>
     </form>
     <form method="post">
         <div>

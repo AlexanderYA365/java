@@ -15,25 +15,62 @@
 </head>
 <body>
 <%@ include file="../navbar.jsp" %>
-<br>
-<br>
-<br>
+<c:if test="${group.idGroupCreator == account.id}">
+    <form:form action="group-admin-panel" class="modal-start" method="GET">
+        <button type="submit">Панель управления</button>
+    </form:form>
+</c:if>
+
 <main role="main">
-    <c:if test="${application.status == 1}">
-        Ваша заявка на рассмотрении
-        <!------видно только членов группы если новенький? или только добавляться в группу может?-->
+    <c:if test="${groupFlag >= 2}">
+        <form:form action="group-add-members" class="modal" method="post">
+            <button type="submit"> Подать заявку на добавление в группу</button>
+        </form:form>
+        <c:if test="${groupFlag == 2}">
+            <br>
+            Вам отказано в просмотре страницы, пользователь отклонил Вашу заявку
+        </c:if>
     </c:if>
-    <c:if test="${application.status == 2}">
-        Вам отказано во вступлении в группу
-        <!------видно только членов группы если новенький? или только добавляться в группу может?-->
-    </c:if>
-    <c:if test="${application.status == 0}">
-        Ваша заявка принята
-        <!------видно только членов группы если новенький? или только добавляться в группу может?-->
-    </c:if>
-    <br>Группа - ${members.get(0).group.groupName}
-    <br>Описание группы - ${members.get(0).group.info}
     <br>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                Группа - ${members.get(0).group.groupName}
+                Описание группы - ${members.get(0).group.info}
+            </div>
+            <div class="col-6 col-md-4">
+                <br>Участники:
+                <table>
+                    <tr>
+                        <th>Имя</th>
+                        <th>Фамилия</th>
+                        <th>Должность</th>
+                    </tr>
+                    <c:forEach var="member" items="${members}">
+                        <tr>
+                            <td><c:out value="${member.member.name}"/></td>
+                            <td><c:out value="${member.member.lastName}"/></td>
+                            <c:if test="${member.groupRole == 'MEMBER'}">
+                                <td>Участник</td>
+                            </c:if>
+                            <c:if test="${member.groupRole == 'ADMIN'}">
+                                <td>Администратор</td>
+                            </c:if>
+                            <c:if test="${member.groupRole == 'MODER'}">
+                                <td>Модератор</td>
+                            </c:if>
+                            <c:if test="${member.groupRole == 'SUBSCRIBER'}">
+                                <td>Подписавщийся</td>
+                            </c:if>
+                        </tr>
+                    </c:forEach>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
     <div class="modal">
         <br>Участники:
         <table>
@@ -55,11 +92,13 @@
                     <c:if test="${member.groupRole == 'MODER'}">
                         <td>Модератор</td>
                     </c:if>
+                    <c:if test="${member.groupRole == 'SUBSCRIBER'}">
+                        <td>Подписавщийся</td>
+                    </c:if>
                 </tr>
             </c:forEach>
         </table>
     </div>
-
     <br>
     <div class="modal">
         <table>
@@ -78,15 +117,20 @@
         </table>
     </div>
     <br>
-    <form:form action="group-add-message" class="modal" method="post">
-        <textarea name="NewWallMessage" cols="40" rows="3"></textarea>
-        <button type="submit">отправить</button>
-    </form:form>
-
-    <form:form action="delete-group" class="modal" method="post">
-        <button type="submit" value="${members.get(0).group.groupId}" name="groupId">Удалить группу</button>
-    </form:form>
-
+    <c:if test="${groupFlag == 0}">
+        <form:form action="group-add-message" class="modal" method="post">
+            <textarea name="NewWallMessage" cols="40" rows="3"></textarea>
+            <button type="submit">отправить</button>
+        </form:form>
+        <form:form action="delete-members" class="modal" method="post">
+            <button type="submit" value="${members.get(0).group.groupId}" name="groupId">Выйти из группы</button>
+        </form:form>
+    </c:if>
+    <c:if test="${group.idGroupCreator == account.id}">
+        <form:form action="delete-group" class="modal" method="post">
+            <button type="submit" value="${members.get(0).group.groupId}" name="groupId">Удалить группу</button>
+        </form:form>
+    </c:if>
 </main>
 </body>
 </html>

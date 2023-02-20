@@ -10,7 +10,7 @@
 --%>
 <html>
 <head>
-    <title>All Accounts</title>
+    <title>Все аккаунты</title>
     <link href="${pageContext.request.contextPath}/resources/css/style.css" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/datatables.min.css"/>
 </head>
@@ -42,11 +42,14 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/datatables.min.js"></script>
 <script>
     $(document).ready(function () {
+        var url = window.location;
+        var string = url.toString();
+        var newUrl = string.substring(0, string.lastIndexOf("/"));
         const table = $('#admin').DataTable({
             processing: true,
             serverSide: true,
             ajax: {
-                url: '/socnet/admin/getAccounts',
+                url: newUrl + '/admin/getAccounts',
             },
             columns: [
                 {data: 'id'},
@@ -67,7 +70,7 @@
             var id = data.id
             $.ajax({
                 type: "DELETE",
-                url: '/socnet/admin/delete/' + id
+                url: newUrl + '/admin/delete/' + id
             });
             table.ajax.reload(function (json) {
                 $('#myInput').val(json.lastInput);

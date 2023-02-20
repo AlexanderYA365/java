@@ -37,12 +37,15 @@
 <script src="${pageContext.request.contextPath}/resources/js/bootstrap.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/datatables.min.js"></script>
 <script>
+    var url = window.location;
+    var string = url.toString();
+    var newUrl = string.substring( 0, string.lastIndexOf("/") );
     $(document).ready(function () {
         $('#search-result').dataTable({
             processing: true,
             serverSide: true,
             ajax: {
-                url: '/socnet/getSearch',
+                url: newUrl + '/getSearch',
                 dataSrc: 'searchResults'
             },
             columns: [
@@ -56,7 +59,7 @@
                     name: 'name',
                     render: function (data, type, row, meta) {
                         if (row.isGroup) {
-                            return '<a class=" d-inline-block fw-normal w-100 h-100 pe-auto" href="show-group?id=' + row.id + '">' + row.name + '</a>';
+                            return '<a class=" d-inline-block fw-normal w-100 h-100 pe-auto" href="show-group?groupId=' + row.id + '">' + row.name + '</a>';
                         } else {
                             return '<a class=" d-inline-block fw-normal w-100 h-100 pe-auto" href="show-friend?id=' + row.id + '">' + row.name + '</a>';
                         }
@@ -67,7 +70,7 @@
                     name: 'surname',
                     render: function (data, type, row, meta) {
                         if (row.isGroup) {
-                            return '<a class=" d-inline-block fw-normal w-100 h-100 pe-auto" href="show-group?id=' + row.id + '">' + '</a>';
+                            return '<a class=" d-inline-block fw-normal w-100 h-100 pe-auto" href="show-group?groupId=' + row.id + '">' + '</a>';
                         } else {
                             return '<a class=" d-inline-block fw-normal w-100 h-100 pe-auto" href="show-friend?id=' + row.id + '">' + row.surname + '</a>';
                         }
@@ -78,7 +81,7 @@
                     name: 'lastName',
                     render: function (data, type, row, meta) {
                         if (row.isGroup) {
-                            return '<a class=" d-inline-block fw-normal w-100 h-100 pe-auto" href="show-group?id=' + row.id + '">' + '</a>';
+                            return '<a class=" d-inline-block fw-normal w-100 h-100 pe-auto" href="show-group?groupId=' + row.id + '">' + '</a>';
                         } else {
                             return '<a class=" d-inline-block fw-normal w-100 h-100 pe-auto" href="show-friend?id=' + row.id + '">' + row.lastName + '</a>';
                         }
