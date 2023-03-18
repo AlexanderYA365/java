@@ -39,8 +39,11 @@
         <br>email: ${account.email}
         <br>Обо мне: ${account.aboutMe}
         <br/>
-        <form method="GET" action="edit-account-settings">
-            <button>Изменить данные пользователя</button>
+    </form>
+
+    <div class="modal">
+    <form method="GET" action="${pageContext.request.contextPath}/edit-account-settings">
+            <button onclick="location.href='${pageContext.request.contextPath}/edit-account-settings'"> Изменить данные пользователя</button>
         </form>
         <br/>
         <form method="GET" action="save-account-settings">
@@ -51,7 +54,7 @@
             Выберите файл для загрузки: <input type="file" name="uploadXml">
             <br><input type="submit" value="сохранить"/>
         </form>
-    </form>
+    </div>
 </main>
 </body>
 </html>

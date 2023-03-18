@@ -32,8 +32,17 @@ public class RelationsDao {
         return true;
     }
 
+    public List<Relations> getAll() {
+        logger.info("getAll()");
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Relations> criteriaQuery = criteriaBuilder.createQuery(Relations.class);
+        Root<Relations> from = criteriaQuery.from(Relations.class);
+        CriteriaQuery<Relations> nameQuery = criteriaQuery.select(from);
+        return entityManager.createQuery(nameQuery).getResultList();
+    }
+
     public List<Relations> getByAccountID(Relations relations) {
-        logger.info("RelationsDao.getByAccountID(relations = {})", relations);
+        logger.info("getByAccountID(relations = {})", relations);
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Relations> criteriaQuery = criteriaBuilder.createQuery(Relations.class);
         Root<Relations> from = criteriaQuery.from(Relations.class);

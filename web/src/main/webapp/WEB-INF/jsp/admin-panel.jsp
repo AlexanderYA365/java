@@ -21,8 +21,6 @@
 <br>
 <br>
 <br>
-
-
 <table border="0" margin="0" padding="0" width="100%"
        class="dataTables_wrapper" id="admin">
     <thead>

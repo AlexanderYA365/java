@@ -28,36 +28,41 @@ public class ApplicationService {
 
     @Transactional
     public boolean create(Application application) {
-        logger.info("create(application - {})", application);
+        logger.info("create(application = {})", application);
         try {
             return applicationDao.create(application);
         } catch (Exception ex) {
-            logger.error("create Exception - {}", ex);
+            logger.error("create Exception = {}", ex);
         }
         return false;
     }
 
     @Transactional
     public boolean update(Application application) {
-        logger.info("update(application - {})", application);
+        logger.info("update(application = {})", application);
         try {
             applicationDao.update(application);
             return true;
         } catch (Exception ex) {
-            logger.error("update Exception - {}", ex);
+            logger.error("update Exception = {}", ex);
         }
         return false;
     }
 
     @Transactional
     public boolean delete(Application application) {
-        logger.info("delete(application - {})", application);
+        logger.info("delete(application = {})", application);
         return applicationDao.delete(application);
     }
 
     public Application get(int idApplication) {
         logger.info("get(idApplication - {})", idApplication);
         return applicationDao.get(idApplication);
+    }
+
+    public Application get(int applicantId, int recipientId) {
+        logger.info("get(applicantId = {}, recipientId = {})", applicantId, recipientId);
+        return applicationDao.get(applicantId, recipientId);
     }
 
     public Application getGroupAccount(Group group, int recipientId) {

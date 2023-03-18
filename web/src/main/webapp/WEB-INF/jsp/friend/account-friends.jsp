@@ -16,6 +16,8 @@
 <%@ include file="../navbar.jsp" %>
 <br>
 <br>
+<button onclick="location.href='${pageContext.request.contextPath}/friend-requests'">Заявки в друзья</button>
+
 <br>
 <main role="main">
     <form class="modal">

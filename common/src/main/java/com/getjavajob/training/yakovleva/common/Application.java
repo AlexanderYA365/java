@@ -92,10 +92,10 @@ public class Application implements Serializable {
     public String toString() {
         return "Application{" +
                 "id=" + id +
-                ", applicationType=" + applicationType.getStatus() +
+                ", applicationType=" + applicationType +
                 ", applicantId=" + applicantId +
                 ", recipientId=" + recipientId +
-                ", status=" + status.getStatus() +
+                ", status=" + status +
                 '}';
     }
 

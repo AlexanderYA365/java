@@ -54,6 +54,31 @@ public class SearchController {
         return new TableResult(draw, size, size, searchResults);
     }
 
+    @RequestMapping(value = "/get-accounts", method = RequestMethod.GET)
+    @ResponseBody
+    public TableResult getFoundAccount(final @RequestParam("draw") int draw,
+                                       final @RequestParam("start") int start,
+                                       final @RequestParam("length") int length) {
+        logger.info("getFoundAccount(draw = {}, start = {}, length = {})", draw, start, length);
+        logger.info("searchP = {}", searchParameter);
+        List<SearchResult> searchResults = foundAccount(searchParameter, start, length);
+        long size = accountService.getSizeRecords(searchParameter);
+        logger.info("records size = {}", size);
+        return new TableResult(draw, size, size, searchResults);
+    }
+
+    private List<SearchResult> foundAccount(String criteria, int start, int end) {
+        logger.info("criteria = {}", criteria);
+        List<Account> accounts = accountService.getAccountsCriteriaLimit(start, end, criteria);
+        List<SearchResult> searchResults = new ArrayList<>();
+        for (Account account : accounts) {
+            searchResults.add(new SearchResult(account.getId(), account.getName(),
+                    account.getSurname(), account.getLastName(), false));
+        }
+        logger.info("searchResults = {}", searchResults);
+        return searchResults;
+    }
+
     private List<SearchResult> searchCriteria(String criteria, int start, int end) {
         logger.info("criteria = {}", criteria);
         List<Account> accounts = accountService.getAccountsCriteriaLimit(start, end, criteria);

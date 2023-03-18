@@ -1,5 +1,7 @@
 package com.getjavajob.training.yakovleva.common;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
@@ -9,11 +11,14 @@ import java.util.Objects;
 @Table(name = "relations")
 public class Relations implements Serializable {
     @Id
-    @Column(name = "account_id", insertable = false, updatable = false)
+    @Column(name = "account_id")
     private int accountId;
     @Id
     @Column(name = "friend_id")
     private int friendId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Account account;
 
     public Relations() {
     }
@@ -65,8 +70,8 @@ public class Relations implements Serializable {
 
 @Embeddable
 class RelationId implements Serializable {
-    int accountId;
-    int friendId;
+    private int accountId;
+    private int friendId;
 
     public RelationId() {
     }

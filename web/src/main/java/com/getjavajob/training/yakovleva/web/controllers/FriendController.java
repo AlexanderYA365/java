@@ -2,6 +2,8 @@ package com.getjavajob.training.yakovleva.web.controllers;
 
 import com.getjavajob.training.yakovleva.common.Account;
 import com.getjavajob.training.yakovleva.common.Application;
+import com.getjavajob.training.yakovleva.common.Enum.ApplicationStatusType;
+import com.getjavajob.training.yakovleva.common.Enum.ApplicationType;
 import com.getjavajob.training.yakovleva.common.Enum.MessageType;
 import com.getjavajob.training.yakovleva.common.Message;
 import com.getjavajob.training.yakovleva.common.Relations;
@@ -9,6 +11,7 @@ import com.getjavajob.training.yakovleva.service.AccountService;
 import com.getjavajob.training.yakovleva.service.ApplicationService;
 import com.getjavajob.training.yakovleva.service.MessageService;
 import com.getjavajob.training.yakovleva.service.RelationsService;
+import com.getjavajob.training.yakovleva.web.controllers.utils.FriendTableUtils;
 import com.getjavajob.training.yakovleva.web.controllers.utils.SocialNetworkUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -27,10 +30,11 @@ import java.util.List;
 @SessionAttributes({"account", "friend"})
 public class FriendController {
     private static final Logger logger = LogManager.getLogger(FriendController.class);
-    private RelationsService relationsService;
-    private ApplicationService applicationService;
-    private AccountService accountService;
-    private MessageService messageService;
+    private final RelationsService relationsService;
+    private final ApplicationService applicationService;
+    private final AccountService accountService;
+    private final MessageService messageService;
+    private Account friendAccount;
 
     @Autowired
     public FriendController(RelationsService relationsService,
@@ -81,13 +85,14 @@ public class FriendController {
                                        @RequestParam(value = "delete", required = false) String delete,
                                        @RequestParam(value = "add", required = false) String add) {
         logger.info("addApplication(id = {}, friend = {}, account = {}, writeMessage = {}, delete = {}, add = {})",
-                id, friend, account, writeMessage, delete, add);
+                id, friend.getId(), account.getId(), writeMessage, delete, add);
         Relations relations = new Relations(account.getId(), friend.getId());
-        Application application = applicationService.getAccount(relations);
         if (add != null) {
-            relationsService.create(relations);
+            addFriend(friend, account, relations);
         }
         if (delete != null) {
+            logger.info("delete friend");
+            Application application = applicationService.getAccount(relations);
             applicationService.delete(application);
             relationsService.deleteByAccountId(relations);
         }
@@ -99,6 +104,7 @@ public class FriendController {
             return modelAndView;
         }
         ModelAndView modelAndView = new ModelAndView("/friend/show-friend");
+        Application application = applicationService.getAccount(relations);
         int friendFlag = application.getId() != 0 ? application.getStatus() : 1;
         logger.info("friendFlag = {}", friendFlag);
         List<Message> messages = messageService.getWallMassageAccount(friend);
@@ -109,11 +115,43 @@ public class FriendController {
         return modelAndView;
     }
 
+    private void addFriend(Account friend, Account account, Relations relations) {
+        logger.info("add friend");
+        Application newApplication = new Application();
+        newApplication.setStatus(ApplicationStatusType.CONFIRMATION);
+        newApplication.setApplicationType(ApplicationType.USER);
+        newApplication.setRecipientId(friend.getId());
+        newApplication.setApplicantId(account.getId());
+        applicationService.create(newApplication);
+        relationsService.create(relations);
+    }
+
     @RequestMapping(value = "/add-friend-account", method = RequestMethod.GET)
     public ModelAndView addFriend() {
         logger.info("addFriend()");
-        ModelAndView modelAndView = new ModelAndView("/friend/add-friend-account");
-        return modelAndView;
+        return new ModelAndView("/friend/add-friend-account");
+    }
+
+    @RequestMapping(value = "/friend-requests", method = RequestMethod.GET)
+    public ModelAndView applicationFriends(@ModelAttribute("account") Account account) {
+        logger.info("applicationFriends()");
+        friendAccount = account;
+        return new ModelAndView("/friend/friend-requests");
+    }
+
+    @RequestMapping(value = "/get-friend-requests", method = RequestMethod.GET)
+    @ResponseBody
+    public FriendTableUtils getFriendRequests(final @RequestParam("draw") int draw,
+                                              final @RequestParam("start") int start,
+                                              final @RequestParam("length") int length) {
+        logger.info("getFriendRequests(draw = {}, start = {}, length = {})", draw, start, length);
+        logger.info("getFriendRequests(friendAccount = {})", friendAccount);
+        List<Account> friendRequests = accountService.getFriendRequests(friendAccount);
+        long size = friendRequests.size();
+        logger.info("records size = {}", size);
+        FriendTableUtils friendTableUtils = new FriendTableUtils(draw, size, size, friendRequests);
+        logger.info(friendTableUtils);
+        return friendTableUtils;
     }
 
     @RequestMapping(value = "/friend-add-wall-message", method = RequestMethod.POST)
@@ -148,12 +186,45 @@ public class FriendController {
         return modelAndView;
     }
 
+    @RequestMapping(value = "/delete-account/{id}",
+            produces = "application/json",
+            method = RequestMethod.GET)
+    public void deleteFriend(@PathVariable String id, @SessionAttribute("account") Account account) {
+        logger.info("deleteFriend(id = {}, account = {})", id, account);
+        Application application = new Application();
+        application.setApplicantId(Integer.parseInt(id));
+        application.setRecipientId(account.getId());
+        application.setStatus(ApplicationStatusType.REJECTED);
+        application.setApplicationType(ApplicationType.USER);
+        applicationService.delete(application);
+        Relations relations = new Relations(account.getId(), Integer.parseInt(id));
+        relationsService.deleteByAccountId(relations);
+    }
+
+    @RequestMapping(value = "/accept-application-friend/{id}",
+            produces = "application/json",
+            method = RequestMethod.GET)
+    public void acceptApplicationFriend(@PathVariable String id, @SessionAttribute("account") Account account) {
+        logger.info("acceptApplicationFriend(id = {}, account = {})", id, account);
+        Application application = new Application();
+        application.setApplicantId(Integer.parseInt(id));
+        application.setRecipientId(account.getId());
+        application.setStatus(ApplicationStatusType.ACCEPTED);
+        application.setApplicationType(ApplicationType.USER);
+        Application a = applicationService.get(application.getApplicantId(), application.getRecipientId());
+        Relations relations = new Relations(account.getId(), Integer.parseInt(id));
+        logger.info("relations = {}", relations);
+        relationsService.create(relations);
+        logger.info("application = {}", application);
+        logger.info("a = {}", a);
+        applicationService.update(a);
+    }
+
     @RequestMapping(value = "/account-friends", method = RequestMethod.POST)
     public ModelAndView friendsRedirect(@ModelAttribute("account") Account account,
-                                        @ModelAttribute Account friend) {
-        logger.info("friendsRedirect( account = {}, friend)", account, friend);
-        ModelAndView modelAndView = new ModelAndView("/friend/account-friends");
-        return modelAndView;
+                                        @ModelAttribute("friend") Account friend) {
+        logger.info("friendsRedirect( account = {}, friend = {})", account, friend);
+        return new ModelAndView("/friend/account-friends");
     }
 
     @RequestMapping(value = "/add-friend-account", method = RequestMethod.POST)

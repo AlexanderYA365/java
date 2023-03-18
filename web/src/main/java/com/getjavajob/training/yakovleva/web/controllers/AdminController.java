@@ -36,8 +36,7 @@ public class AdminController {
     @RequestMapping(value = "/admin-panel", method = RequestMethod.GET)
     public ModelAndView admin() {
         logger.info("admin()");
-        ModelAndView modelAndView = new ModelAndView("admin-panel");
-        return modelAndView;
+        return new ModelAndView("admin-panel");
     }
 
     @RequestMapping(value = "/getAccounts", method = RequestMethod.GET)
@@ -48,8 +47,7 @@ public class AdminController {
         logger.info("updateTable(draw = {}, start = {}, length = {})", draw, start, length);
         List<Account> accounts = accountService.getAllAccountsLimit(start, length);
         long max = accountService.getSizeRecords();
-        TableResult tableResult = new TableResult(draw, max, max, accounts);
-        return tableResult;
+        return new TableResult(draw, max, max, accounts);
     }
 
     class TableResult {

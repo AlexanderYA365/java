@@ -280,7 +280,7 @@ public class AccountController {
             account.setEmail(request.getParameter("email"));
             account.setAboutMe(request.getParameter("aboutMe"));
             account.setRole(getRoleFromForm(request));
-            account.setRelations(editAccount.getRelations());
+//            account.setRelations(editAccount.getRelations());
             account.setPhones(getPhonesFromForm(request, editAccount));
         } catch (Exception ex) {
             logger.error("setDataForm exception = " + ex);

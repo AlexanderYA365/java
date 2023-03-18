@@ -1,7 +1,6 @@
 package com.getjavajob.training.yakovleva.dao;
 
 import com.getjavajob.training.yakovleva.common.Account;
-import com.getjavajob.training.yakovleva.common.Relations;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Repository;
@@ -166,11 +165,12 @@ public class AccountDao {
         Root<Account> root = query.from(Account.class);
         query.select(root);
         query.where(criteriaBuilder.equal(root.get("id"), accountId));
-        List<Relations> relations = entityManager.createQuery(query).getSingleResult().getRelations();
+
+//        List<Relations> relations = entityManager.createQuery(query).getSingleResult().getRelations();
         List<Account> friends = new ArrayList<>();
-        for (Relations accountFriends : relations) {
-            friends.add(getAccount(accountFriends.getFriendId()));
-        }
+//        for (Relations accountFriends : relations) {
+//            friends.add(getAccount(accountFriends.getFriendId()));
+//        }
         return friends;
     }
 

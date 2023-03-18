@@ -37,6 +37,11 @@ public class RelationsService {
         return relationsDao.getByAccountID(relations);
     }
 
+    public List<Relations> getAll() {
+        logger.info("getAll()");
+        return relationsDao.getAll();
+    }
+
     public Relations getByFriendId(Relations relations) {
         logger.info("getByFriendId(Relations relations)");
         logger.debug("getByFriendId(relations = {})", relations);

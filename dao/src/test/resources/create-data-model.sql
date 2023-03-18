@@ -38,18 +38,14 @@ create table `group`
         foreign key (account_id) references account (account_id)
 );
 
-create table relations
-(
-    account_id int not null,
-    friend_id  int not null,
-    primary key (account_id, friend_id),
-    constraint relations_ibfk_1
-        foreign key (account_id) references account (account_id)
-            on delete cascade,
-    constraint relations_ibfk_2
-        foreign key (friend_id) references account (account_id)
-            on delete cascade
-);
+CREATE TABLE `relations` (
+  `account_id` int NOT NULL,
+  `friend_id` int NOT NULL,
+  KEY `account_id` (`account_id`),
+  KEY `friend_id` (`friend_id`),
+  CONSTRAINT `relations_ibfk_1` FOREIGN KEY (`account_id`) REFERENCES `account` (`account_id`) ON DELETE CASCADE,
+  CONSTRAINT `relations_ibfk_2` FOREIGN KEY (`friend_id`) REFERENCES `account` (`account_id`) ON DELETE CASCADE
+)
 
 create table massage
 (

@@ -1,8 +1,10 @@
 package com.getjavajob.training.yakovleva.service;
 
 import com.getjavajob.training.yakovleva.common.Account;
+import com.getjavajob.training.yakovleva.common.Application;
 import com.getjavajob.training.yakovleva.common.Phone;
 import com.getjavajob.training.yakovleva.dao.AccountDao;
+import com.getjavajob.training.yakovleva.dao.ApplicationDao;
 import com.getjavajob.training.yakovleva.dao.PhoneDao;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -10,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -17,12 +20,14 @@ public class AccountService {
     private static final Logger logger = LogManager.getLogger(AccountService.class);
     private AccountDao accountDao;
     private PhoneDao phoneDao;
+    private ApplicationDao applicationDao;
 
     @Autowired
-    public AccountService(AccountDao accountDao, PhoneDao phoneDao) {
+    public AccountService(AccountDao accountDao, PhoneDao phoneDao, ApplicationDao applicationDao) {
         logger.info("AccountService(AccountDao accountDao, PhoneDao phoneDao)");
         this.accountDao = accountDao;
         this.phoneDao = phoneDao;
+        this.applicationDao = applicationDao;
     }
 
     public AccountService() {
@@ -121,6 +126,16 @@ public class AccountService {
         logger.info("get(accountId = {})", accountId);
         Account account = accountDao.getAccount(accountId);
         return account;
+    }
+
+    public List<Account> getFriendRequests(Account account) {
+        logger.info("getFriendRequests(account = {})", account);
+        List<Application> applications = applicationDao.get(account);
+        List<Account> accounts = new ArrayList<>();
+        for (int i = 0; i < applications.size(); i++) {
+            accounts.add(accountDao.getAccount(applications.get(i).getApplicantId()));
+        }
+        return accounts;
     }
 
     public List<Account> getAllAccounts() {

@@ -1,5 +1,6 @@
 package com.getjavajob.training.yakovleva.dao;
 
+import com.getjavajob.training.yakovleva.common.Account;
 import com.getjavajob.training.yakovleva.common.Application;
 import com.getjavajob.training.yakovleva.common.Enum.ApplicationStatusType;
 import com.getjavajob.training.yakovleva.common.Enum.ApplicationType;
@@ -15,6 +16,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -42,6 +44,39 @@ public class ApplicationDao {
         criteriaQuery.select(from);
         criteriaQuery.where(criteriaBuilder.equal(from.get("id"), id));
         return entityManager.createQuery(criteriaQuery).getSingleResult();
+    }
+
+    public Application get(int applicantId, int recipientId) {
+        logger.info("ApplicationDao.get(applicantId = {}, recipientId = {})", applicantId, recipientId);
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Application> criteriaQuery = criteriaBuilder.createQuery(Application.class);
+        Root<Application> from = criteriaQuery.from(Application.class);
+        criteriaQuery.select(from);
+        criteriaQuery.where(criteriaBuilder.and(criteriaBuilder.equal(from.get("recipientId"), recipientId),
+                criteriaBuilder.equal(from.get("applicantId"), applicantId)));
+        return entityManager.createQuery(criteriaQuery).getSingleResult();
+    }
+
+    public List<Application> get(Account account) {
+        logger.info("ApplicationDao.getFriendRequests(account = {})", account);
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Application> criteriaQuery = criteriaBuilder.createQuery(Application.class);
+        Root<Application> from = criteriaQuery.from(Application.class);
+        criteriaQuery.select(from);
+        criteriaQuery.where(criteriaBuilder.and(
+                criteriaBuilder.equal(from.get("recipientId"), account.getId()),
+                criteriaBuilder.equal(from.get("status"), 1),
+                criteriaBuilder.equal(from.get("applicationType"), 1)));
+        List<Application> application = entityManager.createQuery(criteriaQuery).getResultList();
+        if (application.size() != 0) {
+            return application;
+        } else {
+            logger.info("application == null");
+            Application empty = new Application(0, ApplicationType.USER, 0, 0, ApplicationStatusType.ACCEPTED);
+            List<Application> emptyList = new ArrayList<>();
+            emptyList.add(empty);
+            return emptyList;
+        }
     }
 
     public Application get(Group group, int recipientId) {

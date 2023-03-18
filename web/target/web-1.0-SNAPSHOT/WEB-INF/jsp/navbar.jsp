@@ -65,14 +65,14 @@
         console.log(ui.item.value.id.toString())
         var url = window.location;
         var string = url.toString();
-        var newUrl = string.substring( 0, string.lastIndexOf("/") );
-        console.log('url - ' + newUrl );
+        var newUrl = string.substring(0, string.lastIndexOf("/"));
+        console.log('url - ' + newUrl);
         url = window.location.pathname;
         if (ui.item.value.isGroup) {
             console.log(ui.item.value.isGroup.toString())
-            document.location.href = newUrl +"/show-group?groupId=" + ui.item.value.id;
+            document.location.href = newUrl + "/show-group?groupId=" + ui.item.value.id;
         } else {
-            document.location.href = newUrl +"/show-friend?id=" + ui.item.value.id;
+            document.location.href = newUrl + "/show-friend?id=" + ui.item.value.id;
         }
     });
 

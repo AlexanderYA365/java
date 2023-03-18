@@ -39,7 +39,7 @@
 <script>
     var url = window.location;
     var string = url.toString();
-    var newUrl = string.substring( 0, string.lastIndexOf("/") );
+    var newUrl = string.substring(0, string.lastIndexOf("/"));
     $(document).ready(function () {
         $('#search-result').dataTable({
             processing: true,

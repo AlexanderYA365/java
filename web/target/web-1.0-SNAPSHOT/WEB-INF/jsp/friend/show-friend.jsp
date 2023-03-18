@@ -40,13 +40,12 @@
         о пользователе ${friendAccount.aboutMe}
     </div>
     <br>
-    ${friendAccount.id}
+
     <form action="account-message" method="POST">
-        <button type="submit" name="selectUser" value=${friendAccount.id}>Написать сообщение!!!
+        <button type="submit" name="selectUser" value=${friendAccount.id}>
+            Написать сообщение
         </button>
     </form>
-
-
 
     <c:if test="${friendFlag == 1}">
     <!------аватарка, информация пользователя, подать заявку-->
