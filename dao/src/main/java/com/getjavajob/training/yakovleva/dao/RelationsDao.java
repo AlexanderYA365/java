@@ -27,7 +27,7 @@ public class RelationsDao {
 
     @Transactional
     public boolean create(Relations relations) {
-        logger.info("RelationsDao.create(relations = {})", relations);
+        logger.info("create(relations = {})", relations);
         entityManager.merge(relations);
         return true;
     }
@@ -41,8 +41,8 @@ public class RelationsDao {
         return entityManager.createQuery(nameQuery).getResultList();
     }
 
-    public List<Relations> getByAccountID(Relations relations) {
-        logger.info("getByAccountID(relations = {})", relations);
+    public List<Relations> getByAccountId(Relations relations) {
+        logger.info("getByAccountId(relations = {})", relations);
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Relations> criteriaQuery = criteriaBuilder.createQuery(Relations.class);
         Root<Relations> from = criteriaQuery.from(Relations.class);
@@ -52,7 +52,7 @@ public class RelationsDao {
     }
 
     public Relations getByFriendId(Relations relations) {
-        logger.info("RelationsDao.getByFriendId(relations = {})", relations);
+        logger.info("getByFriendId(relations = {})", relations);
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Relations> criteriaQuery = criteriaBuilder.createQuery(Relations.class);
         Root<Relations> from = criteriaQuery.from(Relations.class);
@@ -65,7 +65,7 @@ public class RelationsDao {
 
     @Transactional
     public boolean update(Relations relations) {
-        logger.info("RelationsDao.update(relations = {})", relations);
+        logger.info("update(relations = {})", relations);
         entityManager.getTransaction().begin();
         entityManager.merge(relations);
         return true;
@@ -73,7 +73,7 @@ public class RelationsDao {
 
     @Transactional
     public boolean deleteByAccountId(Relations relations) {
-        logger.info("RelationsDao.deleteByAccountId(relations = {})", relations);
+        logger.info("deleteByAccountId(relations = {})", relations);
         entityManager.remove(relations);
         return true;
     }

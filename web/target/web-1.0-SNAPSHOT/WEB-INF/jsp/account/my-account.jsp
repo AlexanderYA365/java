@@ -42,8 +42,10 @@
     </form>
 
     <div class="modal">
-    <form method="GET" action="${pageContext.request.contextPath}/edit-account-settings">
-            <button onclick="location.href='${pageContext.request.contextPath}/edit-account-settings'"> Изменить данные пользователя</button>
+        <form method="GET" action="${pageContext.request.contextPath}/edit-account-settings">
+            <button onclick="location.href='${pageContext.request.contextPath}/edit-account-settings'"> Изменить данные
+                пользователя
+            </button>
         </form>
         <br/>
         <form method="GET" action="save-account-settings">

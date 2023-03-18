@@ -1,7 +1,7 @@
 package com.getjavajob.training.yakovleva.web.controllers;
 
 import com.getjavajob.training.yakovleva.Repository.GroupMembersRepository;
-import com.getjavajob.training.yakovleva.common.Relations;
+import com.getjavajob.training.yakovleva.common.Account;
 import com.getjavajob.training.yakovleva.service.AccountService;
 import com.getjavajob.training.yakovleva.service.ApplicationService;
 import com.getjavajob.training.yakovleva.service.GroupService;
@@ -39,13 +39,7 @@ public class TestController {
     @RequestMapping(value = "/aaa", method = RequestMethod.GET)
     public ModelAndView a() {
         logger.info("a()");
-        List<Relations> relationsList = relationsService.getAll();
-//        Relations relations = new Relations(1, 32);
-//        relationsService.create(relations);
-        Relations relations = relationsList.get(0);
-        relationsService.create(relations);
-        Relations relations1 = new Relations(1, 33);
-        relationsService.create(relations1);
+        List<Account> relationsList = accountService.getFriendsAccount(1);
         logger.info("all - {}", relationsList);
         ModelAndView modelAndView = new ModelAndView("all-accounts");
         return modelAndView;

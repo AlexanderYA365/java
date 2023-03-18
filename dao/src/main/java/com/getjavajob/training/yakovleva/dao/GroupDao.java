@@ -27,13 +27,13 @@ public class GroupDao {
 
     @Transactional
     public boolean create(Group group) {
-        logger.info("GroupDao.create(group = {})", group);
+        logger.info("create(group = {})", group);
         entityManager.merge(group);
         return true;
     }
 
     public List<Group> getGroups(int groupId) {
-        logger.info("GroupDao.getGroups(groupId = {})", groupId);
+        logger.info("getGroups(groupId = {})", groupId);
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Group> criteriaQuery = criteriaBuilder.createQuery(Group.class);
         Root<Group> from = criteriaQuery.from(Group.class);
@@ -43,7 +43,7 @@ public class GroupDao {
     }
 
     public Group get(int groupId) {
-        logger.info("GroupDao.getGroup(group_id = {})", groupId);
+        logger.info("getGroup(group_id = {})", groupId);
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Group> criteriaQuery = criteriaBuilder.createQuery(Group.class);
         Root<Group> from = criteriaQuery.from(Group.class);
@@ -53,7 +53,7 @@ public class GroupDao {
     }
 
     public Group get(String groupName) {
-        logger.info("GroupDao.getGroupByGroupName(groupName = {})", groupName);
+        logger.info("getGroupByGroupName(groupName = {})", groupName);
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Group> criteriaQuery = criteriaBuilder.createQuery(Group.class);
         Root<Group> from = criteriaQuery.from(Group.class);
@@ -63,7 +63,7 @@ public class GroupDao {
     }
 
     public List<Group> getAllGroups(String groupName) {
-        logger.info("GroupDao.getGroups(groupName = {})", groupName);
+        logger.info("getGroups(groupName = {})", groupName);
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Group> criteriaQuery = criteriaBuilder.createQuery(Group.class);
         Root<Group> from = criteriaQuery.from(Group.class);
@@ -73,7 +73,7 @@ public class GroupDao {
     }
 
     public List<Group> getCriteriaLimit(int start, int end, String criteriaName) {
-        logger.info("AccountDao.getAccountsCriteriaLimit(start = {}, end = {}, criteriaName = {})",
+        logger.info("getAccountsCriteriaLimit(start = {}, end = {}, criteriaName = {})",
                 start, end, criteriaName);
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Group> cr = cb.createQuery(Group.class);
@@ -84,7 +84,7 @@ public class GroupDao {
     }
 
     public List<Group> getAllGroups() {
-        logger.info("GroupDao.getGroups()");
+        logger.info("getGroups()");
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Group> cr = cb.createQuery(Group.class);
         Root<Group> root = cr.from(Group.class);
@@ -93,7 +93,7 @@ public class GroupDao {
     }
 
     public List<Group> getGroupsAccount(int account_id) {
-        logger.info("GroupDao.getGroupsAccount(account_id = {})", account_id);
+        logger.info("getGroupsAccount(account_id = {})", account_id);
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Group> criteriaQuery = criteriaBuilder.createQuery(Group.class);
         Root<Group> from = criteriaQuery.from(Group.class);
@@ -104,14 +104,14 @@ public class GroupDao {
 
     @Transactional
     public boolean update(Group group) {
-        logger.info("GroupDao.update(group = {})", group);
+        logger.info("update(group = {})", group);
         entityManager.merge(group);
         return true;
     }
 
     @Transactional
     public boolean delete(Group group) {
-        logger.info("GroupDao.delete(group = {})", group);
+        logger.info("delete(group = {})", group);
         group = entityManager.find(Group.class, group.getGroupId());
         entityManager.remove(group);
         return true;
@@ -119,7 +119,7 @@ public class GroupDao {
 
     @Transactional
     public boolean insertIdGroupCreator(Group group, int accountId) {
-        logger.info("GroupDao.insertAccount(group = {}, accountId = {})", group, accountId);
+        logger.info("insertAccount(group = {}, accountId = {})", group, accountId);
         group.setIdGroupCreator(accountId);
         entityManager.merge(group);
         return true;
@@ -135,7 +135,7 @@ public class GroupDao {
     }
 
     public long getSizeRecords(String search) {
-        logger.info("GroupDao.getSizeRecords(search = {})", search);
+        logger.info("getSizeRecords(search = {})", search);
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Long> cq = cb.createQuery(Long.class);
         Root<Group> from = cq.from(Group.class);

@@ -29,12 +29,7 @@ public class ApplicationService {
     @Transactional
     public boolean create(Application application) {
         logger.info("create(application = {})", application);
-        try {
-            return applicationDao.create(application);
-        } catch (Exception ex) {
-            logger.error("create Exception = {}", ex);
-        }
-        return false;
+        return applicationDao.create(application);
     }
 
     @Transactional

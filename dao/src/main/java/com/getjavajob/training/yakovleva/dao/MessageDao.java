@@ -24,13 +24,13 @@ public class MessageDao {
 
     @Transactional
     public boolean create(Message message) {
-        logger.info("MessageDao.create(message = {})", message);
+        logger.info("create(message = {})", message);
         entityManager.merge(message);
         return true;
     }
 
     public List<Message> getMessageUserId(int id) {
-        logger.info("MessageDao.getMessageUserId(id = {})", id);
+        logger.info("getMessageUserId(id = {})", id);
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Message> criteriaQuery = criteriaBuilder.createQuery(Message.class);
         Root<Message> from = criteriaQuery.from(Message.class);
@@ -40,7 +40,7 @@ public class MessageDao {
     }
 
     public List<Message> getMessageUserIdNameSender(int receiverId) {
-        logger.info("MessageDao.getMessageUserIdNameSender(receiverId = {})", receiverId);
+        logger.info("getMessageUserIdNameSender(receiverId = {})", receiverId);
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Account> query = criteriaBuilder.createQuery(Account.class);
         Root<Account> fromAccount = query.from(Account.class);
@@ -54,27 +54,22 @@ public class MessageDao {
     }
 
     public List<Message> getUniqueMessagesForUser(int receiverId) {
-        logger.info("MessageDao.getUniqueMessagesForUser(receiverId = {})", receiverId);
+        logger.info("getUniqueMessagesForUser(receiverId = {})", receiverId);
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Message> query = criteriaBuilder.createQuery(Message.class);
         Root<Message> from = query.from(Message.class);
         Predicate receiverIdOrSenderId = criteriaBuilder.or(
                 criteriaBuilder.equal(from.get("receiverId"), receiverId),
                 criteriaBuilder.equal(from.get("senderId"), receiverId));
-//        Subquery<Number> subQuery = query.subquery(Number.class);
-//        Root maxTime = subQuery.from(Message.class);
-//        subQuery.select(criteriaBuilder.max(maxTime.get("publicationDate")));
-//        Predicate andMaxDate = criteriaBuilder.equal(from.get("publicationDate"), subQuery);
         Predicate andMessageType = criteriaBuilder.and(
                 criteriaBuilder.equal(from.get("messageType"), 1),
-//                andMaxDate,
                 receiverIdOrSenderId);
         query.where(andMessageType).groupBy(from.get("receiverId"));
         return entityManager.createQuery(query).getResultList();
     }
 
     public List<Message> getGroupMessage(int idGroup) {
-        logger.info("MessageDao.getGroupMessage(idGroup = {})", idGroup);
+        logger.info("getGroupMessage(idGroup = {})", idGroup);
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Message> query = criteriaBuilder.createQuery(Message.class);
         Root<Message> root = query.from(Message.class);
@@ -88,7 +83,7 @@ public class MessageDao {
     }
 
     public List<Message> getMessageAccounts(int senderId, int receiverId) {
-        logger.info("MessageDao.getMessageAccounts(senderId = {}, receiverId = {})", senderId, receiverId);
+        logger.info("getMessageAccounts(senderId = {}, receiverId = {})", senderId, receiverId);
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Message> query = criteriaBuilder.createQuery(Message.class);
         Root<Message> root = query.from(Message.class);
@@ -108,7 +103,7 @@ public class MessageDao {
     }
 
     public List<Message> getWallMessage(int receiverId) {
-        logger.info("MessageDao.getWallMessage(receiverId = {})", receiverId);
+        logger.info("getWallMessage(receiverId = {})", receiverId);
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Message> query = criteriaBuilder.createQuery(Message.class);
         Root<Message> root = query.from(Message.class);
@@ -122,7 +117,7 @@ public class MessageDao {
     }
 
     public List<Message> getAllMessages() {
-        logger.info("MessageDao.getAllMessages()");
+        logger.info("getAllMessages()");
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Message> query = criteriaBuilder.createQuery(Message.class);
         Root<Message> root = query.from(Message.class);
@@ -132,7 +127,7 @@ public class MessageDao {
 
     @Transactional
     public boolean delete(int id) {
-        logger.info("MessageDao.delete(id = {})", id);
+        logger.info("delete(id = {})", id);
         Message deleteMessage = entityManager.find(Message.class, id);
         entityManager.remove(deleteMessage);
         return true;

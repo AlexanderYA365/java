@@ -34,7 +34,7 @@ public class RelationsService {
     public List<Relations> getByAccountId(Relations relations) {
         logger.info("getByAccountId(Relations relations)");
         logger.debug("getByAccountId(relations = {})", relations);
-        return relationsDao.getByAccountID(relations);
+        return relationsDao.getByAccountId(relations);
     }
 
     public List<Relations> getAll() {

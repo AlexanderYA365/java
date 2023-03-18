@@ -49,7 +49,7 @@
         var newUrl = string.substring(0, string.lastIndexOf("/"));
         $.ajax({
             url: newUrl + '/result-search?search=' + document.getElementById('name-account').value,
-            method:  'get',
+            method: 'get',
         });
         load();
     }

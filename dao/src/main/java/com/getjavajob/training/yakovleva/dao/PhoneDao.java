@@ -25,13 +25,13 @@ public class PhoneDao {
 
     @Transactional
     public boolean create(final Phone phone) {
-        logger.info("PhoneDao.create(phone = {})", phone);
+        logger.info("create(phone = {})", phone);
         entityManager.merge(phone);
         return true;
     }
 
     public List<Phone> get(int accountId) {
-        logger.info("PhoneDao.get(accountId = {})", accountId);
+        logger.info("get(accountId = {})", accountId);
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Phone> criteriaQuery = criteriaBuilder.createQuery(Phone.class);
         Root<Phone> from = criteriaQuery.from(Phone.class);
@@ -42,14 +42,14 @@ public class PhoneDao {
 
     @Transactional
     public boolean update(Phone phone) {
-        logger.info("PhoneDao.update(phone = {})", phone);
+        logger.info("update(phone = {})", phone);
         entityManager.merge(phone);
         return true;
     }
 
     @Transactional
     public boolean delete(Phone phone) {
-        logger.info("PhoneDao.delete(phone = {})", phone);
+        logger.info("delete(phone = {})", phone);
         phone = entityManager.find(Phone.class, phone.getId());
         entityManager.remove(phone);
         return true;

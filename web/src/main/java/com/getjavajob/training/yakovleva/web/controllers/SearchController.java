@@ -135,7 +135,7 @@ public class SearchController {
 
     }
 
-    class TableResult {
+    private class TableResult {
         private int draw;
         private long recordsTotal;
         private long recordsFiltered;

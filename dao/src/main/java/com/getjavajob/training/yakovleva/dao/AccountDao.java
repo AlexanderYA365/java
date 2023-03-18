@@ -1,6 +1,7 @@
 package com.getjavajob.training.yakovleva.dao;
 
 import com.getjavajob.training.yakovleva.common.Account;
+import com.getjavajob.training.yakovleva.common.Relations;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Repository;
@@ -27,13 +28,13 @@ public class AccountDao {
 
     @Transactional
     public boolean create(Account account) {
-        logger.info("AccountDao.create(account = {})", account);
+        logger.info("create(account = {})", account);
         entityManager.merge(account);
         return true;
     }
 
     public int getIdAccount(Account account) {
-        logger.info("AccountDao.getIdAccount(account = {})", account);
+        logger.info("getIdAccount(account = {})", account);
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Account> criteriaQuery = criteriaBuilder.createQuery(Account.class);
         Root<Account> from = criteriaQuery.from(Account.class);
@@ -45,7 +46,7 @@ public class AccountDao {
     }
 
     public Account getAccount(String username, String password) {
-        logger.info("AccountDao.getAccount(username = {}, password = {})", username, password);
+        logger.info("getAccount(username = {}, password = {})", username, password);
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Account> criteriaQuery = criteriaBuilder.createQuery(Account.class);
         Root<Account> from = criteriaQuery.from(Account.class);
@@ -77,7 +78,7 @@ public class AccountDao {
     }
 
     public List<Account> getAccountsName(String name) {
-        logger.info("AccountDao.getAccountsName(name = {})", name);
+        logger.info("getAccountsName(name = {})", name);
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Account> criteriaQuery = criteriaBuilder.createQuery(Account.class);
         Root<Account> from = criteriaQuery.from(Account.class);
@@ -87,7 +88,7 @@ public class AccountDao {
     }
 
     public List<Account> getAllAccounts() {
-        logger.info("AccountDao.getAccounts()");
+        logger.info("getAccounts()");
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Account> cr = cb.createQuery(Account.class);
         Root<Account> root = cr.from(Account.class);
@@ -96,7 +97,7 @@ public class AccountDao {
     }
 
     public List<Account> getAccountsCriteriaLimit(int start, int end, String criteriaName) {
-        logger.info("AccountDao.getAccountsCriteriaLimit(start = {}, end = {}, criteriaName = {})",
+        logger.info("getAccountsCriteriaLimit(start = {}, end = {}, criteriaName = {})",
                 start, end, criteriaName);
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Account> cr = cb.createQuery(Account.class);
@@ -120,7 +121,7 @@ public class AccountDao {
     }
 
     public long getSizeRecords(String search) {
-        logger.info("AccountDao.getSizeRecords(search = {})", search);
+        logger.info("getSizeRecords(search = {})", search);
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Long> cq = cb.createQuery(Long.class);
         Root<Account> from = cq.from(Account.class);
@@ -135,7 +136,7 @@ public class AccountDao {
     }
 
     public List<Account> getAccountsLimit(int start, int end) {
-        logger.info("AccountDao.getAccountsLimit(start = {}, end = {})", start, end);
+        logger.info("getAccountsLimit(start = {}, end = {})", start, end);
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Account> cr = cb.createQuery(Account.class);
         Root<Account> root = cr.from(Account.class);
@@ -145,7 +146,7 @@ public class AccountDao {
 
     @Transactional
     public boolean deleteAccount(Account account) {
-        logger.info("AccountDao.getFriendsAccount(account.id = {})", account.getId());
+        logger.info("getFriendsAccount(account.id = {})", account.getId());
         account = entityManager.find(Account.class, account.getId());
         entityManager.remove(account);
         return true;
@@ -159,24 +160,23 @@ public class AccountDao {
     }
 
     public List<Account> getFriendsAccount(int accountId) {
-        logger.info("AccountDao.getFriendsAccount(accountId = {})", accountId);
+        logger.info("getFriendsAccount(accountId = {})", accountId);
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Account> query = criteriaBuilder.createQuery(Account.class);
-        Root<Account> root = query.from(Account.class);
+        CriteriaQuery<Relations> query = criteriaBuilder.createQuery(Relations.class);
+        Root<Relations> root = query.from(Relations.class);
         query.select(root);
-        query.where(criteriaBuilder.equal(root.get("id"), accountId));
-
-//        List<Relations> relations = entityManager.createQuery(query).getSingleResult().getRelations();
+        query.where(criteriaBuilder.equal(root.get("accountId"), accountId));
+        List<Relations> relations = entityManager.createQuery(query).getResultList();
         List<Account> friends = new ArrayList<>();
-//        for (Relations accountFriends : relations) {
-//            friends.add(getAccount(accountFriends.getFriendId()));
-//        }
+        for (Relations accountFriends : relations) {
+            friends.add(getAccount(accountFriends.getFriendId()));
+        }
         return friends;
     }
 
     @Transactional
     public void createAccounts(List<Account> accounts) {
-        logger.info("AccountDao.createAccounts(accounts.size() = {})", accounts.size());
+        logger.info("createAccounts(accounts.size() = {})", accounts.size());
         for (Account a : accounts) {
             try {
                 entityManager.merge(a);

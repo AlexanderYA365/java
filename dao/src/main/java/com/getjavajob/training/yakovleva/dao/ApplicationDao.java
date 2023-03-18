@@ -31,13 +31,13 @@ public class ApplicationDao {
 
     @Transactional
     public boolean create(Application application) {
-        logger.info("ApplicationDao.create(application = {})", application);
+        logger.info("create(application = {})", application);
         entityManager.merge(application);
         return true;
     }
 
     public Application get(int id) {
-        logger.info("ApplicationDao.get(id = {})", id);
+        logger.info("get(id = {})", id);
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Application> criteriaQuery = criteriaBuilder.createQuery(Application.class);
         Root<Application> from = criteriaQuery.from(Application.class);
@@ -47,7 +47,7 @@ public class ApplicationDao {
     }
 
     public Application get(int applicantId, int recipientId) {
-        logger.info("ApplicationDao.get(applicantId = {}, recipientId = {})", applicantId, recipientId);
+        logger.info("get(applicantId = {}, recipientId = {})", applicantId, recipientId);
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Application> criteriaQuery = criteriaBuilder.createQuery(Application.class);
         Root<Application> from = criteriaQuery.from(Application.class);
@@ -58,7 +58,7 @@ public class ApplicationDao {
     }
 
     public List<Application> get(Account account) {
-        logger.info("ApplicationDao.getFriendRequests(account = {})", account);
+        logger.info("get(account = {})", account);
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Application> criteriaQuery = criteriaBuilder.createQuery(Application.class);
         Root<Application> from = criteriaQuery.from(Application.class);
@@ -80,7 +80,7 @@ public class ApplicationDao {
     }
 
     public Application get(Group group, int recipientId) {
-        logger.info("ApplicationDao.get(group.id = {}, recipientId = {})", group.getGroupId(), recipientId);
+        logger.info("get(group.id = {}, recipientId = {})", group.getGroupId(), recipientId);
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Application> criteriaQuery = criteriaBuilder.createQuery(Application.class);
         Root<Application> from = criteriaQuery.from(Application.class);
@@ -100,8 +100,7 @@ public class ApplicationDao {
     }
 
     public Application get(Relations relations) {
-        logger.info("ApplicationDao.get(relations = {})", relations);
-        logger.info("ApplicationDao.get(relations = {})", relations);
+        logger.info("get(relations = {})", relations);
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Application> criteriaQuery = criteriaBuilder.createQuery(Application.class);
         Root<Application> from = criteriaQuery.from(Application.class);
@@ -121,7 +120,7 @@ public class ApplicationDao {
     }
 
     public List<Application> getApplications() {
-        logger.info("ApplicationDao.getApplications()");
+        logger.info("getApplications()");
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Application> cr = cb.createQuery(Application.class);
         Root<Application> root = cr.from(Application.class);
@@ -131,14 +130,14 @@ public class ApplicationDao {
 
     @Transactional
     public boolean update(Application application) {
-        logger.info("ApplicationDao.update(application = {})", application);
+        logger.info("update(application = {})", application);
         entityManager.merge(application);
         return true;
     }
 
     @Transactional
     public boolean delete(Application application) {
-        logger.info("ApplicationDao.delete(application = {})", application);
+        logger.info("delete(application = {})", application);
         application = entityManager.find(Application.class, application.getId());
         entityManager.remove(application);
         return true;
