@@ -1,12 +1,13 @@
-C:\dev\socialNetwork\web\src\main\java\com\getjavajob\training\yakovleva\web\config\ChatEndpoint.java
 C:\dev\socialNetwork\web\src\main\java\com\getjavajob\training\yakovleva\web\controllers\AdminController.java
-C:\dev\socialNetwork\web\src\main\java\com\getjavajob\training\yakovleva\web\controllers\SearchController.java
-C:\dev\socialNetwork\web\src\main\java\com\getjavajob\training\yakovleva\web\security\SecurityConfig.java
 C:\dev\socialNetwork\web\src\main\java\com\getjavajob\training\yakovleva\web\controllers\TestController.java
 C:\dev\socialNetwork\web\src\main\java\com\getjavajob\training\yakovleva\web\controllers\utils\SocialNetworkUtils.java
 C:\dev\socialNetwork\web\src\main\java\com\getjavajob\training\yakovleva\web\controllers\FriendController.java
 C:\dev\socialNetwork\web\src\main\java\com\getjavajob\training\yakovleva\web\controllers\GroupController.java
 C:\dev\socialNetwork\web\src\main\java\com\getjavajob\training\yakovleva\web\controllers\MessageController.java
-C:\dev\socialNetwork\web\src\main\java\com\getjavajob\training\yakovleva\web\controllers\AccountController.java
 C:\dev\socialNetwork\web\src\main\java\com\getjavajob\training\yakovleva\web\config\WebConfig.java
+C:\dev\socialNetwork\web\src\main\java\com\getjavajob\training\yakovleva\web\config\ChatEndpoint.java
+C:\dev\socialNetwork\web\src\main\java\com\getjavajob\training\yakovleva\web\controllers\SearchController.java
+C:\dev\socialNetwork\web\src\main\java\com\getjavajob\training\yakovleva\web\security\SecurityConfig.java
+C:\dev\socialNetwork\web\src\main\java\com\getjavajob\training\yakovleva\web\controllers\utils\FriendTableUtils.java
+C:\dev\socialNetwork\web\src\main\java\com\getjavajob\training\yakovleva\web\controllers\AccountController.java
 C:\dev\socialNetwork\web\src\main\java\com\getjavajob\training\yakovleva\web\WebappApplication.java

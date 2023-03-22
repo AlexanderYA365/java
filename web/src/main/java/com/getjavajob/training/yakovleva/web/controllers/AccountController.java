@@ -158,7 +158,7 @@ public class AccountController {
     }
 
     @RequestMapping(value = "/save-account-settings", method = RequestMethod.GET)
-    public ModelAndView save(@ModelAttribute("account") Account account, HttpServletResponse response) {
+    public void save(@ModelAttribute("account") Account account, HttpServletResponse response) {
         logger.info("save = {}", account);
         File file = new File("account.xml");
         try {
@@ -188,7 +188,7 @@ public class AccountController {
         } catch (IOException e) {
             logger.error("IOException: " + e);
         }
-        return new ModelAndView("/account/my-account");
+//        return new ModelAndView("/account/my-account");
     }
 
     @ModelAttribute("account")
@@ -280,7 +280,7 @@ public class AccountController {
             account.setEmail(request.getParameter("email"));
             account.setAboutMe(request.getParameter("aboutMe"));
             account.setRole(getRoleFromForm(request));
-//            account.setRelations(editAccount.getRelations());
+            account.setRelations(editAccount.getRelations());
             account.setPhones(getPhonesFromForm(request, editAccount));
         } catch (Exception ex) {
             logger.error("setDataForm exception = " + ex);

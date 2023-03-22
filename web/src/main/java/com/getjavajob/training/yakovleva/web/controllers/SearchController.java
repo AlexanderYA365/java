@@ -47,7 +47,7 @@ public class SearchController {
                                    final @RequestParam("start") int start,
                                    final @RequestParam("length") int length) {
         logger.info("tableResult(draw = {}, start = {}, length = {})", draw, start, length);
-        logger.info("searchP = {}", searchParameter);
+        logger.info("searchParameter = {}", searchParameter);
         List<SearchResult> searchResults = searchCriteria(searchParameter, start, length);
         long size = accountService.getSizeRecords(searchParameter) + groupService.getSizeRecords(searchParameter);
         logger.info("records size = {}", size);
@@ -60,7 +60,7 @@ public class SearchController {
                                        final @RequestParam("start") int start,
                                        final @RequestParam("length") int length) {
         logger.info("getFoundAccount(draw = {}, start = {}, length = {})", draw, start, length);
-        logger.info("searchP = {}", searchParameter);
+        logger.info("searchParameter = {}", searchParameter);
         List<SearchResult> searchResults = foundAccount(searchParameter, start, length);
         long size = accountService.getSizeRecords(searchParameter);
         logger.info("records size = {}", size);

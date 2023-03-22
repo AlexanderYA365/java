@@ -19,7 +19,7 @@
          alt="Responsive image">
 </div>
 <main role="main">
-    <div class="main">
+    <div class="modal">
         <br/>
         Имя пользователя ${friendAccount.name}
         <br/>
@@ -41,7 +41,7 @@
     </div>
     <br>
 
-    <form action="account-message" method="POST">
+    <form class="modal" action="account-message" method="POST">
         <button type="submit" name="selectUser" value=${friendAccount.id}>
             Написать сообщение
         </button>

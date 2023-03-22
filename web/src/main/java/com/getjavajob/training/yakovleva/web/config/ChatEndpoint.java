@@ -27,6 +27,7 @@ public class ChatEndpoint {
 
     @Autowired
     public ChatEndpoint(MessageService messageService) {
+        logger.info("ChatEndpoint()");
         this.messageService = messageService;
     }
 

@@ -9,7 +9,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
-    <title>Chat</title>
+    <title>Чат</title>
     <link href="${pageContext.request.contextPath}/resources/css/style.css" rel="stylesheet">
     <style>
         .messages {
@@ -115,8 +115,11 @@
                 usernameReceiving = document.querySelector('#usernameReceiving').innerText.trim();
                 usernameSender = document.querySelector('#usernameSender').innerText.trim();
                 senderId = document.querySelector('#senderId').innerText.trim();
+                var url = window.location;
+                var string = url.toString();
+                let newUrl = string.substring(5, string.lastIndexOf("/"));
                 receiverId = document.querySelector('#receiverId').innerText.trim();
-                this.ws = new WebSocket("ws://localhost:8085/socnet/goChat/" + username);
+                this.ws = new WebSocket("ws:" + newUrl + "/goChat/" + username);
                 this.ws.onopen = () => this.onOpenSocket();
                 this.ws.onmessage = (e) => this.onMessage(JSON.parse(e.data));
                 this.ws.onclose = (e) => this.onClose();
