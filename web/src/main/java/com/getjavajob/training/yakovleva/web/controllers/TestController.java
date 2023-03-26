@@ -1,7 +1,8 @@
 package com.getjavajob.training.yakovleva.web.controllers;
 
 import com.getjavajob.training.yakovleva.Repository.GroupMembersRepository;
-import com.getjavajob.training.yakovleva.common.Account;
+import com.getjavajob.training.yakovleva.common.Application;
+import com.getjavajob.training.yakovleva.common.Enum.ApplicationStatusType;
 import com.getjavajob.training.yakovleva.service.AccountService;
 import com.getjavajob.training.yakovleva.service.ApplicationService;
 import com.getjavajob.training.yakovleva.service.GroupService;
@@ -13,8 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.util.List;
 
 @Controller
 public class TestController {
@@ -39,8 +38,10 @@ public class TestController {
     @RequestMapping(value = "/aaa", method = RequestMethod.GET)
     public ModelAndView a() {
         logger.info("a()");
-        List<Account> relationsList = accountService.getFriendsAccount(1);
-        logger.info("all - {}", relationsList);
+        Application application = applicationService.get(8, 1);
+        application.setStatus(ApplicationStatusType.ACCEPTED);
+        logger.info("application = {}", application);
+        applicationService.update(application);
         ModelAndView modelAndView = new ModelAndView("all-accounts");
         return modelAndView;
     }

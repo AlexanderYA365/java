@@ -51,7 +51,7 @@
                 {data: 'surname'},
                 {data: 'lastName'},
                 {defaultContent: '<button id="add-btn">Добавить</button>'},
-                {defaultContent: '<button id="del-btn">Отказать</button>'},
+                {defaultContent: '<button id="den-btn">Отказать</button>'},
             ]
         });
 
@@ -64,15 +64,21 @@
                 type: "GET",
                 url: newUrl + '/accept-application-friend/' + id
             });
+            table.ajax.reload(function (json) {
+                $('#myInput').val(json.lastInput);
+            });
         });
 
-        $('#find-account tbody').on('click', '#del-btn', function () {
+        $('#find-account tbody').on('click', '#den-btn', function () {
             const data = table.row($(this).parents('tr')).data();
             var id = data.id
             console.log(id)
             $.ajax({
                 type: "GET",
-                url: newUrl + '/delete-account/' + id
+                url: newUrl + '/denied-application/' + id
+            });
+            table.ajax.reload(function (json) {
+                $('#myInput').val(json.lastInput);
             });
         });
     });

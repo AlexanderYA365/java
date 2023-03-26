@@ -78,17 +78,17 @@ public class FriendController {
     }
 
     @RequestMapping(value = "/show-friend", method = RequestMethod.POST)
-    public ModelAndView addApplication(@RequestParam("id") int id,
-                                       @SessionAttribute("friend") Account friend,
-                                       @SessionAttribute("account") Account account,
-                                       @RequestParam(value = "write-message", required = false) String writeMessage,
-                                       @RequestParam(value = "delete", required = false) String delete,
-                                       @RequestParam(value = "add", required = false) String add) {
-        logger.info("addApplication(id = {}, friend = {}, account = {}, writeMessage = {}, delete = {}, add = {})",
+    public ModelAndView showFriend(@RequestParam("id") int id,
+                                   @SessionAttribute("friend") Account friend,
+                                   @SessionAttribute("account") Account account,
+                                   @RequestParam(value = "write-message", required = false) String writeMessage,
+                                   @RequestParam(value = "delete", required = false) String delete,
+                                   @RequestParam(value = "add", required = false) String add) {
+        logger.info("showFriend(id = {}, friend = {}, account = {}, writeMessage = {}, delete = {}, add = {})",
                 id, friend.getId(), account.getId(), writeMessage, delete, add);
         Relations relations = new Relations(account.getId(), friend.getId());
         if (add != null) {
-            addFriend(friend, account, relations);
+            addFriendAccount(friend, account, relations);
         }
         if (delete != null) {
             logger.info("delete friend");
@@ -115,8 +115,8 @@ public class FriendController {
         return modelAndView;
     }
 
-    private void addFriend(Account friend, Account account, Relations relations) {
-        logger.info("add friend");
+    private void addFriendAccount(Account friend, Account account, Relations relations) {
+        logger.info("addFriend(friend = {}, account = {}, relations = {})", friend, account, relations);
         Application newApplication = new Application();
         newApplication.setStatus(ApplicationStatusType.CONFIRMATION);
         newApplication.setApplicationType(ApplicationType.USER);
@@ -134,7 +134,7 @@ public class FriendController {
 
     @RequestMapping(value = "/friend-requests", method = RequestMethod.GET)
     public ModelAndView applicationFriends(@ModelAttribute("account") Account account) {
-        logger.info("applicationFriends()");
+        logger.info("applicationFriends(account = {})", account);
         friendAccount = account;
         return new ModelAndView("/friend/friend-requests");
     }
@@ -149,9 +149,7 @@ public class FriendController {
         List<Account> friendRequests = accountService.getFriendRequests(friendAccount);
         long size = friendRequests.size();
         logger.info("records size = {}", size);
-        FriendTableUtils friendTableUtils = new FriendTableUtils(draw, size, size, friendRequests);
-        logger.info(friendTableUtils);
-        return friendTableUtils;
+        return new FriendTableUtils(draw, size, size, friendRequests);
     }
 
     @RequestMapping(value = "/friend-add-wall-message", method = RequestMethod.POST)
@@ -186,19 +184,14 @@ public class FriendController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/delete-account/{id}",
+    @RequestMapping(value = "/denied-application/{id}",
             produces = "application/json",
             method = RequestMethod.GET)
-    public void deleteFriend(@PathVariable String id, @SessionAttribute("account") Account account) {
-        logger.info("deleteFriend(id = {}, account = {})", id, account);
-        Application application = new Application();
-        application.setApplicantId(Integer.parseInt(id));
-        application.setRecipientId(account.getId());
+    public void deniedApplication(@PathVariable String id, @SessionAttribute("account") Account account) {
+        logger.info("deniedApplication(id = {}, account = {})", id, account);
+        Application application = applicationService.get(Integer.parseInt(id), account.getId());
         application.setStatus(ApplicationStatusType.REJECTED);
-        application.setApplicationType(ApplicationType.USER);
-        applicationService.delete(application);
-        Relations relations = new Relations(account.getId(), Integer.parseInt(id));
-        relationsService.deleteByAccountId(relations);
+        applicationService.update(application);
     }
 
     @RequestMapping(value = "/accept-application-friend/{id}",
@@ -206,18 +199,11 @@ public class FriendController {
             method = RequestMethod.GET)
     public void acceptApplicationFriend(@PathVariable String id, @SessionAttribute("account") Account account) {
         logger.info("acceptApplicationFriend(id = {}, account = {})", id, account);
-        Application application = new Application();
-        application.setApplicantId(Integer.parseInt(id));
-        application.setRecipientId(account.getId());
+        Application application = applicationService.get(Integer.parseInt(id), account.getId());
         application.setStatus(ApplicationStatusType.ACCEPTED);
-        application.setApplicationType(ApplicationType.USER);
-        Application a = applicationService.get(application.getApplicantId(), application.getRecipientId());
         Relations relations = new Relations(account.getId(), Integer.parseInt(id));
-        logger.info("relations = {}", relations);
         relationsService.create(relations);
-        logger.info("application = {}", application);
-        logger.info("a = {}", a);
-        applicationService.update(a);
+        applicationService.update(application);
     }
 
     @RequestMapping(value = "/account-friends", method = RequestMethod.POST)
@@ -237,7 +223,6 @@ public class FriendController {
             if (accountId == null) {
                 try {
                     List<Account> accounts = accountService.getAccountName(name);
-                    System.out.println(accounts);
                     logger.info("accounts = {}", accounts);
                     request.setAttribute("accounts", accounts);
                 } catch (Exception e) {
@@ -247,8 +232,8 @@ public class FriendController {
             if (accountId != null) {
                 Account account = (Account) session.getAttribute("account");
                 Account accountFriend = accountService.get(Integer.parseInt(accountId));
-                System.out.println("account - " + account);
-                System.out.println("friend - " + accountFriend);
+                logger.info("account = {}", account);
+                logger.info("friend = {}", accountFriend);
                 Relations relations = new Relations();
                 relations.setAccountId(account.getId());
                 relations.setFriendId(accountFriend.getId());

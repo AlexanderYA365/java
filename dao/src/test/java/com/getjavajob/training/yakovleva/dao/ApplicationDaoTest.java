@@ -1,6 +1,7 @@
 package com.getjavajob.training.yakovleva.dao;
 
 import com.getjavajob.training.yakovleva.common.Application;
+import com.getjavajob.training.yakovleva.common.Enum.ApplicationStatusType;
 import com.getjavajob.training.yakovleva.common.Group;
 import com.getjavajob.training.yakovleva.common.Relations;
 import com.getjavajob.training.yakovleva.config.DaoConfig;
@@ -94,14 +95,11 @@ class ApplicationDaoTest {
 
     @Test
     void update() {
-        Application application = new Application();
-        application.setApplicantId(1);
-        application.setRecipientId(1);
-        application.setId(1);
-        application.setStatus(0);
-        application.setApplicationType(0);
-        applicationDao.create(application);
-        boolean actual = applicationDao.update(application);
+        Application expected = applicationDao.get(1);
+        expected.setStatus(ApplicationStatusType.REJECTED);
+        boolean actual = applicationDao.update(expected);
+        Application actualApplicant = applicationDao.get(1);
+        assertEquals(expected, actualApplicant);
         assertEquals(true, actual);
     }
 
