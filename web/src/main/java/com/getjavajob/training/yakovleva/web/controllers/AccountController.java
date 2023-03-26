@@ -188,7 +188,6 @@ public class AccountController {
         } catch (IOException e) {
             logger.error("IOException: " + e);
         }
-//        return new ModelAndView("/account/my-account");
     }
 
     @ModelAttribute("account")
@@ -322,7 +321,7 @@ public class AccountController {
     }
 
     private List<Phone> getPhonesFromForm(HttpServletRequest request, Account account) {
-        logger.info("setPhone");
+        logger.info("getPhonesFromForm");
         List<Phone> phones = new ArrayList<>();
         if (account.getPhones().size() != 0) {
             String[] requestPhone = request.getParameterValues("phone");

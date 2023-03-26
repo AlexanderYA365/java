@@ -93,6 +93,7 @@ public class GroupController {
                                          HttpSession session, HttpServletRequest request) {
         logger.info("addFindGroupView(groupId = {})", groupId);
         ModelAndView modelAndView = new ModelAndView("/group/account-find-group");
+        //TODO удалить или переименовать groupId2
         String groupId2 = request.getParameter("groupId");
         logger.info("groupId = {}", groupId);
         String groupName = request.getParameter("GroupName");

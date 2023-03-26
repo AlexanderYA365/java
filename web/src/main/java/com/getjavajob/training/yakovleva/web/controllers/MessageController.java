@@ -18,8 +18,8 @@ import java.util.List;
 @SessionAttributes({"account", "friend", "selectUser"})
 public class MessageController {
     private static final Logger logger = LogManager.getLogger(MessageController.class);
-    private MessageService messageService;
-    private AccountService accountService;
+    private final MessageService messageService;
+    private final AccountService accountService;
 
     @Autowired
     public MessageController(MessageService messageService, AccountService accountService) {
