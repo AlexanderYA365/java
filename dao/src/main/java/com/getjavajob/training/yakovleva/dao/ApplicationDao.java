@@ -57,6 +57,28 @@ public class ApplicationDao {
         return entityManager.createQuery(criteriaQuery).getSingleResult();
     }
 
+    public List<Application> getRejectedUsers(Account account) {
+        logger.info("getRejectedUsers(account = {})", account);
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Application> criteriaQuery = criteriaBuilder.createQuery(Application.class);
+        Root<Application> from = criteriaQuery.from(Application.class);
+        criteriaQuery.select(from);
+        criteriaQuery.where(criteriaBuilder.and(
+                criteriaBuilder.equal(from.get("recipientId"), account.getId()),
+                criteriaBuilder.equal(from.get("status"), ApplicationStatusType.REJECTED),
+                criteriaBuilder.equal(from.get("applicationType"), ApplicationType.USER)));
+        List<Application> application = entityManager.createQuery(criteriaQuery).getResultList();
+        if (application.size() != 0) {
+            return application;
+        } else {
+            logger.info("application == null");
+            Application empty = new Application(0, ApplicationType.USER, 0, 0, ApplicationStatusType.ACCEPTED);
+            List<Application> emptyList = new ArrayList<>();
+            emptyList.add(empty);
+            return emptyList;
+        }
+    }
+
     public List<Application> get(Account account) {
         logger.info("get(account = {})", account);
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();

@@ -138,6 +138,18 @@ public class AccountService {
         return accounts;
     }
 
+    public List<Account> getFriendRejected(Account account) {
+        logger.info("getFriendRequests(account = {})", account);
+        List<Application> applications = applicationDao.getRejectedUsers(account);
+        List<Account> accounts = new ArrayList<>();
+        for (int i = 0; i < applications.size(); i++) {
+            if (applications.get(i).getApplicantId() != 0) {
+                accounts.add(accountDao.getAccount(applications.get(i).getApplicantId()));
+            }
+        }
+        return accounts;
+    }
+
     public List<Account> getAllAccounts() {
         logger.info("getAllAccounts()");
         return accountDao.getAllAccounts();

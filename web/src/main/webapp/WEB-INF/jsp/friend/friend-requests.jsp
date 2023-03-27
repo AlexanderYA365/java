@@ -15,6 +15,8 @@
 <body>
 <%@ include file="../navbar.jsp" %>
 <br>
+<button onclick="location.href='${pageContext.request.contextPath}/account-friends'">Перечень друзей</button>
+<button onclick="location.href='${pageContext.request.contextPath}/denied-application'">Отказано</button>
 <br>
 <table border="0" margin="0" padding="0" width="100%"
        class="dataTables_wrapper" id="find-account">
@@ -29,6 +31,8 @@
     </tr>
     </thead>
 </table>
+
+<%--TODO добавить таблицу с педжинацией на jsp --%>
 
 <script src="${pageContext.request.contextPath}/resources/js/bootstrap.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/bootstrap.js.map"></script>

@@ -132,6 +132,16 @@ public class FriendController {
         return new ModelAndView("/friend/add-friend-account");
     }
 
+    @RequestMapping(value = "/denied-application", method = RequestMethod.GET)
+    public ModelAndView deniedApplication(@SessionAttribute("account") Account account) {
+        logger.info("deniedApplication(account = {})", account);
+        List<Account> deniedFriends = accountService.getFriendRejected(account);
+        ModelAndView modelAndView = new ModelAndView("/friend/denied-application");
+        modelAndView.addObject("deniedFriends", deniedFriends);
+        logger.info("deniedFriends = {}", deniedFriends);
+        return modelAndView;
+    }
+
     @RequestMapping(value = "/friend-requests", method = RequestMethod.GET)
     public ModelAndView applicationFriends(@ModelAttribute("account") Account account) {
         logger.info("applicationFriends(account = {})", account);

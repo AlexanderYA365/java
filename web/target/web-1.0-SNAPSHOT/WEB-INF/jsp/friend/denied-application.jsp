@@ -29,17 +29,6 @@ ${deniedFriends}
 <button id="next">следующие</button>
 <body>
 <script>
-
-    function load(){
-        var url = window.location;
-        var string = url.toString();
-        var newUrl = string.substring(0, string.lastIndexOf("/"));
-        $.ajax({
-            type: "GET",
-            url: newUrl + '/add-account/' + selectMember + '/' + role
-        });
-    }
-
     $('#table-denied').append($('<tr>')
         .append($('<td>').append("text1"))
         .append($('<td>').append("text2"))
